@@ -1,11 +1,13 @@
 import React from 'react';
-import {View, SafeAreaView} from 'react-native';
+import {View, SafeAreaView, Button} from 'react-native';
 
 
-const Home = () => {
+const Home = ({navigation}) => {
     return (
         <SafeAreaView style={{flex: 1}}>
-        <View style={{flex: 1, backgroundColor: 'black'}} />
+        <View style={{ backgroundColor: 'black'}} />
+        <Button onPress={() => navigation.push('Forgot')}
+        title='Click me'></Button>
       </SafeAreaView>
     )
 };
