@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+      "allowJs": false,
+      "allowSyntheticDefaultImports": true,
+      "experimentalDecorators": true,
+      "jsx": "react-native",
+      "module": "es2022",
+      "moduleResolution": "node",
+      "noImplicitAny": false,
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "noUnusedLocals": true,
+      "sourceMap": true,
+      "target": "esnext",
+      "lib": ["esnext", "dom"],
+      "skipLibCheck": true,
+      "resolveJsonModule": true,
+      "baseUrl": "." /* Base directory to resolve non-absolute module names. */,
+      "paths": {
+        "@assets": ["assets"],
+        "@components": ["./app/components"],
+        "@navigator": ["./app/navigator"],
+        "@screens": ["./app/screens"],
+        "@theme": ["./app/theme"],
+        "@utils": ["./app/utils"],
+        
+
+        /// All
+        "@assets/*": ["./assets/*"],
+        "@components/*": ["./app/components/*"],
+        "@navigator/*": ["./app/navigator/*"],
+        "@screens/*": ["./app/screens/*"],
+        "@theme/*": ["./app/theme/*"],
+        "@utils/*": ["./app/utils/*"],
+      }
+    },
+    "exclude": ["node_modules"],
+    "include": ["index.js", "app", "test", "scripts", "globals.d.ts"]
+  }
