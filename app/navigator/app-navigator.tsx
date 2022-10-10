@@ -3,7 +3,10 @@ import {AppStack} from './app-stack';
 
 
 export const AppNavigator = () => {
-    <NavigationContainer>
+    return (
+        <NavigationContainer>
         <AppStack />
     </NavigationContainer>
+    )
+   
 }

@@ -6,8 +6,6 @@ import ResetPassword from '@screens/ResetPassword';
 import OTPverify from '@screens/OTPverify';
 
 const Stack = createStackNavigator();
-
-
 export const AppStack = () => {
     return (
     <Stack.Navigator>
