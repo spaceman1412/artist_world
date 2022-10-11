@@ -1,9 +1,16 @@
-import React from 'react';
-import Home from '@screens/Home';
+
+
+import { AppNavigator } from '@navigator/app-navigator';
+import * as React from 'react';
+
+
+
 
 const App = () => {
+ 
   return (
-   <Home />
+    <AppNavigator />
+
   );
 };
 
