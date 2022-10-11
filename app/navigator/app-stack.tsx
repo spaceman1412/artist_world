@@ -1,3 +1,4 @@
+import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ForgotPassWord from '@screens/ForgotPassWord';
 import Home from '@screens/Home';
@@ -7,39 +8,34 @@ import OTPverify from '@screens/OTPverify';
 
 const Stack = createStackNavigator();
 export const AppStack = () => {
-    return (
-    <Stack.Navigator>
-        <Stack.Screen 
-            name="Home"
-            component={Home}
-        />
-         <Stack.Screen
-        name='ResetDone'
-       component={ResetDone}
-       options={{
-        headerShown: false,
-        }}/>
+  return (
+    <Stack.Navigator initialRouteName="OTPverify">
+      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="ResetDone"
+        component={ResetDone}
+        options={{
+          headerShown: false,
+        }}
+      />
 
-        <Stack.Screen
-        name='ResetPassword'
+      <Stack.Screen
+        name="ResetPassword"
         component={ResetPassword}
-        options={
-          {title: 'Reset Password'}
-        }/>
-        <Stack.Screen
-        name='Forgot'
+        options={{title: 'Reset Password'}}
+      />
+      <Stack.Screen
+        name="Forgot"
         component={ForgotPassWord}
         options={{title: 'Forgot Password'}}
-        />
-        <Stack.Screen
+      />
+      <Stack.Screen
         name="OTPverify"
         component={OTPverify}
-        options={
-          {
-            title: 'Forgot Password'
-          }
-        }/>
+        options={{
+          title: 'Forgot Password',
+        }}
+      />
     </Stack.Navigator>
-    )
-   
-}
+  );
+};
