@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {
   View,
   Text,
@@ -22,6 +23,7 @@ const NumericInput = ({value, onChangeText}) => {
 };
 
 const OTPverify = ({navigation}) => {
+  const [seconds, setSeconds] = useState(60);
   const [codes, setCodes] = React.useState({
     1: '',
     2: '',
@@ -32,6 +34,15 @@ const OTPverify = ({navigation}) => {
   const setCode = (key: number, value: string) => {
     setCodes(prev => ({...prev, [key]: value}));
   };
+
+  const countdown = setInterval(() => {
+    if (seconds > 0) {
+      setSeconds(seconds - 1);
+    } else {
+      setSeconds(60);
+      clearInterval(countdown);
+    }
+  }, 1000);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,12 +70,12 @@ const OTPverify = ({navigation}) => {
           />
         </View>
         <Text style={styles.text}>
-          Resend code in <Text style={styles.phoneNumber}>60</Text> s
+          Resend code in <Text style={styles.phoneNumber}>{seconds}</Text> s
         </Text>
       </View>
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate('ResetPassword')}>
+        onPress={() => navigation.navigate('resetPassword')}>
         <Text style={styles.buttonContent}>Verify</Text>
       </Pressable>
     </SafeAreaView>

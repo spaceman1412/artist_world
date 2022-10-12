@@ -1,19 +1,21 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import ForgotPassWord from '@screens/ForgotPassWord';
-import Home from '@screens/Home';
-import ResetDone from '@screens/ResetDone';
-import ResetPassword from '@screens/ResetPassword';
-import OTPverify from '@screens/OTPverify';
-import Counter from '@screens/Counter';
+import ForgotPassWord from '@screens/forgot-password';
+import Home from '@screens/home';
+import ResetDone from '@screens/reset-done';
+import ResetPassword from '@screens/reset-password';
+import OTPverify from '@screens/otp-verify';
+import Counter from '@screens/counter';
+import Prologue from '@screens/prologue';
+import PhoneLogin from '@screens/phone-login';
 
 const Stack = createStackNavigator();
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Counter">
-      <Stack.Screen name="Home" component={Home} />
+    <Stack.Navigator initialRouteName="prologue">
+      <Stack.Screen name="home" component={Home} />
       <Stack.Screen
-        name="ResetDone"
+        name="resetDone"
         component={ResetDone}
         options={{
           headerShown: false,
@@ -21,17 +23,17 @@ export const AppStack = () => {
       />
 
       <Stack.Screen
-        name="ResetPassword"
+        name="resetPassword"
         component={ResetPassword}
         options={{title: 'Reset Password'}}
       />
       <Stack.Screen
-        name="Forgot"
+        name="forgot"
         component={ForgotPassWord}
         options={{title: 'Forgot Password'}}
       />
       <Stack.Screen
-        name="OTPverify"
+        name="otpVerify"
         component={OTPverify}
         options={{
           title: 'Forgot Password',
@@ -39,12 +41,16 @@ export const AppStack = () => {
       />
 
       <Stack.Screen
-        name="Counter"
+        name="counter"
         component={Counter}
         options={{
           title: 'Counter',
         }}
       />
+
+      <Stack.Screen name="prologue" component={Prologue} />
+
+      <Stack.Screen name="phoneLogin" component={PhoneLogin} />
     </Stack.Navigator>
   );
 };
