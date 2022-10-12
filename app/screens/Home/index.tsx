@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, SafeAreaView, Button} from 'react-native';
 
-
 const Home = () => {
   return (
     <SafeAreaView style={{flex: 1}}>

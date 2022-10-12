@@ -5,11 +5,12 @@ import Home from '@screens/Home';
 import ResetDone from '@screens/ResetDone';
 import ResetPassword from '@screens/ResetPassword';
 import OTPverify from '@screens/OTPverify';
+import Counter from '@screens/Counter';
 
 const Stack = createStackNavigator();
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="OTPverify">
+    <Stack.Navigator initialRouteName="Counter">
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen
         name="ResetDone"
@@ -34,6 +35,14 @@ export const AppStack = () => {
         component={OTPverify}
         options={{
           title: 'Forgot Password',
+        }}
+      />
+
+      <Stack.Screen
+        name="Counter"
+        component={Counter}
+        options={{
+          title: 'Counter',
         }}
       />
     </Stack.Navigator>
