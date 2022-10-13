@@ -2,7 +2,7 @@ import React from 'react';
 import {View, SafeAreaView, Button} from 'react-native';
 
 
-const Home = ({navigation}) => {
+const Home = (navigation) => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{flex: 1, backgroundColor: 'black'}} />
