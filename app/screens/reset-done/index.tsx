@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { View, Text,Image, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import { images } from '@assets/images';
 const ResetDone = () =>{
     return(
         <SafeAreaView style={styles.container}>
                 <View style={styles.content}>
 
                 <Image 
-                source={require('./img/congratulation.png')}
+                source={images.congratulation}
                 style={{width: 340, height: 340}}/>
                 <Text style={{fontSize: 25,
                 marginTop: 10}}>

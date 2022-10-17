@@ -7,21 +7,19 @@ import {
   TextInput,
   Pressable,
   TouchableOpacity,
-  Button,
   SafeAreaView,
 } from 'react-native';
-
+import { images } from '@assets/images';
 const ResetPassword = ({navigation}) => {
   const [inputting, setInputting] = React.useState('');
   const [hidePassword, setHidePassword] = React.useState([true, true]);
   const [password, setPassword] = React.useState('');
-  console.log(password);
   const [secondpassword, setSecondPassword] = React.useState('');
   return (
     <SafeAreaView style={styles.container}>
       <Image
         style={{width: 200, height: 200}}
-        source={require('./img/rotation_lock.png')}
+        source={images.rotationLock}
       />
       <View style={styles.contentContainer}>
         <Text
@@ -55,8 +53,8 @@ const ResetPassword = ({navigation}) => {
               <Image
                 source={
                   !hidePassword[0]
-                    ? require('./img/eye.png')
-                    : require('./img/eye_off.png')
+                    ? images.eye
+                    : images.eye_off
                 }
               />
             </Pressable>
@@ -77,15 +75,15 @@ const ResetPassword = ({navigation}) => {
               style={{fontSize: 17, width: 300}}
               placeholder={'Confirm New Password'}
               value={password}
-              onChangeText={(e: any) => setPassword(e)}
+              onChangeText={(text) => setPassword(text)}
             />
             <Pressable
               onPress={() => setHidePassword([true, !hidePassword[1]])}>
               <Image
                 source={
                   !hidePassword[1]
-                    ? require('./img/eye.png')
-                    : require('./img/eye_off.png')
+                    ? images.eye
+                    : images.eye_off
                 }
               />
             </Pressable>
@@ -140,6 +138,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderRadius: 30,
     height: 49,
+    color: 'black'
   },
   button: {
     alignItems: 'center',

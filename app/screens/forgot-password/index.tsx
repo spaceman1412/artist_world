@@ -7,6 +7,7 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React from 'react';
+import { images } from '@assets/images';
 
 const ForgotPassWord = ({navigation}) => {
   const [choice, setChoice] = React.useState(1);
@@ -15,7 +16,7 @@ const ForgotPassWord = ({navigation}) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
-          source={require('./img/forgot_Password.png')}
+          source={images.forgot_Password}
           style={{width: 250, height: 200}}
         />
       </View>
@@ -27,7 +28,7 @@ const ForgotPassWord = ({navigation}) => {
           <Pressable
             style={choice === 1 ? styles.selected : styles.options}
             onPress={() => setChoice(1)}>
-            <Image source={require('./img/message.png')} />
+            <Image source={images.message} />
             <View style={styles.boxContent}>
               <Text style={styles.title}>Via SMS</Text>
               <Text style={styles.boxInfor}>+6282*******39</Text>
@@ -36,7 +37,7 @@ const ForgotPassWord = ({navigation}) => {
           <Pressable
             style={choice === 2 ? styles.selected : styles.options}
             onPress={() => setChoice(2)}>
-            <Image source={require('./img/mail.png')} />
+            <Image source={images.mail} />
             <View style={styles.boxContent}>
               <Text style={styles.title}>Via Email</Text>
               <Text style={styles.boxInfor}>ex***le@yourdomain.com</Text>
@@ -46,7 +47,7 @@ const ForgotPassWord = ({navigation}) => {
       </View>
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate('resetPassword')}>
+        onPress={() => navigation.navigate('otpVerify')}>
         <Text style={styles.buttonContent}>Continue</Text>
       </Pressable>
     </SafeAreaView>

@@ -14,7 +14,9 @@ const Stack = createStackNavigator();
 export const AppStack = () => {
   return (
     <Stack.Navigator initialRouteName="selectCountry">
-      <Stack.Screen name='selectCountry' component={SelectCountry}/>
+      <Stack.Screen name='selectCountry'
+       component={SelectCountry}
+       options={{title: 'Select Your Country'}}/>
       <Stack.Screen name="home" component={Home} />
       <Stack.Screen
         name="resetDone"

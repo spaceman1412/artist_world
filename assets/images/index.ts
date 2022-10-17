@@ -1,4 +1,11 @@
 export const images = {
   girl: require('./girl.png'),
+  eye: require('./eye.png'),
+  eye_off: require('./eye_off.png'),
+  rotationLock : require('./rotation_lock.png'),
+  forgot_Password: require('./forgot_Password.png'),
+  message: require('./message.png'),
+  mail: require('./mail.png'),
+  congratulation : require('./congratulation.png'),
 };
 export type ImageTypes = keyof typeof images;
