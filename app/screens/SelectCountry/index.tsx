@@ -95,6 +95,7 @@ const SelectCountry = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
+    flex: 1,
   },
   searchBox: {
     flexDirection: 'row',

@@ -7,5 +7,12 @@ export const images = {
   message: require('./message.png'),
   mail: require('./mail.png'),
   congratulation : require('./congratulation.png'),
+  phone: require('./call.png'),
+  edit: require('./edit.png'),
+  location: require('./map.png'),
+  sort_down: require('./sort_down.png'),
+  user: require('./user.png'),
+  email: require('./email.png'),
+
 };
 export type ImageTypes = keyof typeof images;

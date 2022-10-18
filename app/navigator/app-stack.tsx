@@ -9,15 +9,25 @@ import OTPverify from '@screens/otp-verify';
 import Prologue from '@screens/prologue';
 import PhoneLogin from '@screens/phone-login';
 import SelectCountry from '@screens/SelectCountry';
+import EditProfile from '@screens/Edit-profile';
 
 const Stack = createStackNavigator();
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="selectCountry">
-      <Stack.Screen name='selectCountry'
-       component={SelectCountry}
-       options={{title: 'Select Your Country'}}/>
-      <Stack.Screen name="home" component={Home} />
+    <Stack.Navigator initialRouteName="editProfile">
+      <Stack.Screen name='editProfile'
+      component={EditProfile}
+      options={{
+        title: 'Fill Your Profile'
+      }}/>
+      <Stack.Screen 
+      name='selectCountry'
+      component={SelectCountry}
+      options={{
+        title: 'Select Your Country'
+      }}/>
+      <Stack.Screen name="home"
+       component={Home} />
       <Stack.Screen
         name="resetDone"
         component={ResetDone}
