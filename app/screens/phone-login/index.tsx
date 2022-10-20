@@ -1,6 +1,11 @@
 import React from 'react';
-import {Text, View, StyleSheet, Button, TouchableOpacity} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 
 const styles = StyleSheet.create({
   container: {

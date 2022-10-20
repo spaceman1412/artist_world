@@ -1,10 +1,14 @@
 import React from 'react';
-import {Text, View, Image, StyleSheet, Button} from 'react-native';
-import {images} from '@assets/images/index';
 import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  Button,
   TouchableOpacity,
   TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
+} from 'react-native';
+import {images} from '@assets/images/index';
 
 const styles = StyleSheet.create({
   container: {

@@ -1,10 +1,17 @@
+import {Button} from '@components';
+import GlobalStyles from '@theme/styles/global-style';
 import React from 'react';
-import {View, SafeAreaView, Button} from 'react-native';
+import {SafeAreaView} from 'react-native';
 
-const Home = () => {
+const Home = ({navigation}) => {
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1, backgroundColor: 'black'}} />
+    <SafeAreaView
+      style={[
+        GlobalStyles.flex,
+        GlobalStyles.alignCenter,
+        GlobalStyles.justifyCenter,
+      ]}>
+      <Button text="aaa" preset="primary" style={{width: 100, height: 100}} />
     </SafeAreaView>
   );
 };
