@@ -1,8 +1,7 @@
+import React from 'react';
 import {CounterActions} from 'app/store/counter/reducer';
 import {useAppDispatch, useAppSelector} from 'app/store/hook';
-import React from 'react';
 import {Button, Text, TextInput, View} from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
 
 const Counter = () => {
   // The `state` arg is correctly typed as `RootState` already
