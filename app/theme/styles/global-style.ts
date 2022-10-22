@@ -23,6 +23,9 @@ const GlobalStyles = StyleSheet.create({
   flexStart: {
     alignItems: 'flex-start',
   },
+  flexEnd: {
+    alignItems: 'flex-end'
+  },
   justifyAround: {
     justifyContent: 'space-around',
   },
@@ -44,6 +47,12 @@ const GlobalStyles = StyleSheet.create({
   fullHeight: {
     height: '100%',
   },
+  halfWidth: {
+    width: '50%',
+  },
+  halfHeight: {
+    height: '50%',
+  }
 });
 
 export default GlobalStyles;

@@ -1,18 +1,18 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import ForgotPassWord from '@screens/forgot-password';
-import Home from '@screens/home';
+import Home from '@screens/Home';
 import ResetDone from '@screens/reset-done';
 import ResetPassword from '@screens/reset-password';
 import OTPverify from '@screens/otp-verify';
-import Counter from '@screens/counter';
+import Counter from '@screens/Counter';
 import Prologue from '@screens/prologue';
 import PhoneLogin from '@screens/phone-login';
 
 const Stack = createStackNavigator();
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="prologue">
+    <Stack.Navigator initialRouteName="otpVerify">
       <Stack.Screen name="home" component={Home} />
       <Stack.Screen
         name="resetDone"
