@@ -1,3 +1,4 @@
+import {CommonType} from '@utils/types';
 import React from 'react';
 import {
   Text,
@@ -21,7 +22,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const PhoneLogin = ({navigation}) => {
+interface Props {}
+
+export const PhoneLogin: CommonType.AppScreenProps<'otpVerify', Props> = ({
+  navigation,
+}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.headingText}>My mobile</Text>
@@ -58,5 +63,3 @@ const PhoneLogin = ({navigation}) => {
     </View>
   );
 };
-
-export default PhoneLogin;

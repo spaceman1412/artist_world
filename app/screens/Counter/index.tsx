@@ -2,8 +2,11 @@ import React from 'react';
 import {CounterActions} from 'app/store/counter/reducer';
 import {useAppDispatch, useAppSelector} from 'app/store/hook';
 import {Button, Text, TextInput, View} from 'react-native';
+import {CommonType} from '@utils/types';
 
-const Counter = () => {
+interface Props {}
+
+export const Counter: CommonType.AppScreenProps<'counter', Props> = () => {
   // The `state` arg is correctly typed as `RootState` already
   const {value} = useAppSelector(state => state.counter);
   const [number, setNumber] = React.useState(null);
@@ -49,5 +52,3 @@ const Counter = () => {
     </View>
   );
 };
-
-export default Counter;

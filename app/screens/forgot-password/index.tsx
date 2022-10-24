@@ -7,8 +7,13 @@ import {
   SafeAreaView,
 } from 'react-native';
 import React from 'react';
+import {CommonType} from '@utils/types';
 
-const ForgotPassWord = ({navigation}) => {
+interface Props {}
+
+export const ForgotPassWord: CommonType.AppScreenProps<'forgot', Props> = ({
+  navigation,
+}) => {
   const [choice, setChoice] = React.useState(1);
 
   return (
@@ -113,5 +118,3 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
 });
-
-export default ForgotPassWord;

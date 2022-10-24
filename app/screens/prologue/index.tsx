@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {images} from '@assets/images/index';
+import {CommonType} from '@utils/types';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,7 +28,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const Prologue = ({navigation}) => {
+interface Props {}
+
+export const Prologue: CommonType.AppScreenProps<'prologue', Props> = ({
+  navigation,
+}) => {
   return (
     <View style={styles.container}>
       <Image
@@ -58,5 +63,3 @@ const Prologue = ({navigation}) => {
     </View>
   );
 };
-
-export default Prologue;

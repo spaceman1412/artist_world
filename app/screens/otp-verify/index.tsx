@@ -1,3 +1,4 @@
+import {CommonType} from '@utils/types';
 import * as React from 'react';
 import {useState} from 'react';
 import {
@@ -22,7 +23,11 @@ const NumericInput = ({value, onChangeText}) => {
   );
 };
 
-const OTPverify = ({navigation}) => {
+interface Props {}
+
+export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
+  navigation,
+}) => {
   const [seconds, setSeconds] = useState(60);
   const [codes, setCodes] = React.useState({
     1: '',
@@ -142,5 +147,3 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
 });
-
-export default OTPverify;

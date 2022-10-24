@@ -1,9 +1,14 @@
 import {Button} from '@components';
 import GlobalStyles from '@theme/styles/global-style';
+import {CommonType} from '@utils/types';
 import React from 'react';
 import {SafeAreaView} from 'react-native';
 
-const Home = ({navigation}) => {
+interface Props {}
+
+export const Home: CommonType.AppScreenProps<'home', Props> = ({
+  navigation,
+}) => {
   return (
     <SafeAreaView
       style={[
@@ -15,5 +20,3 @@ const Home = ({navigation}) => {
     </SafeAreaView>
   );
 };
-
-export default Home;
