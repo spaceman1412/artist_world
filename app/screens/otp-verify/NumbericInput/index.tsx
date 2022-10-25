@@ -56,11 +56,12 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 2,
     borderColor: '#e8e5ea',
-    backgroundColor: color.background,
+    backgroundColor: 'white',
     borderRadius: 17,
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: 15,
   },
 });
 

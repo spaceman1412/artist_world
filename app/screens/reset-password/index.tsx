@@ -1,3 +1,4 @@
+import {CommonType} from '@utils/types';
 import * as React from 'react';
 import {
   Text,
@@ -11,7 +12,12 @@ import {
   SafeAreaView,
 } from 'react-native';
 
-const ResetPassword = ({navigation}) => {
+interface Props {}
+
+export const ResetPassword: CommonType.AppScreenProps<
+  'resetPassword',
+  Props
+> = ({navigation}) => {
   const [inputting, setInputting] = React.useState('');
   const [hidePassword, setHidePassword] = React.useState([true, true]);
   const [password, setPassword] = React.useState('');
@@ -156,4 +162,3 @@ const styles = StyleSheet.create({
     fontSize: 25,
   },
 });
-export default ResetPassword;

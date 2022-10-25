@@ -1,6 +1,6 @@
-import {Button} from '@components';
-import * as React from 'react';
 
+import {CommonType} from '@utils/types';
+import {Button} from '@components';
 import {
   View,
   Text,
@@ -13,8 +13,14 @@ import GlobalStyles from '@theme/styles/global-style';
 import {images} from '@assets/images';
 import NumericInput from './NumbericInput';
 import { color } from '@theme';
+import * as React from 'react';
 
-const OTPverify = ({navigation}) => {
+
+interface Props {}
+
+export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
+  navigation,
+}) => {
   const [seconds, setSeconds] = React.useState(60);
   const [inputting, setInputting] = React.useState(1);
   const [codes, setCodes] = React.useState({
@@ -181,20 +187,22 @@ const OTPverify = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
-    backgroundColor: color.background,
+    backgroundColor: 'white',
   },
   text: {
     fontSize: 20,
     textAlign: 'center',
     color: 'black',
+
   },
   phoneNumber: {
     fontWeight: 'bold',
   },
   inputGroup: {
+    margin: 'auto',
     flexDirection: 'row',
     shadowColor: '#999',
     shadowOffset: {
@@ -204,7 +212,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.37,
     shadowRadius: 7.49,
     elevation: 12,
-    marginVertical: 10,
+    justifyContent: 'center',
+
   },
   button: {
     width: 370,
@@ -232,6 +241,7 @@ const styles = StyleSheet.create({
   },
   numberPad: {
     height: '40%',
+    marginVertical: 10,
   },
   countDown: {
     fontSize: 30,
@@ -239,8 +249,6 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   countDownContainer: {
-    margin: 10,
+    margin: 15 ,
   },
 });
-
-export default OTPverify;
