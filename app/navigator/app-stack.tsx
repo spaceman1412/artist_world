@@ -1,13 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-
 import {AppNavigatorParamList} from './navigator-param-list';
 import * as SCREENS from '@screens';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 export const AppStack = () => {
   return (
-
     <Stack.Navigator initialRouteName="otpVerify">
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen

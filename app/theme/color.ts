@@ -27,7 +27,7 @@ export const color = {
   /**
    * The main tinting color.
    */
-  primary: palette.lighterGrey,
+  primary: palette.primary,
   /**
    * The main tinting color, but darker.
    */
@@ -63,4 +63,7 @@ export const color = {
    * white background
    */
   storybookTextColor: palette.black,
+
+  outLine: palette.lightGrey,
+  whiteBackground: palette.white
 };

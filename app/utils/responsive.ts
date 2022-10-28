@@ -39,7 +39,7 @@ export function isIphoneX() {
   return (
     Platform.OS === 'ios' &&
     !Platform.isPad &&
-    !Platform.isTVOS &&
+    !Platform.isTV &&
     (_height === 780 ||
       _width === 780 ||
       _height === 812 ||

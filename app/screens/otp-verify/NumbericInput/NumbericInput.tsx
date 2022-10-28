@@ -1,4 +1,4 @@
-import { color } from '@theme';
+import {color} from '@theme';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 
 interface NumbericInputProps {
@@ -19,7 +19,7 @@ const NumericInput = ({
       onPress={() => onPress()}
       style={
         inputting
-          ? [styles.input, {borderColor: '#e06c75'}]
+          ? [styles.input, {borderColor: color.primary}]
           : filled
           ? [styles.input, styles.filled]
           : styles.input
@@ -27,9 +27,9 @@ const NumericInput = ({
       <Text
         style={
           inputting
-            ? [styles.textInput, {color: '#f6b3bc'}]
+            ? [styles.textInput, {color: color.primary}]
             : filled
-            ? [styles.textInput, {color: 'white'}]
+            ? [styles.textInput, {color: color.text, opacity: 1}]
             : styles.textInput
         }>
         {value === '' ? 0 : value}
@@ -40,28 +40,28 @@ const NumericInput = ({
 
 const styles = StyleSheet.create({
   textInput: {
-    fontSize: 40,
+    fontSize: 32,
     fontWeight: '700',
-    color: '#e8e6e9',
+    color: color.outLine,
+    opacity: 0.4,
   },
   filled: {
-    backgroundColor: '#e83f56',
-    borderColor: '#e06c75',
+    backgroundColor: color.primary,
+    borderColor: color.primary,
+
   },
   input: {
-    height: 80,
-    width: 80,
-    fontSize: 30,
-    margin: 5,
+    height: 70,
+    width: 66,
+    margin: 9,
     padding: 10,
-    borderWidth: 2,
-    borderColor: '#e8e5ea',
-    backgroundColor: 'white',
-    borderRadius: 17,
+    borderWidth: 1,
+    borderColor: color.outLine,
+    backgroundColor: color.transparent,
+    borderRadius: 15,
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: 15,
   },
 });
 
