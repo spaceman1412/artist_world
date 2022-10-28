@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "all": "watchman watch-del-all && rmdir node_modules /s /q && yarn install && cd ios && del -f Pods && del -f Podfile.lock && npx pod install && cd .."
+    "all": "watchman watch-del-all && rm -rf package-lock.json && rm -rf node_modules/ && rm -fr $TMPDIR/metro* && yarn install && cd ios && rm -rf Pods && rm -rf Podfile.lock && pod install && cd .."
   },
   "dependencies": {
     "@react-native-clipboard/clipboard": "^1.11.1",
