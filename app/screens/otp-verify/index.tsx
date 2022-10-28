@@ -1,23 +1,19 @@
-
 import {CommonType} from '@utils/types';
-import {Button} from '@components';
 import {
   View,
   Text,
   StyleSheet,
   SafeAreaView,
   Pressable,
-  Image,
+  FlatList,
 } from 'react-native';
 import GlobalStyles from '@theme/styles/global-style';
-import {images} from '@assets/images';
-import NumericInput from './NumbericInput';
-import { color } from '@theme';
+import NumericInput from './NumbericInput/NumbericInput';
+import {color} from '@theme';
 import * as React from 'react';
-
+import NumberPad from './NumberPad/NumberPad';
 
 interface Props {}
-
 export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
   navigation,
 }) => {
@@ -42,7 +38,7 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
       setInputting(inputting - 1);
     }
   };
-
+  
   React.useEffect(() => {
     const countdown = setInterval(() => {
       setSeconds(prev => prev - 1);
@@ -54,12 +50,27 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
     return () => clearInterval(countdown);
   }, [seconds]);
 
+  const Data = [
+    {id: '1', onPress: () => setCode('1')},
+    {id:'2',onPress:() => setCode('2')},
+    {id:'3',onPress:() => setCode('3')},
+    {id:'4',onPress:() => setCode('4')},
+    {id:'5',onPress:() => setCode('5')},
+    {id:'6',onPress:() => setCode('6')},
+    {id:'7',onPress:() => setCode('7')},
+    {id:'8',onPress:() => setCode('8')},
+    {id:'9',onPress:() => setCode('9')},
+    {id:'space'},
+    {id:'0',onPress:() => setCode('0')},
+    {id:'delete', onPress: () => handleDelete()},
+  ]
+
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      
         <View style={styles.countDownContainer}>
           <Text style={[styles.countDown, GlobalStyles.textCenter]}>
-            {seconds == 60
+            {seconds === 60
               ? '01:00'
               : seconds < 10
               ? '00:0' + seconds
@@ -94,85 +105,11 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
             onPress={() => setInputting(4)}
           />
         </View>
-      </View>
-
-      <View style={[GlobalStyles.fullWidth, styles.numberPad]}>
-        <View style={[GlobalStyles.itemCenter, GlobalStyles.row, styles.line]}>
-          <Button
-            text="1"
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}
-            onPressIn={() => setCode('1')}
-          />
-          <Button
-            text="2"
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}
-            onPressIn={() => setCode('2')}
-          />
-          <Button
-            text="3"
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}
-            onPressIn={() => setCode('3')}
-          />
-        </View>
-        <View style={[GlobalStyles.itemCenter, GlobalStyles.row, styles.line]}>
-          <Button
-            text="4"
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}
-            onPressIn={() => setCode('4')}
-          />
-          <Button
-            text="5"
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}
-            onPressIn={() => setCode('5')}
-          />
-          <Button
-            text="6"
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}
-            onPressIn={() => setCode('6')}
-          />
-        </View>
-        <View style={[GlobalStyles.itemCenter, GlobalStyles.row, styles.line]}>
-          <Button
-            text="7"
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}
-            onPressIn={() => setCode('7')}
-          />
-          <Button
-            text="8"
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}
-            onPressIn={() => setCode('8')}
-          />
-          <Button
-            text="9"
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}
-            onPressIn={() => setCode('9')}
-          />
-        </View>
-        <View
-          style={[GlobalStyles.justifyCenter, GlobalStyles.row, styles.line]}>
-          <View style={styles.numberButton}></View>
-          <Button
-            text="0"
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}
-            onPressIn={() => setCode('0')}
-          />
-          <Button
-            onPress={handleDelete}
-            textStyle={styles.contentNumberButton}
-            style={styles.numberButton}>
-            <Image source={images.delete} style={{width: 30, height: 30}} />
-          </Button>
-        </View>
+      
+      <View style={[ styles.numberPad]}>
+          <FlatList data={Data}
+          renderItem={NumberPad} 
+          numColumns={3}/>
       </View>
 
       <Pressable
@@ -187,24 +124,22 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: color.whiteBackground,
   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: '400',
     textAlign: 'center',
-    color: 'black',
-
+    color: color.storybookTextColor,
   },
   phoneNumber: {
     fontWeight: 'bold',
   },
   inputGroup: {
-    margin: 'auto',
     flexDirection: 'row',
-    shadowColor: '#999',
     shadowOffset: {
       width: 0,
       height: 6,
@@ -213,42 +148,30 @@ const styles = StyleSheet.create({
     shadowRadius: 7.49,
     elevation: 12,
     justifyContent: 'center',
-
   },
   button: {
-    width: 370,
+    width: 85,
+    height: 24,
     marginBottom: 20,
     alignItems: 'center',
-    marginTop: 'auto',
   },
   buttonContent: {
-    color: '#e72e48',
-    fontWeight: '500',
-    fontSize: 20,
-  },
-  numberButton: {
-    width: '33%',
-    padding: 10,
-    height: '100%',
-    backgroundColor: color.transparent,
-  },
-  contentNumberButton: {
-    fontSize: 27,
-    color: 'black',
-  },
-  line: {
-    height: '33%',
+    color: color.primary,
+    fontWeight: '700',
+    fontSize: 16,
   },
   numberPad: {
-    height: '40%',
-    marginVertical: 10,
+    width: '100%',
+    
+    paddingHorizontal: 10,
   },
   countDown: {
-    fontSize: 30,
+    fontSize: 34,
     fontWeight: '700',
-    color: 'black',
+    color: color.storybookTextColor,
+    height: 51,
   },
   countDownContainer: {
-    margin: 15 ,
+    margin: 15,
   },
 });
