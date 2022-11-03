@@ -6,7 +6,7 @@ import * as SCREENS from '@screens';
 const Stack = createStackNavigator<AppNavigatorParamList>();
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="prologue">
+    <Stack.Navigator initialRouteName="otpVerify">
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
