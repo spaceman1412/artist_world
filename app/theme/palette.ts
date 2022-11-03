@@ -1,5 +1,5 @@
 export const palette = {
-  primary: '#505352',
+  primary: '#E94057',
   secondary: '#BDBDBD',
   secondaryGray: '#909090',
   primaryOrange: '#F15A22',
@@ -90,6 +90,7 @@ export const palette = {
   BlurCamera: 'rgba(0, 0, 0, 0.5)',
 
   Gray: '#727272',
+  GrayLight: '#8E5EA',
   Gray60: 'rgba(214, 213, 213, 0.6)',
   outOfGreyWithOpacity: (opacity: number) => `rgba(214, 213, 213, ${opacity})`,
 

@@ -1,87 +1,121 @@
 import {CommonType} from '@utils/types';
-import * as React from 'react';
-import {useState} from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TextInput,
   SafeAreaView,
   Pressable,
+  FlatList,
 } from 'react-native';
-
-const NumericInput = ({value, onChangeText}) => {
-  return (
-    <TextInput
-      onChangeText={onChangeText}
-      value={value}
-      style={styles.input}
-      maxLength={1}
-      keyboardType="numeric"
-      returnKeyType="next"
-    />
-  );
-};
+import GlobalStyles from '@theme/styles/global-style';
+import NumericInput from './NumbericInput/NumbericInput';
+import {color} from '@theme';
+import * as React from 'react';
+import NumberPad from './NumberPad/NumberPad';
 
 interface Props {}
-
 export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
   navigation,
 }) => {
-  const [seconds, setSeconds] = useState(60);
+  const [seconds, setSeconds] = React.useState(60);
+  const [inputting, setInputting] = React.useState(1);
   const [codes, setCodes] = React.useState({
     1: '',
     2: '',
     3: '',
     4: '',
   });
-
-  const setCode = (key: number, value: string) => {
-    setCodes(prev => ({...prev, [key]: value}));
+  const setCode = (value: string) => {
+    setCodes(prev => ({...prev, [inputting]: value}));
+    if (inputting < 4) {
+      setInputting(inputting + 1);
+    }
   };
 
-  const countdown = setInterval(() => {
-    if (seconds > 0) {
-      setSeconds(seconds - 1);
-    } else {
-      setSeconds(60);
-      clearInterval(countdown);
+  const handleDelete = () => {
+    setCodes(prev => ({...prev, [inputting]: ''}));
+    if (inputting > 1) {
+      setInputting(inputting - 1);
     }
-  }, 1000);
+  };
+  
+  React.useEffect(() => {
+    const countdown = setInterval(() => {
+      setSeconds(prev => prev - 1);
+      if (seconds === 0) {
+        clearInterval(countdown);
+        setSeconds(60);
+      }
+    }, 1000);
+    return () => clearInterval(countdown);
+  }, [seconds]);
+
+  const Data = [
+    {id: '1', onPress: () => setCode('1')},
+    {id:'2',onPress:() => setCode('2')},
+    {id:'3',onPress:() => setCode('3')},
+    {id:'4',onPress:() => setCode('4')},
+    {id:'5',onPress:() => setCode('5')},
+    {id:'6',onPress:() => setCode('6')},
+    {id:'7',onPress:() => setCode('7')},
+    {id:'8',onPress:() => setCode('8')},
+    {id:'9',onPress:() => setCode('9')},
+    {id:'space'},
+    {id:'0',onPress:() => setCode('0')},
+    {id:'delete', onPress: () => handleDelete()},
+  ]
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.view}>
-        <Text style={styles.text}>
-          Code has been send to{' '}
-          <Text style={styles.phoneNumber}>+0705980780</Text>
-        </Text>
+      
+        <View style={styles.countDownContainer}>
+          <Text style={[styles.countDown, GlobalStyles.textCenter]}>
+            {seconds === 60
+              ? '01:00'
+              : seconds < 10
+              ? '00:0' + seconds
+              : '00:' + seconds}
+          </Text>
+          <Text style={styles.text}>Type the verification code</Text>
+          <Text style={styles.text}>we've sent you</Text>
+        </View>
         <View style={styles.inputGroup}>
           <NumericInput
+            inputting={inputting === 1}
+            filled={codes[1] !== ''}
             value={codes[1]}
-            onChangeText={(value: string) => setCode(1, value)}
+            onPress={() => setInputting(1)}
           />
           <NumericInput
             value={codes[2]}
-            onChangeText={(value: string) => setCode(2, value)}
+            inputting={inputting === 2}
+            filled={codes[2] !== ''}
+            onPress={() => setInputting(2)}
           />
           <NumericInput
             value={codes[3]}
-            onChangeText={(value: string) => setCode(3, value)}
+            inputting={inputting === 3}
+            filled={codes[3] !== ''}
+            onPress={() => setInputting(3)}
           />
           <NumericInput
             value={codes[4]}
-            onChangeText={(value: string) => setCode(4, value)}
+            inputting={inputting === 4}
+            filled={codes[4] !== ''}
+            onPress={() => setInputting(4)}
           />
         </View>
-        <Text style={styles.text}>
-          Resend code in <Text style={styles.phoneNumber}>{seconds}</Text> s
-        </Text>
+      
+      <View style={[ styles.numberPad]}>
+          <FlatList data={Data}
+          renderItem={NumberPad} 
+          numColumns={3}/>
       </View>
+
       <Pressable
         style={styles.button}
         onPress={() => navigation.navigate('resetPassword')}>
-        <Text style={styles.buttonContent}>Verify</Text>
+        <Text style={styles.buttonContent}>Send again</Text>
       </Pressable>
     </SafeAreaView>
   );
@@ -90,39 +124,22 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     flex: 1,
-    backgroundColor: 'white',
-  },
-  view: {
-    display: 'flex',
-    flex: 0.5,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 250,
+    backgroundColor: color.whiteBackground,
   },
   text: {
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: '400',
+    textAlign: 'center',
+    color: color.storybookTextColor,
   },
   phoneNumber: {
     fontWeight: 'bold',
   },
-  input: {
-    height: 60,
-    width: 60,
-    fontSize: 22,
-    margin: 12,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#e06c75',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    textAlign: 'center',
-  },
   inputGroup: {
     flexDirection: 'row',
-    shadowColor: '#999',
     shadowOffset: {
       width: 0,
       height: 6,
@@ -130,20 +147,31 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.37,
     shadowRadius: 7.49,
     elevation: 12,
+    justifyContent: 'center',
   },
   button: {
-    padding: 10,
-    width: 370,
-    backgroundColor: '#e06c75',
-    height: 55,
-    borderRadius: 30,
+    width: 85,
+    height: 24,
     marginBottom: 20,
     alignItems: 'center',
-    marginTop: 'auto',
   },
   buttonContent: {
-    color: 'white',
-    fontWeight: '500',
-    fontSize: 25,
+    color: color.primary,
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  numberPad: {
+    width: '100%',
+    
+    paddingHorizontal: 10,
+  },
+  countDown: {
+    fontSize: 34,
+    fontWeight: '700',
+    color: color.storybookTextColor,
+    height: 51,
+  },
+  countDownContainer: {
+    margin: 15,
   },
 });
