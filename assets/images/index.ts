@@ -1,7 +1,7 @@
 export const images = {
   girl: require('./girl.png'),
   placeholder: require('./placeholder.jpg'),
-  camera: require("./camera.svg")
+  camera: require('./camera.svg'),
   delete: require('./delete.png'),
 };
 
