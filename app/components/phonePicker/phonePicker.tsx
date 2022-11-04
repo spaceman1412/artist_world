@@ -13,20 +13,17 @@ from 'react-native';
 import { PhonePickerProps } from './phonePicker.props';
 
 
-export function PhonePicker({
-flagCode,
-codeNumber,
-value,
-onChange,
-navigation,
-}: PhonePickerProps)
+export function PhonePicker(props: PhonePickerProps)
 {
+    const {
+    flagCode,
+    codeNumber,
+    value,
+    onChange,
+    navigation,
+    } = props
     const validatePhone = (value) =>{
-        if(isNaN(value))
-        {
-            
-        }
-        else
+        if(!isNaN(value))   // to make sure the user only enter number even in PC
         {
             let num = value.replace('.','')
             onChange(num);

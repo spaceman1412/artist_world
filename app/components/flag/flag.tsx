@@ -3,7 +3,8 @@ import CountryFlag  from "react-native-country-flag"
 import { FlagProp } from "./flag.props";
 
 
-const Flag = ({code, style} : FlagProp ) => {
+const Flag = (props : FlagProp ) => {
+    const {code,style} = props
     return (
         <View >
             <CountryFlag isoCode={code} 

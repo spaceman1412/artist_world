@@ -5,7 +5,9 @@ import { RadioButtonProps } from './radioButton.props';
 import { INLINE_STYLE, OUTLINE_STYLE, TEXT_STYLES } from './radioButton.preset';
 import {color as colors}  from '@theme';
 import GlobalStyles from '@theme/styles/global-style'
-const RadioButton = ({
+const RadioButton = (props: RadioButtonProps) =>
+{
+    const{
         text,
         color = colors.palette.primary,
         size = 'md',
@@ -14,9 +16,7 @@ const RadioButton = ({
         checked,
         position ,
         ...rest
-}: RadioButtonProps) =>
-{
-
+    } = props
     const outLineStyle = OUTLINE_STYLE[size] || OUTLINE_STYLE.md;
     const outLineStyles = [outLineStyle,{borderColor: color}]
     const inLineStyle = INLINE_STYLE[size] || INLINE_STYLE.md;
@@ -44,7 +44,6 @@ const RadioButton = ({
                 </TouchableOpacity>
                 </>:
                 <>
-                {content}
                 <TouchableOpacity 
                 style={outLineStyles}
                 {...rest}
@@ -55,6 +54,7 @@ const RadioButton = ({
                         : null
                     }
                 </TouchableOpacity>
+                {content}
                 </>
             }
         </View>
