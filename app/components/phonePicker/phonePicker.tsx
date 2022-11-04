@@ -23,7 +23,7 @@ export function PhonePicker(props: PhonePickerProps)
     navigation,
     } = props
     const validatePhone = (value) =>{
-        if(!isNaN(value))   // to make sure the user only enter number even in PC
+        if(!isNaN(value))   // to make sure the user only enter number even when in the pc
         {
             let num = value.replace('.','')
             onChange(num);
