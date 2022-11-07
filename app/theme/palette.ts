@@ -2,7 +2,7 @@ export const palette = {
   primary: '#E94057',
   secondary: '#BDBDBD',
   secondaryGray: '#909090',
-  primaryOrange: '#F15A22',
+  primaryOrange: '#F27121',
   white: '#ffffff',
   offWhite: '#e6e6e6',
   orange: '#F15B24',
@@ -84,7 +84,7 @@ export const palette = {
   SGray20: '#FAFAFB',
   SGray10: '#FFFFFF',
 
-  purple: '#E0E0E0',
+  purple: '#8A2387',
 
   BlurOrange: 'rgba(241, 90, 34, 0.5)',
   BlurCamera: 'rgba(0, 0, 0, 0.5)',
