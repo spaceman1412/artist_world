@@ -8,13 +8,14 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import { CountryProps } from './country.props';
 
 
-const Country = ({
+const Country = (props: CountryProps) => {
+  const {
     flagName,
     flagNumber,
     flagCode,
     checked, 
-    onChecked}: 
-    CountryProps) => {
+    onChecked
+    } = props
   return (
     <TouchableOpacity
       onPress={() => onChecked(flagNumber)}

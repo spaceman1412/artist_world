@@ -46,10 +46,6 @@ export const SelectCountry: CommonType.AppScreenProps<'selectCountry', Props> =
     setSearch(e);
   };
   const handleNextButton = () =>{
-    navigation.navigate('home',{
-      flagNumber: countrySelection,
-    })
-    console.log('navigate to phone select')
   }
   return (
     <SafeAreaView style={styles.container}>
