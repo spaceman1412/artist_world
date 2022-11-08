@@ -125,7 +125,7 @@ dropdown: {
     backgroundColor: color.whiteBackground,
     width: 295,
     maxHeight: 100,
-    shadowColor: 'blue',
+    shadowColor: color.palette.black,
     shadowRadius: 4,
     shadowOffset: { height: 4, width: 0 },
     shadowOpacity: 0.5,
