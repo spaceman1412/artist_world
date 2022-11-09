@@ -1,10 +1,16 @@
-import { ModalProps } from 'react-native';
-
+import { StyleProp,ViewStyle, TouchableOpacityProps, TextStyle } from 'react-native';
 
 export interface DropDownProps 
 {
-    //  data: [{id: string, label: string}],
-    data: any,
+    data: Array<{id: string, label: string}>,
     value : string,
-    onSelect: () => void,
+    onSelect: (value) => void,
+    containerStyles ?: StyleProp<ViewStyle>,
+    textStyles?: StyleProp<TextStyle>
+    itemStyles?: StyleProp<TouchableOpacityProps>,
+    maxDropdownHeight? : number,
+    preset?: 'primary'| 'noneOutline',
+    dropDownWidth?: number,
+    dropdownHeight?: number,
+    placeHolder?: string,
 }

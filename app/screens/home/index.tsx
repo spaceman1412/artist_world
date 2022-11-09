@@ -1,11 +1,11 @@
 import {Button} from '@components';
-import DropDown from '@components/dropdown/dropdown';
 import FilterSearch from '@components/filterSearch/filterSearch';
 import GlobalStyles from '@theme/styles/global-style';
 import {getSize} from '@utils/responsive';
 import {CommonType} from '@utils/types';
-import React from 'react';
+import  React from 'react';
 import {SafeAreaView} from 'react-native';
+
 
 interface Props {}
 
@@ -13,8 +13,16 @@ export const Home: CommonType.AppScreenProps<'home', Props> = ({
   navigation,
 }) => {
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [select,setSelect]= React.useState('');
-  const data  = [{id: '1', label:'asd'}]
+  const [age, setAge]= React.useState([15,28])
+  const [gender,setGender] = React.useState('')
+  const [location,setLocation]= React.useState('')
+  const [distance,setDistance] = React.useState([0])
+  const locations = [
+    {id: '1', label : 'Hanoi'},
+      {id: '2', label: 'SaiGon'},
+      {id: '3', label: 'Da Lat'},
+      {id: '4', label: 'Da Nang'},
+     {id: '5', label : 'Ca Mau'}]
   return (
     <SafeAreaView
       style={[
@@ -30,16 +38,18 @@ export const Home: CommonType.AppScreenProps<'home', Props> = ({
       />
       <FilterSearch
       visible={modalVisible}
-      onRequestClose={() => setModalVisible(!modalVisible)}
-      animationType='slide'
-      onclear={() => console.log('clear')}
+      onCloseModal={setModalVisible}
+      genderValue = {gender}
+      setGender={setGender}
+      locationValue = {location}
+      setLocation = {setLocation}
+      LocationData = {locations}
+      distance = {distance}
+      setDistance={setDistance}
+      age = {age}
+      setAge={setAge}
+      animationType={'slide'}
       />
-      <DropDown
-      value={select}
-      onSelect={() => setSelect} 
-      data={[
-      {id: '1', label: '2'},
-      {id: '2', label: '3'}]} />
       
     </SafeAreaView>
   );
