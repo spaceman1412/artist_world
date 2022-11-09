@@ -43,7 +43,7 @@ export const AppStack = () => {
       />
 
       <Stack.Screen name="prologue" component={SCREENS.Prologue} />
-
+      <Stack.Screen name="selectCountry" component={SCREENS.SelectCountry}/>
       <Stack.Screen name="phoneLogin" component={SCREENS.PhoneLogin} />
     </Stack.Navigator>
   );
