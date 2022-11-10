@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "608291050737",
+    "project_id": "artistworld-ff16f",
+    "storage_bucket": "artistworld-ff16f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608291050737:android:6307cc662516124ee70550",
+        "android_client_info": {
+          "package_name": "com.artistworld"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "608291050737-0iuis5p9hjqpr9mk4s7kn8qaq3vha74k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsROyLnYtBlfZVZSjhwgm9vxQiWduAmkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "608291050737-0iuis5p9hjqpr9mk4s7kn8qaq3vha74k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
