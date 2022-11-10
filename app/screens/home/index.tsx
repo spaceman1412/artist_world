@@ -5,6 +5,7 @@ import {getSize} from '@utils/responsive';
 import {CommonType} from '@utils/types';
 import  React from 'react';
 import {SafeAreaView} from 'react-native';
+import {firebase} from '@react-native-firebase/app-check';
 
 
 interface Props {}
@@ -23,6 +24,9 @@ export const Home: CommonType.AppScreenProps<'home', Props> = ({
       {id: '3', label: 'Da Lat'},
       {id: '4', label: 'Da Nang'},
      {id: '5', label : 'Ca Mau'}]
+  const appCheckForDefaultApp = firebase.appCheck();
+
+  console.log(appCheckForDefaultApp);
   return (
     <SafeAreaView
       style={[
