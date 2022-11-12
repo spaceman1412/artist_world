@@ -6,6 +6,7 @@ export const images = {
   dropdown: require('./down-arrow.png'),
   close: require('./close.png'),
   search: require('./search.png'),
+  nextArrow: require('./next.png'),
 
 };
 
