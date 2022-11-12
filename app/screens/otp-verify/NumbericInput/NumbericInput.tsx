@@ -8,12 +8,12 @@ interface NumbericInputProps {
   onPress: () => void;
 }
 
-const NumericInput = ({
+const NumericInput = (props: NumbericInputProps) => {
+  const {
   value,
   inputting,
   filled,
-  onPress,
-}: NumbericInputProps) => {
+  onPress,} = props
   return (
     <TouchableOpacity
       onPress={() => onPress()}

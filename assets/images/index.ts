@@ -3,6 +3,9 @@ export const images = {
   placeholder: require('./placeholder.jpg'),
   camera: require('./camera.svg'),
   delete: require('./delete.png'),
+  dropdown: require('./down-arrow.png'),
+  close: require('./close.png'),
+  search: require('./search.png'),
   nextArrow: require('./next.png'),
 
 };
