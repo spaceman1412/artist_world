@@ -19,7 +19,7 @@ const DateTimePicker = (props: DateTimePickerProps) =>{
             onPress={onCloseModal}>
                 <View style={styles.container}>
                     <Text style={styles.text}>Birthday</Text>
-                    <Calendar style={styles.calendar}
+                    <Calendar 
                     onLayout={e => e.preventDefault}
                     initialDate={date}
                     theme={{
@@ -54,11 +54,6 @@ const styles = StyleSheet.create({
         padding: 40,
         borderRadius: 25,
         justifyContent: 'space-between',
-        
-
-    },
-    calendar:{
-        
         
 
     },
