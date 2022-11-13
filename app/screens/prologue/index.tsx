@@ -27,6 +27,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  imageContainer: {
+    width: getSize.v(235),
+    height: getSize.v(360),
+    borderRadius: 15,
+  },
+  text: {color: 'white', fontSize: getSize.font(16)},
+  bottomContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  textButton: {
+    fontSize: 16,
+    color: 'rgba(0, 0, 0, 0.7)',
+  },
+  textBottom: {
+    color: 'rgba(233, 64, 87, 1)',
+    fontSize: getSize.font(16),
+  },
 });
 
 interface Props {}
@@ -36,38 +55,18 @@ export const Prologue: CommonType.AppScreenProps<'prologue', Props> = ({
 }) => {
   return (
     <View style={styles.container}>
-      <Image
-        source={images.girl}
-        style={{
-          width: getSize.v(235),
-          height: getSize.v(360),
-          borderRadius: 15,
-        }}
-      />
+      <Image source={images.girl} style={styles.imageContainer} />
       <View>
-        <TouchableOpacity style={styles.button}>
-          <Text style={{color: 'white', fontSize: getSize.font(16)}}>
-            Create an account
-          </Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('createAccount')}>
+          <Text style={styles.text}>Create an account</Text>
         </TouchableOpacity>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginTop: 20,
-          }}>
-          <Text style={{fontSize: 16, color: 'rgba(0, 0, 0, 0.7)'}}>
-            Already have an account?{' '}
-          </Text>
+        <View style={styles.bottomContainer}>
+          <Text style={styles.textButton}>Already have an account? </Text>
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate('phoneLogin')}>
-            <Text
-              style={{
-                color: 'rgba(233, 64, 87, 1)',
-                fontSize: getSize.font(16),
-              }}>
-              Sign In!
-            </Text>
+            <Text style={styles.textBottom}>Sign In!</Text>
           </TouchableWithoutFeedback>
         </View>
       </View>
