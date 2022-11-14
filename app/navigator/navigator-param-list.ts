@@ -7,5 +7,6 @@ export type AppNavigatorParamList = {
   counter: undefined;
   prologue: undefined;
   phoneLogin: undefined;
+  createAccount: undefined;
   selectCountry: undefined;
 };
