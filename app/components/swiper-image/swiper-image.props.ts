@@ -1,4 +1,7 @@
-export interface SwiperImageProps{
-    images : Array<{image: string, age: string, name: string}>,
+import {ImageSourcePropType} from 'react-native';
 
+export interface SwiperImageProps {
+  images: Array<{image: ImageSourcePropType; age: string; name: string}>;
+  width?: number;
+  height?: number;
 }
