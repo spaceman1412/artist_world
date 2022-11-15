@@ -8,6 +8,7 @@ export const images = {
   search: require('./search.png'),
   nextArrow: require('./next.png'),
   loginScreenIcon: require('./login-screen-icon.svg'),
+  abstractShape: require('./abstractShape.png'),
 };
 
 export type ImageTypes = keyof typeof images;
