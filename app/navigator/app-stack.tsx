@@ -6,7 +6,12 @@ import * as SCREENS from '@screens';
 const Stack = createStackNavigator<AppNavigatorParamList>();
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="home">
+    <Stack.Navigator initialRouteName="customContent">
+      <Stack.Screen
+        name="customContent"
+        component={SCREENS.CustomContent}
+        options={{title: 'Custom Content'}}
+      />
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
