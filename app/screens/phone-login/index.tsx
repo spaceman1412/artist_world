@@ -1,5 +1,6 @@
 import {CommonType} from '@utils/types';
 import React from 'react';
+import auth from '@react-native-firebase/auth';
 import {
   Text,
   View,
@@ -27,6 +28,18 @@ interface Props {}
 export const PhoneLogin: CommonType.AppScreenProps<'otpVerify', Props> = ({
   navigation,
 }) => {
+  const [phone, setPhone] = React.useState('');
+  const [confirm, setConfirm] = React.useState(null);
+  const onPressContinue = () => {
+    auth()
+      .signInWithPhoneNumber(phone)
+      .then(resolve => {
+        navigation.navigate('otpVerify', {
+          confirm: resolve,
+        });
+      });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.headingText}>My mobile</Text>
@@ -35,6 +48,8 @@ export const PhoneLogin: CommonType.AppScreenProps<'otpVerify', Props> = ({
         verify your account.{' '}
       </Text>
       <TextInput
+        value={phone}
+        onChangeText={text => setPhone(text)}
         style={{
           width: 295,
           height: 58,
@@ -55,7 +70,7 @@ export const PhoneLogin: CommonType.AppScreenProps<'otpVerify', Props> = ({
           alignItems: 'center',
           marginTop: 64,
         }}
-        onPress={() => navigation.navigate('otpVerify')}>
+        onPress={onPressContinue}>
         <Text style={{fontWeight: '700', fontSize: 16, color: 'white'}}>
           Continue
         </Text>

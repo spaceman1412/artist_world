@@ -9,11 +9,7 @@ interface NumbericInputProps {
 }
 
 const NumericInput = (props: NumbericInputProps) => {
-  const {
-  value,
-  inputting,
-  filled,
-  onPress,} = props
+  const {value, inputting, filled, onPress} = props;
   return (
     <TouchableOpacity
       onPress={() => onPress()}
@@ -48,13 +44,11 @@ const styles = StyleSheet.create({
   filled: {
     backgroundColor: color.primary,
     borderColor: color.primary,
-
   },
   input: {
-    height: 70,
-    width: 66,
-    margin: 9,
-    padding: 10,
+    height: 58,
+    width: 58,
+    margin: 3,
     borderWidth: 1,
     borderColor: color.outLine,
     backgroundColor: color.transparent,

@@ -3,7 +3,7 @@ export type AppNavigatorParamList = {
   resetDone: undefined;
   resetPassword: undefined;
   forgot: undefined;
-  otpVerify: undefined;
+  otpVerify: {confirm: any};
   counter: undefined;
   prologue: undefined;
   phoneLogin: undefined;
