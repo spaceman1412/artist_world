@@ -29,7 +29,7 @@ export const UploadImage = () => {
     <View style={styles.container}>
       <Image
         style={styles.image}
-        source={{uri: imageUri ?? images.placeholder}}
+        source={{uri: imageUri ?? images.placeholder.toString()}}
       />
       <TouchableOpacity style={styles.upload} onPress={uploadImage}>
         <Camera />
