@@ -120,6 +120,7 @@ export const Login: CommonType.AppScreenProps<'login', Props> = ({
             text={'Continue with email'}
             style={styles.buttonEmail}
             textStyle={styles.textEmailButton}
+            onPress={() => navigation.navigate('createAccount')}
           />
           <Button
             text={'Use phone number'}
@@ -130,9 +131,9 @@ export const Login: CommonType.AppScreenProps<'login', Props> = ({
         </View>
       </View>
       <View style={styles.dividerContainer}>
-        <View style={styles.divider}></View>
+        <View style={styles.divider} />
         <Text style={styles.dividerText}>or sign up with</Text>
-        <View style={styles.divider}></View>
+        <View style={styles.divider} />
       </View>
       <View style={styles.otherLoginContainer}>
         <Button

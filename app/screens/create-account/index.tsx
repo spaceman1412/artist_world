@@ -12,11 +12,23 @@ export const CreateAccount: CommonType.AppScreenProps<
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const login = () => {
+    auth()
+      .signInWithEmailAndPassword(email.trim(), password.trim())
+      .then(() => {
+        navigation.navigate('profile');
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
   const create = () => {
     auth()
       .createUserWithEmailAndPassword(email.trim(), password.trim())
       .then(() => {
         console.log('User account created & signed in!');
+        navigation.navigate('profile');
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
@@ -78,17 +90,32 @@ export const CreateAccount: CommonType.AppScreenProps<
 
       <SizedBox height={10} />
 
-      <TouchableOpacity
-        style={{
-          width: 100,
-          height: 50,
-          backgroundColor: 'blue',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-        onPress={() => create()}>
-        <Text style={{color: 'white'}}>Create</Text>
-      </TouchableOpacity>
+      <View style={{flexDirection: 'row'}}>
+        <TouchableOpacity
+          style={{
+            width: 100,
+            height: 50,
+            backgroundColor: 'blue',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={login}>
+          <Text style={{color: 'white'}}>Login</Text>
+        </TouchableOpacity>
+
+        <SizedBox width={10} />
+        <TouchableOpacity
+          style={{
+            width: 100,
+            height: 50,
+            backgroundColor: 'blue',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          onPress={create}>
+          <Text style={{color: 'white'}}>Create</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
