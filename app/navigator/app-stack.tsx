@@ -57,6 +57,8 @@ export const AppStack = () => {
         component={SCREENS.Login}
         options={{headerShown: false}}
       />
+
+      <Stack.Screen name="profile" component={SCREENS.Profile} />
     </Stack.Navigator>
   );
 };

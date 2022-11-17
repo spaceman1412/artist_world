@@ -11,4 +11,5 @@ export type AppNavigatorParamList = {
   selectCountry: undefined;
   login: undefined;
   profileDetails: undefined;
+  profile: undefined;
 };
