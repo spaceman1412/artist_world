@@ -17,7 +17,7 @@ import { Button } from '@components';
 interface Props{}
 export const SelectCountry: CommonType.AppScreenProps<'selectCountry', Props> = 
 ({navigation}) => {
-  const [countrySelection, setCountrySelection] = React.useState('');
+  const [countrySelection, setCountrySelection] = React.useState({flagNumber: '', flagCode: ''});
   const [listFlag, setListFlag] = React.useState(flags);
   const [search, setSearch] = React.useState('');
   const [inputting, setInputting] = React.useState(false);
@@ -46,6 +46,10 @@ export const SelectCountry: CommonType.AppScreenProps<'selectCountry', Props> =
     setSearch(e);
   };
   const handleNextButton = () =>{
+    navigation.navigate('phoneLogin',{
+      flagCode: countrySelection.flagCode,
+      flagNumber: countrySelection.flagNumber
+    })
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -82,7 +86,7 @@ export const SelectCountry: CommonType.AppScreenProps<'selectCountry', Props> =
               flagName={item.name}
               flagNumber={item.phone}
               flagCode={item.code}
-              checked={countrySelection === item.phone}
+              checked={countrySelection.flagNumber === item.phone}
               onChecked={setCountrySelection}
               key={item.code}
             />
@@ -98,10 +102,10 @@ export const SelectCountry: CommonType.AppScreenProps<'selectCountry', Props> =
         text='Next'
         textStyle={styles.buttonContent}
         style={
-        countrySelection === '' ?
+        countrySelection.flagCode === '' ?
         styles.buttonNext : 
         styles.buttonNextActive}
-        disabled={countrySelection === '' 
+        disabled={countrySelection.flagCode === '' 
         ? true : false}
         onPress={handleNextButton}
         />

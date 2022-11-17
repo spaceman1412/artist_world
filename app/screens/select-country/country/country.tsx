@@ -18,7 +18,7 @@ const Country = (props: CountryProps) => {
     } = props
   return (
     <TouchableOpacity
-      onPress={() => onChecked(flagNumber)}
+      onPress={() => onChecked({flagCode,flagNumber})}
       style={!checked ? styles.container : [styles.container, {borderColor: color.palette.primary}]}>
       <View style={styles.flagContainer}>
         <Flag code={flagCode} />

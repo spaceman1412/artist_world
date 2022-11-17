@@ -6,7 +6,8 @@ export type AppNavigatorParamList = {
   otpVerify: {confirm: any};
   counter: undefined;
   prologue: undefined;
-  phoneLogin: undefined;
+  phoneLogin: {flagCode: string, flagNumber: string};
   createAccount: undefined;
   selectCountry: undefined;
+  login: undefined;
 };

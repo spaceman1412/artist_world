@@ -31,8 +31,8 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
   });
   async function confirmCode(code) {
     try {
-      const confirm = await confirmation.confirm(code);
-      console.log(confirm);
+      
+      await confirmation.confirm(code).then(resolve => console.log(resolve, 'login done'))
     } catch (error) {
       console.log('Invalid code.');
     }
@@ -41,9 +41,10 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
     setCodes(prev => ({...prev, [inputting]: value}));
     if (inputting <= 6) {
       setInputting(inputting + 1);
-    } else if (inputting === 7) {
+    } 
+    if (inputting === 7) {
       const codeConfirm = Object.keys(codes).reduce((pre, curr) => pre + curr);
-      confirmCode(codeConfirm).then(() => console.log('loggi into app'));
+      confirmCode(codeConfirm);
     }
   };
 

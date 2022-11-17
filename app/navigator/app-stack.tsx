@@ -6,7 +6,7 @@ import * as SCREENS from '@screens';
 const Stack = createStackNavigator<AppNavigatorParamList>();
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="phoneLogin">
+    <Stack.Navigator initialRouteName="login">
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
@@ -47,6 +47,11 @@ export const AppStack = () => {
       <Stack.Screen name="phoneLogin" component={SCREENS.PhoneLogin} />
 
       <Stack.Screen name="createAccount" component={SCREENS.CreateAccount} />
+      <Stack.Screen
+        name="login"
+        component={SCREENS.Login}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
