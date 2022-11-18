@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Pressable,
   FlatList,
+  LogBox,
 } from 'react-native';
 import GlobalStyles from '@theme/styles/global-style';
 import NumericInput from './NumbericInput/NumbericInput';
@@ -18,53 +19,57 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
   navigation,
   route,
 }) => {
+  LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+  ]);
+
   const confirmation = route.params.confirm;
   const [seconds, setSeconds] = React.useState(60);
-  const [inputting, setInputting] = React.useState(1);
-  const [codes, setCodes] = React.useState({
-    1: '',
-    2: '',
-    3: '',
-    4: '',
-    5: '',
-    6: '',
-  });
-  async function confirmCode(code) {
+  const [inputting, setInputting] = React.useState(0);
+  const [codes, setCodes] = React.useState(Array(6).fill(''));
+
+  async function confirmCode(code: string) {
     try {
-      
-      await confirmation.confirm(code).then(resolve => console.log(resolve, 'login done'))
+      const result = await confirmation.confirm(code);
+
+      console.log('Login done --> ', result)
     } catch (error) {
       console.log('Invalid code.');
     }
   }
   const setCode = (value: string) => {
-    setCodes(prev => ({...prev, [inputting]: value}));
-    if (inputting <= 6) {
-      setInputting(inputting + 1);
-    } 
-    if (inputting === 7) {
-      const codeConfirm = Object.keys(codes).reduce((pre, curr) => pre + curr);
+    setCodes(prev => {
+        prev[inputting] = value;
+        return prev;
+    });
+    setInputting(inputting + 1);
+
+    if (inputting === codes.length - 1) {
+      const codeConfirm = codes.join('');
       confirmCode(codeConfirm);
     }
   };
 
   const handleDelete = () => {
-    setCodes(prev => ({...prev, [inputting]: ''}));
-    if (inputting > 1) {
+    setCodes(prev => {
+        prev[inputting] = '';
+        return prev;
+    });
+
+    if (inputting > 0) {
       setInputting(inputting - 1);
     }
   };
 
   React.useEffect(() => {
     const countdown = setInterval(() => {
-      setSeconds(prev => prev - 1);
+      setSeconds(seconds - 1);
       if (seconds === 0) {
-        clearInterval(countdown);
-        setSeconds(60);
+        navigation.navigate('phoneLogin');
       }
     }, 1000);
     return () => clearInterval(countdown);
-  }, [seconds]);
+  }, [navigation, seconds]);
 
   const Data = [
     {id: '1', onPress: () => setCode('1')},
@@ -96,9 +101,15 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
       </View>
       <View style={styles.inputGroup}>
         <NumericInput
+          inputting={inputting === 0}
+          filled={codes[0] !== ''}
+          value={codes[0]}
+          onPress={() => setInputting(0)}
+        />
+        <NumericInput
+          value={codes[1]}
           inputting={inputting === 1}
           filled={codes[1] !== ''}
-          value={codes[1]}
           onPress={() => setInputting(1)}
         />
         <NumericInput
@@ -124,12 +135,6 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
           inputting={inputting === 5}
           filled={codes[5] !== ''}
           onPress={() => setInputting(5)}
-        />
-        <NumericInput
-          value={codes[6]}
-          inputting={inputting === 6}
-          filled={codes[6] !== ''}
-          onPress={() => setInputting(6)}
         />
       </View>
 

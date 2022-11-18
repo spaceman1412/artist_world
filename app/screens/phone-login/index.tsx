@@ -63,7 +63,6 @@ const styles = StyleSheet.create({
   },
   input:{
     width: 160,
-    lineHeight: 21,
     color: color.storybookTextColor,
     justifyContent: 'center',
     paddingHorizontal: 10,
