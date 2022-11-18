@@ -10,8 +10,8 @@ import {StyleSheet, TouchableOpacity, Image, View} from 'react-native';
 import {UploadImageProps} from './index.props';
 
 export const UploadImage = (props: UploadImageProps) => {
-  const {onUpload} = props; // <-- the stupidest destructuring here
-  const [imageUri, setImageUri] = React.useState<string | null>(null);
+  const {onUpload, source} = props;
+  const [imageUri, setImageUri] = React.useState(source);
 
   const uploadImage = () => {
     launchImageLibrary(
@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   container: {
     width: 101,
     height: 106,
+    shadowColor: color.line,
   },
   image: {
     width: 99,
