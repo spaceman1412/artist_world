@@ -1,8 +1,7 @@
-import {ModalProps} from 'react-native'
+import {ModalProps} from 'react-native';
 
-export interface DateTimePickerProps extends ModalProps
-{
-    onCloseModal: () => void,
-    date: string,
-    setDate: (date) => void,
+export interface DateTimePickerProps extends ModalProps {
+  visible?: boolean;
+  onBackPress?: () => void;
+  onSave?: (value) => void;
 }

@@ -8,111 +8,100 @@ import {
   StyleSheet,
   View,
   TextInput,
+  Alert,
 } from 'react-native';
-import Calendar from 'assets/images/calendar.svg';
 import DateTimePicker from '@components/date-time-picker/date-time-picker';
-import {color} from '@theme';
 import GlobalStyles from '@theme/styles/global-style';
 import SizedBox from '@components/sized-box';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import {styles} from './style';
+import auth from '@react-native-firebase/auth';
+import Profile from '@screens/profile';
 
 interface Props {}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 40,
-  },
-  headerButton: {
-    justifyContent: 'center',
-    alignSelf: 'flex-end',
-    fontWeight: '700',
-    lineHeight: 24,
-    fontSize: 16,
-  },
-  headerButtonContent: {
-    color: color.primary,
-    fontWeight: '700',
-  },
-  title: {
-    fontWeight: '700',
-    fontSize: 34,
-    lineHeight: 51,
-    color: color.storybookTextColor,
-    alignSelf: 'flex-start',
-  },
-  buttonConfirmStyle: {
-    width: 295,
-    height: 56,
-    backgroundColor: color.primary,
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  birthdayButton: {
-    backgroundColor: color.palette.wispPink,
-    width: 295,
-    height: 58,
-    borderRadius: 15,
-    alignItems: 'center',
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    marginTop: 13,
-  },
-  textButtonBirthday: {
-    color: color.primary,
-    marginHorizontal: 20,
-    opacity: 1,
-    fontWeight: '700',
-  },
-  inputContainer: {
-    height: 60,
-    marginVertical: 10,
-  },
-  inputWrapper: {
-    width: 295,
-    height: 58,
-    borderRadius: 15,
-    borderWidth: 1,
-    borderColor: color.palette.mischka,
-    color: color.storybookTextColor,
-    marginTop: -8,
-    justifyContent: 'center',
-  },
-  inputLabel: {
-    fontSize: 12,
-    color: color.palette.GrayWithOpacity(0.3),
-    backgroundColor: color.palette.white,
-    zIndex: 2,
-    width: 68,
-    textAlign: 'center',
-    fontWeight: '700',
-  },
-  input: {
-    color: color.storybookTextColor,
-    marginHorizontal: 20,
-    fontSize: 14,
-  },
-  mainContainer: {},
-});
 export const ProfileDetails: CommonType.AppScreenProps<
   'profileDetails',
   Props
 > = ({navigation}) => {
-  const [datetimePicker, setDateTimePicker] = React.useState(false);
-  const [birthDay, setBirthday] = React.useState('');
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
+  const [birthDate, setBirthDate] = React.useState('Choose your birth date');
+  const uid = auth().currentUser.uid;
+
+  const [dateTimePicker, setDateTimePicker] = React.useState(false);
+
+  const [imagePath, setImagePath] = React.useState(null);
+
+  const onValidate = () => {
+    if (
+      firstName !== '' &&
+      lastName !== '' &&
+      birthDate !== 'Choose your birth date' &&
+      imagePath
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const onConfirm = async () => {
+    try {
+      const fileName = await uploadFile();
+
+      const ref = storage().ref(fileName);
+
+      const validate = await onValidate();
+
+      if (ref && validate) {
+        ref.getDownloadURL().then(url => {
+          firestore()
+            .collection('Users')
+            .doc(uid)
+            .set({
+              firstName: firstName,
+              lastName: lastName,
+              birthDate: birthDate,
+              avatarUrl: url,
+            })
+            .then(() => {
+              console.log('User added!');
+            });
+        });
+      } else {
+        Alert.alert('Your data is invalid');
+      }
+    } catch (error) {
+      console.log(imagePath);
+      Alert.alert('Error', 'Some error occurred. Please try again');
+    }
+  };
+
+  const uploadFile = async () => {
+    if (imagePath) {
+      const split = imagePath.split('/');
+      const fileName = split[split.length - 1];
+      const reference = await storage().ref(`${uid}-${fileName}`);
+
+      const pathToFile = imagePath;
+      const url = await reference.putFile(pathToFile);
+      console.log(url);
+      return url.metadata.fullPath;
+    }
+  };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: color.whiteBackground}}>
+    <SafeAreaView style={styles.mainContainer}>
       <View style={styles.container}>
-        <TouchableOpacity style={styles.headerButton}>
+        {/* <TouchableOpacity style={styles.headerButton}>
           <Text style={styles.headerButtonContent}>Skip</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Text style={styles.title}>Profile details</Text>
         <SizedBox height={20} />
         <View style={GlobalStyles.itemCenter}>
-          <UploadImage />
+          <UploadImage onUpload={value => setImagePath(value)} />
         </View>
 
         <View style={styles.inputContainer}>
@@ -138,17 +127,21 @@ export const ProfileDetails: CommonType.AppScreenProps<
         <TouchableOpacity
           style={styles.birthdayButton}
           onPress={() => setDateTimePicker(true)}>
-          <Calendar />
-          <Text style={styles.textButtonBirthday}>Choose birthday date</Text>
+          <Text style={styles.textButtonBirthday}>{birthDate}</Text>
         </TouchableOpacity>
         <SizedBox height={20} />
-        <Button text={'Confirm'} style={styles.buttonConfirmStyle} />
+        <Button
+          text={'Confirm'}
+          style={styles.buttonConfirmStyle}
+          onPress={onConfirm}
+        />
         <DateTimePicker
-          date={birthDay}
-          setDate={setBirthday}
-          visible={datetimePicker}
-          animationType={'slide'}
-          onCloseModal={() => setDateTimePicker(false)}
+          visible={dateTimePicker}
+          onSave={value => {
+            setBirthDate(value);
+            setDateTimePicker(false);
+          }}
+          onBackPress={() => setDateTimePicker(false)}
         />
       </View>
     </SafeAreaView>
