@@ -5,7 +5,13 @@ import {OnboardingItem} from './onboardItem/onboardItem';
 import {color} from '@theme';
 
 export function SwiperImage(props: SwiperImageProps) {
-  const {images, width = 300, height = 500} = props;
+  const {
+  images, 
+  width = 295, 
+  height = 500,
+  name, 
+  age,
+  } = props;
   const [imgActive, setImgActive] = React.useState(0);
   const sizeStyle = [{width, height}];
   const onSlide = nativeEvent => {
@@ -20,7 +26,7 @@ export function SwiperImage(props: SwiperImageProps) {
   };
 
   return (
-    <View style={[styles.container, sizeStyle]}>
+    <View  style={[styles.container, sizeStyle]}>
       <View style={sizeStyle}>
         <ScrollView
           onScroll={({nativeEvent}) => onSlide(nativeEvent)}
@@ -29,11 +35,12 @@ export function SwiperImage(props: SwiperImageProps) {
           {images.map((item, index) => (
             <OnboardingItem
               key={index}
-              image={item.image}
-              name={item.name}
-              age={item.age}
+              image={item}
+              name={name}
+              age={age}
               width={width}
               height={height}
+              
             />
           ))}
         </ScrollView>
@@ -62,29 +69,29 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     alignSelf: 'center',
-    top: '30%',
+    top: '35%',
     backgroundColor: color.palette.GrayWithOpacity(0.6),
     borderTopStartRadius: 15,
     borderBottomStartRadius: 15,
-    height: 180,
+    height: 76,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 20,
+    paddingHorizontal: 8,
+    paddingVertical: 16,
     overflow: 'hidden',
   },
   dot: {
-    width: 10,
-    height: 10,
+    width: 4,
+    height: 4,
     backgroundColor: color.palette.lightGrey,
     borderRadius: 50,
-    margin: 8,
+    margin: 3,
   },
   dotActive: {
-    width: 10,
-    height: 10,
+    width: 4,
+    height: 4,
     backgroundColor: color.palette.white,
     borderRadius: 50,
-    margin: 8,
+    margin: 3,
   },
 });

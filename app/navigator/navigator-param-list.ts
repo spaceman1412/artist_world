@@ -12,4 +12,5 @@ export type AppNavigatorParamList = {
   login: undefined;
   profileDetails: undefined;
   profile: undefined;
+  discover: undefined;
 };
