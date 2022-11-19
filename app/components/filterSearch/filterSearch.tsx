@@ -135,7 +135,7 @@ return(
                 GlobalStyles.row,
                 GlobalStyles.justifyBetween]}>
                 <Text style={styles.title}>Age</Text>
-                <Text>{age[0]} - {age[1]}</Text>
+                <Text style={styles.label}>{age[0]} - {age[1]}</Text>
                 </View>
             <MultiSlider
             min={10}
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderWidth: 1,
         borderColor: color.palette.mischka,
-        marginVertical: 10
+        marginVertical: 10,
     },
     buttonGender:{
         width: 98,
@@ -226,7 +226,8 @@ const styles = StyleSheet.create({
         width: '100%',
         borderLeftColor: color.palette.mischka,
         borderLeftWidth: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        color: color.storybookTextColor,
     },
     genderLeftActive:{
         borderTopLeftRadius: 15,
@@ -272,10 +273,12 @@ const styles = StyleSheet.create({
         zIndex: 2,
         fontSize: 12,
         margin: 0,
-        width: 48,
+        width: 60,
         marginLeft: 28,
         backgroundColor: color.whiteBackground,
         padding: 0,
+        color: color.storybookTextColor,
+        textAlign: 'center'
     },
     dropdownSection:{
         width: 300,

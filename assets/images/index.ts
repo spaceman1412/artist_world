@@ -8,6 +8,9 @@ export const images = {
   close: require('./close.png'),
   search: require('./search.png'),
   nextArrow: require('./next.png'),
+  loginScreenIcon: require('./login-screen-icon.svg'),
+  calendar: require('./calendar.svg'),
+
 };
 
 export type ImageTypes = keyof typeof images;
