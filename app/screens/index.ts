@@ -9,4 +9,8 @@ export * from './reset-password';
 export * from './create-account';
 export * from './select-country';
 export * from './login';
+export * from './profile-details';
 export * from './profile';
+
+
+

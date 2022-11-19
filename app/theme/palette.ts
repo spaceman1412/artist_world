@@ -15,7 +15,7 @@ export const palette = {
   mischka: '#E8E6EA',
   aquaHaze: '#F4F6F9',
   seaPink: '#EE8F9D',
-
+  wispPink: '#FDECEE',
   primary40: 'rgba(114, 114, 114, 0.4)',
   primary60: 'rgba(114, 114, 114, 0.6)',
 
