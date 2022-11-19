@@ -18,6 +18,9 @@ export const palette = {
   wispPink: '#FDECEE',
   primary40: 'rgba(114, 114, 114, 0.4)',
   primary60: 'rgba(114, 114, 114, 0.6)',
+    primaryWithOpacity: (opacity: number) =>
+    `background: rgba(233, 64, 87, ${opacity})`,
+
 
   textBlack: '#2C2C2C',
   black: '#1d1d1d',
@@ -31,6 +34,9 @@ export const palette = {
   /**Origin color: #1A1A1A */
   blackWithOpacity: (opacity: number) =>
     `background: rgba(26, 26, 26, ${opacity})`,
+    
+  whiteWithOpacity: (opacity: number) =>
+    `background: rgba(255, 255, 255, ${opacity})`,
 
   PGreen60: '#016B69',
   PGreen50: '#127E74',
