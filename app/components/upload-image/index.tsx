@@ -7,20 +7,27 @@ import {
 import {images} from '@assets/images';
 import Camera from '@assets/images/camera.svg';
 import {StyleSheet, TouchableOpacity, Image, View} from 'react-native';
+import {UploadImageProps} from './index.props';
 
-export const UploadImage = () => {
-  const [imageUri, setImageUri] = React.useState(null);
+export const UploadImage = (props: UploadImageProps) => {
+  const {onUpload, source} = props;
+  const [imageUri, setImageUri] = React.useState(source);
 
   const uploadImage = () => {
     launchImageLibrary(
       {mediaType: 'photo'},
       (response: ImagePickerResponse) => {
         if (response.didCancel || response.errorCode) {
+          // do nothing on request fail
           return;
         }
 
         // we only pick one image per time.
-        setImageUri(response.assets[0].uri);
+        const uri = response.assets[0].uri;
+        setImageUri(uri);
+
+        // parent can do whatever they want with image uri
+        onUpload && onUpload(uri);
       },
     );
   };
@@ -29,7 +36,7 @@ export const UploadImage = () => {
     <View style={styles.container}>
       <Image
         style={styles.image}
-        source={{uri: imageUri ?? images.placeholder}}
+        source={imageUri ? {uri: imageUri} : images.placeholder}
       />
       <TouchableOpacity style={styles.upload} onPress={uploadImage}>
         <Camera />
@@ -42,6 +49,7 @@ const styles = StyleSheet.create({
   container: {
     width: 101,
     height: 106,
+    shadowColor: color.line,
   },
   image: {
     width: 99,
