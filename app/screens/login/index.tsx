@@ -105,7 +105,7 @@ export const Login: CommonType.AppScreenProps<'login', Props> = ({
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
       // Sign-in the user with the credential
-      await auth().signInWithCredential(googleCredential);
+      await auth().signInWithCredential(googleCredential).then(() => navigation.navigate('profile'));
     } catch (e) {
       console.log(e);
     }

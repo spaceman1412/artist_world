@@ -1,3 +1,4 @@
+import { color } from "@theme";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { DropdownItemProps } from "./dropdownItem.props";
 
@@ -15,6 +16,6 @@ export function DropdownItem (props: DropdownItemProps)
 const styles = StyleSheet.create({
     textStyle: {
         padding: 5,
-        
+        color: color.storybookTextColor,
     }
 })
