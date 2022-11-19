@@ -127,6 +127,7 @@ export const Login: CommonType.AppScreenProps<'login', Props> = ({
             style={styles.buttonPhone}
             textStyle={styles.textPhoneButton}
             preset="outline"
+            onPress={() => navigation.navigate('phoneLogin')}
           />
         </View>
       </View>
