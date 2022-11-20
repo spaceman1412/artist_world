@@ -6,7 +6,7 @@ import * as SCREENS from '@screens';
 const Stack = createStackNavigator<AppNavigatorParamList>();
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="login">
+    <Stack.Navigator initialRouteName="messages">
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
@@ -56,6 +56,11 @@ export const AppStack = () => {
       <Stack.Screen
         name="login"
         component={SCREENS.Login}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name='messages'
+        component={SCREENS.Messages}
         options={{headerShown: false}}
       />
       <Stack.Screen name="discover" component={SCREENS.Discover} />

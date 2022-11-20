@@ -13,4 +13,5 @@ export type AppNavigatorParamList = {
   profileDetails: undefined;
   profile: undefined;
   discover: undefined;
+  messages: undefined;
 };

@@ -12,3 +12,4 @@ export * from './login';
 export * from './profile-details';
 export * from './profile';
 export * from './discover';
+export * from './messages'
