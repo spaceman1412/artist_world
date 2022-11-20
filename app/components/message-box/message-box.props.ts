@@ -23,4 +23,5 @@ export interface MessageBoxProps {
      * Number of unread message
      */
     unreadCount?: number,
+    onPress: () => void,
 }

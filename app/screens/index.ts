@@ -15,3 +15,4 @@ export * from './profile-details/interests';
 export * from './profile-details/role';
 export * from './profile';
 export * from './discover';
+export * from './messages'

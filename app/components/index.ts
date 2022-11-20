@@ -7,3 +7,4 @@ export * from './dropdown/dropdown';
 export * from './filterSearch/filterSearch';
 export * from './date-time-picker/date-time-picker';
 export * from './upload-image';
+export * from './messageModal/messageModal';

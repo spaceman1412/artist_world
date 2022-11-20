@@ -12,6 +12,7 @@ export const MessageBox = (props: MessageBoxProps) => {
     time,
     hasStory = false,
     unreadCount = 0,
+    onPress,
   } = props;
 
   return (
@@ -33,7 +34,8 @@ export const MessageBox = (props: MessageBoxProps) => {
           </View>
         )}
       </TouchableOpacity>
-      <TouchableOpacity style={styles.info}>
+      <TouchableOpacity style={styles.info}
+      onPress={onPress}>
         <View style={styles.content}>
           <Text style={[styles.text, styles.username]} numberOfLines={1}>
             {username}
@@ -58,9 +60,10 @@ export const MessageBox = (props: MessageBoxProps) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    width: getSize.v(295),
+    width: '100%',
     height: getSize.v(56),
     backgroundColor: color.background,
+    marginVertical: 10,
   },
   info: {
     flex: 1,
@@ -102,6 +105,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
     width: getSize.v(189),
+    color: color.storybookTextColor,
   },
   username: {
     fontWeight: '700',

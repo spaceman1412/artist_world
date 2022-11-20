@@ -98,4 +98,5 @@ export const palette = {
   outOfGreyWithOpacity: (opacity: number) => `rgba(214, 213, 213, ${opacity})`,
 
   GrayWithOpacity: (opacity: number) => `rgba(114, 114, 114, ${opacity})`,
+  PrimaryWithOpacity: (opacity: number) => `rgba(233, 64, 87,${opacity})`,
 };
