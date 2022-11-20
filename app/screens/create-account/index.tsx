@@ -16,7 +16,7 @@ export const CreateAccount: CommonType.AppScreenProps<
     auth()
       .signInWithEmailAndPassword(email.trim(), password.trim())
       .then(() => {
-        navigation.navigate('profile');
+        navigation.navigate('profileDetails');
       })
       .catch(error => {
         console.log(error);
@@ -28,7 +28,7 @@ export const CreateAccount: CommonType.AppScreenProps<
       .createUserWithEmailAndPassword(email.trim(), password.trim())
       .then(() => {
         console.log('User account created & signed in!');
-        navigation.navigate('profile');
+        navigation.navigate('profileDetails');
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {
