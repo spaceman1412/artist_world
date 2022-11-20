@@ -1,3 +1,4 @@
+import {ProfileDetailsNavigatorParamList} from './../navigator/navigator-param-list';
 import {AppNavigatorParamList} from '@navigator/navigator-param-list';
 import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
@@ -8,5 +9,15 @@ export declare namespace CommonType {
     ComponentProps extends object,
   > = React.FC<
     StackScreenProps<AppNavigatorParamList & ComponentProps, RouteName>
+  >;
+
+  export type ProfileDetailsScreenProps<
+    RouteName extends keyof ProfileDetailsNavigatorParamList,
+    ComponentProps extends object,
+  > = React.FC<
+    StackScreenProps<
+      ProfileDetailsNavigatorParamList & ComponentProps,
+      RouteName
+    >
   >;
 }

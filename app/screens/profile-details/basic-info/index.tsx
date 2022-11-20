@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   Text,
   TouchableOpacity,
-  StyleSheet,
   View,
   TextInput,
   Alert,
@@ -15,14 +14,13 @@ import GlobalStyles from '@theme/styles/global-style';
 import SizedBox from '@components/sized-box';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import {styles} from './style';
+import {styles} from '../style';
 import auth from '@react-native-firebase/auth';
-import Profile from '@screens/profile';
 
 interface Props {}
 
-export const ProfileDetails: CommonType.AppScreenProps<
-  'profileDetails',
+export const BasicInfo: CommonType.ProfileDetailsScreenProps<
+  'basicInfo',
   Props
 > = ({navigation}) => {
   const [firstName, setFirstName] = React.useState('');
@@ -67,7 +65,7 @@ export const ProfileDetails: CommonType.AppScreenProps<
               avatarUrl: url,
             })
             .then(() => {
-              console.log('User added!');
+              navigation.navigate('discover');
             });
         });
       } else {
@@ -87,7 +85,6 @@ export const ProfileDetails: CommonType.AppScreenProps<
 
       const pathToFile = imagePath;
       const url = await reference.putFile(pathToFile);
-      console.log(url);
       return url.metadata.fullPath;
     }
   };
