@@ -19,9 +19,12 @@ export function SelectiveButton(props: SelectiveButtonProps) {
     onPreset = 'primary',
     offPreset = 'buttonOff',
     icon,
+    text,
     iconPosition,
     state,
     style: styleOverride,
+    textStyle: textStyleOverride,
+    iconStyle: iconStyleOverride,
     children,
     ...rest
   } = props;
@@ -29,22 +32,19 @@ export function SelectiveButton(props: SelectiveButtonProps) {
   const viewStyle =
     VIEW_STYLES[state ? onPreset : offPreset] || VIEW_STYLES.primary;
   const viewStyles = [viewStyle, styleOverride];
+  const textStyle =
+    TEXT_STYLES[state ? onPreset : offPreset] || TEXT_STYLES.primary;
+  const textStyles = [textStyle, textStyleOverride];
+  const iconStyle =
+    ICON_STYLES[state ? onPreset : offPreset] || ICON_STYLES.primary;
+  const iconStyles = [iconStyle, iconStyleOverride];
 
+  const content = children || <Text style={textStyles}>{text}</Text>;
   return (
     <TouchableOpacity style={viewStyles} {...rest}>
-      {iconPosition === 'left' && <Image source={icon} style={styles.icon} />}
-      {children}
-      {iconPosition === 'right' && <Image source={icon} style={styles.icon} />}
+      {iconPosition === 'left' && <Image source={icon} style={iconStyles} />}
+      {content}
+      {iconPosition === 'right' && <Image source={icon} style={iconStyles} />}
     </TouchableOpacity>
   );
 }
-const styles = StyleSheet.create({
-  icon: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 5,
-    width: 16,
-    height: 16,
-  },
-});
