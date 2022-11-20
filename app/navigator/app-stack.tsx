@@ -20,7 +20,11 @@ export const AppStack = () => {
           headerShown: false,
         }}
       />
-
+<      <Stack.Screen
+        name="findOutMatch"
+        component={SCREENS.FindOutMatch}
+        options={{title: 'Find Out Match'}}
+      />
       <Stack.Screen
         name="resetPassword"
         component={SCREENS.ResetPassword}

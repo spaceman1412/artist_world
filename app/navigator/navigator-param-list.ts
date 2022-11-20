@@ -14,6 +14,7 @@ export type AppNavigatorParamList = {
   profile: undefined;
   discover: undefined;
   messages: undefined;
+  findOutMatch: undefined;
 };
 
 export type ProfileDetailsNavigatorParamList = {

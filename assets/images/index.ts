@@ -9,6 +9,7 @@ export const images = {
   nextArrow: require('./next.png'),
   loginScreenIcon: require('./login-screen-icon.svg'),
   calendar: require('./calendar.svg'),
+  man: require('./man.jpg'),
 };
 
 export type ImageTypes = keyof typeof images;
