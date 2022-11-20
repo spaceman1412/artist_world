@@ -3,12 +3,14 @@ export const images = {
   placeholder: require('./placeholder.jpg'),
   camera: require('./camera.svg'),
   delete: require('./delete.png'),
+  abstractShape: require('./abstractShape.png'),
   dropdown: require('./down-arrow.png'),
   close: require('./close.png'),
   search: require('./search.png'),
   nextArrow: require('./next.png'),
   loginScreenIcon: require('./login-screen-icon.svg'),
   calendar: require('./calendar.svg'),
+
 };
 
 export type ImageTypes = keyof typeof images;

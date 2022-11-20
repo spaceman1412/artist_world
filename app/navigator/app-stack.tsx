@@ -11,7 +11,16 @@ const initialRouteName = auth().currentUser ? 'profileDetails' : 'login';
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={initialRouteName}>
+
+<Stack.Navigator initialRouteName="login">
+      <Stack.Screen
+        name="customContent"
+        component={SCREENS.CustomContent}
+        options={{title: 'Custom Content'}}
+      />
+
+
+
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
