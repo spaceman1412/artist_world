@@ -2,6 +2,8 @@ import * as React from 'react';
 import {TouchableOpacity, Text, View} from 'react-native';
 import {VIEW_STYLES, TEXT_STYLES} from './selective_button.presets';
 import {SelectiveButtonProps} from './selective_button.props';
+import Icon from 'react-native-vector-icons/Entypo';
+import {color} from '@theme';
 
 /**
  * For your text displaying needs.
@@ -16,6 +18,8 @@ export function SelectiveButton(props: SelectiveButtonProps) {
     text,
     style: styleOverride,
     textStyle: textStyleOverride,
+    selectedColorBackground,
+    unSelectedColorBackground,
     children,
     ...rest
   } = props;
@@ -26,14 +30,21 @@ export function SelectiveButton(props: SelectiveButtonProps) {
   const textStyles = [textStyle, textStyleOverride];
 
   const content = children || (
-    <Text style={[textStyles, {flex: 1}]}>{text}</Text>
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'row',
+        paddingHorizontal: 20,
+        alignItems: 'center',
+      }}>
+      <Text style={[textStyles, {flex: 1}]}>{text}</Text>
+      <Icon name="check" color={color.palette.white} size={20} />
+    </View>
   );
 
   return (
     <TouchableOpacity style={viewStyles} {...rest}>
-      <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-        {content}
-      </View>
+      {content}
     </TouchableOpacity>
   );
 }

@@ -16,6 +16,8 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {styles} from '../style';
 import auth from '@react-native-firebase/auth';
+import {useAppDispatch} from '@store/hook';
+import {ProfileActions} from '@store/profile/reducer';
 
 interface Props {}
 
@@ -27,6 +29,7 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
   const [lastName, setLastName] = React.useState('');
   const [birthDate, setBirthDate] = React.useState('Choose your birth date');
   const uid = auth().currentUser.uid;
+  const dispatcher = useAppDispatch();
 
   const [dateTimePicker, setDateTimePicker] = React.useState(false);
 
@@ -55,18 +58,14 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
 
       if (ref && validate) {
         ref.getDownloadURL().then(url => {
-          firestore()
-            .collection('Users')
-            .doc(uid)
-            .set({
-              firstName: firstName,
-              lastName: lastName,
-              birthDate: birthDate,
-              avatarUrl: url,
-            })
-            .then(() => {
-              navigation.navigate('discover');
-            });
+          const data = {
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: birthDate,
+            avatarUrl: url,
+          };
+          dispatcher(ProfileActions.updateBasicInfo(data));
+          navigation.navigate('sexSelect');
         });
       } else {
         Alert.alert('Your data is invalid');

@@ -18,4 +18,6 @@ export type AppNavigatorParamList = {
 export type ProfileDetailsNavigatorParamList = {
   basicInfo: undefined;
   sexSelect: undefined;
+  interests: undefined;
+  role: undefined;
 };

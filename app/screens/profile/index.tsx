@@ -8,7 +8,6 @@ import {Incubator} from 'react-native-ui-lib';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 
-
 interface Props {}
 
 const styles = StyleSheet.create({
@@ -21,15 +20,15 @@ const styles = StyleSheet.create({
 export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
   navigation,
 }) => {
-  const [pic, setPic] = React.useState("");
-  const onSend = async() => {
-    var parts = pic.split('/')
-    var picRef = parts[parts.length - 1]
+  const [pic, setPic] = React.useState('');
+  const onSend = async () => {
+    var parts = pic.split('/');
+    var picRef = parts[parts.length - 1];
     console.log(picRef);
-    const ref = storage().ref(picRef)
+    const ref = storage().ref(picRef);
     await ref.putFile(pic);
-    const url = await storage().ref(picRef).getDownloadURL()
-    
+    const url = await storage().ref(picRef).getDownloadURL();
+
     firestore()
       .collection('Users')
       .add({

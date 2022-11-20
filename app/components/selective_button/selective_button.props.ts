@@ -36,4 +36,7 @@ export interface SelectiveButtonProps extends TouchableOpacityProps {
    * One of the different types of text presets.
    */
   children?: React.ReactNode;
+
+  selectedColorBackground: string;
+  unSelectedColorBackground: string;
 }

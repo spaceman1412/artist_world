@@ -8,15 +8,12 @@ const BASE_VIEW: ViewStyle = {
   paddingVertical: spacing[2],
   paddingHorizontal: spacing[2],
   borderRadius: radius.XS,
-  justifyContent: 'center',
-  alignItems: 'center',
   height: 40,
 };
 
 const BASE_TEXT: TextStyle = {
   paddingHorizontal: spacing[3],
   fontWeight: '500',
-  textAlign: 'center',
 };
 
 export const VIEW_STYLES = StyleSheet.create({

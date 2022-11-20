@@ -1,9 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit';
 import counterReducer from './counter/reducer';
+import profileReducer from './profile/reducer';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
+    profile: profileReducer,
   },
 });
 

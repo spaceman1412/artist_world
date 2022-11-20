@@ -7,9 +7,11 @@ const Stack = createStackNavigator<ProfileDetailsNavigatorParamList>();
 
 export const ProfileStack = () => {
   return (
-    <Stack.Navigator initialRouteName="sexSelect">
+    <Stack.Navigator initialRouteName="basicInfo">
       <Stack.Screen name="basicInfo" component={SCREENS.BasicInfo} />
       <Stack.Screen name="sexSelect" component={SCREENS.SexSelect} />
+      <Stack.Screen name="interests" component={SCREENS.Interests} />
+      <Stack.Screen name="role" component={SCREENS.Role} />
     </Stack.Navigator>
   );
 };
