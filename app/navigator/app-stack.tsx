@@ -2,11 +2,16 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import {AppNavigatorParamList} from './navigator-param-list';
 import * as SCREENS from '@screens';
+import {ProfileStack} from './profile-stack';
+import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
+
+const initialRouteName = auth().currentUser ? 'profileDetails' : 'login';
+
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName="login">
+    <Stack.Navigator initialRouteName={initialRouteName}>
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
@@ -35,7 +40,7 @@ export const AppStack = () => {
       />
       <Stack.Screen
         name="profileDetails"
-        component={SCREENS.ProfileDetails}
+        component={ProfileStack}
         options={{
           headerShown: false,
         }}

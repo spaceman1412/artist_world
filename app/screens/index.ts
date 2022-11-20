@@ -9,6 +9,7 @@ export * from './reset-password';
 export * from './create-account';
 export * from './select-country';
 export * from './login';
-export * from './profile-details';
+export * from './profile-details/basic-info';
+export * from './profile-details/sex-select';
 export * from './profile';
 export * from './discover';
