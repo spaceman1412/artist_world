@@ -1,13 +1,11 @@
-import {React, ReactNode, useState} from 'react';
+import React, {ReactNode, useState} from 'react';
 import {
-  Text,
-  StyleSheet,
   StyleProp,
   TextStyle,
-  TouchableOpacity,
   NativeSyntheticEvent,
   TextLayoutEventData,
 } from 'react-native';
+import {TouchableOpacity, Text} from 'react-native-ui-lib';
 import {color} from '@theme';
 
 interface Props {
@@ -25,6 +23,8 @@ const TextShowMore = ({style, children, numberOfLines}: Props) => {
   };
 
   const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
+    //FIXME: do not work very well on IOS
+    // as it always return the same number of line with truncated text
     const lines = event.nativeEvent.lines;
 
     setShowMore(lines.length >= numberOfLines);
@@ -39,8 +39,8 @@ const TextShowMore = ({style, children, numberOfLines}: Props) => {
         {children}
       </Text>
       {showMore && (
-        <TouchableOpacity onPress={onPressShowMore}>
-          <Text style={styles.textShowMore}>
+        <TouchableOpacity activeOpacity={0.6} onPress={onPressShowMore}>
+          <Text text80BO marginT-5 color={color.primary}>
             {!showAllText ? 'Read more' : 'Show less'}
           </Text>
         </TouchableOpacity>
@@ -48,13 +48,5 @@ const TextShowMore = ({style, children, numberOfLines}: Props) => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  textShowMore: {
-    color: color.primary,
-    fontWeight: '700',
-    marginTop: 5,
-  },
-});
 
 export default TextShowMore;
