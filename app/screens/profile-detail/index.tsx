@@ -1,185 +1,242 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {CommonType} from '@utils/types';
 import {color} from '@theme';
 import {images} from 'assets/images';
 import {getSize} from '@utils/responsive';
 import GlobalStyles from '@theme/styles/global-style';
-import {
-  View,
-  Image,
-  StyleSheet,
-  SafeAreaView,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import {ScrollView, StyleSheet, Image, FlatList} from 'react-native';
 import LeftArrow from '@assets/images/left-arrow.svg';
 import PaperPlane from '@assets/images/paper-plane.svg';
 import Location from '@assets/images/location.svg';
 import TextShowMore from './show-more-text';
-import {FlatList} from 'react-native-gesture-handler';
+import Heart from '@assets/images/heart.svg';
+import XStroke from '@assets/images/stroke.svg';
+import Star from '@assets/images/star.svg';
+import {Button as ThienButton} from '@components';
+import {Button, View, Text, LoaderScreen} from 'react-native-ui-lib';
+import firestore from '@react-native-firebase/firestore';
 
 interface Props {}
 
-const data = [
-  {text: 'Travelling'},
-  {text: 'Book'},
-  {text: 'Music'},
-  {text: 'Dancing'},
-  {text: 'Modelling'},
-  {text: 'Lmao'},
-];
+// TODO: Replace with prop's uid
+const uid = '57ix0KpC41a91UNZF32SpKkxgNW2';
 
 export const ProfileDetail: CommonType.AppScreenProps<
   'profileDetail',
   Props
 > = ({navigation}) => {
+  const [data, setData] = useState(undefined);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const res = await firestore().collection('Users').doc(uid).get();
+
+      setData(res.data());
+    };
+
+    getUserData().catch(console.error);
+  });
+
+  const getAge = () => {
+    const today = new Date();
+    const birthDate = new Date(data.birthDate);
+
+    return today.getFullYear() - birthDate.getFullYear();
+  };
+
   return (
-    <SafeAreaView>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.screen}>
-          <TouchableOpacity
-            style={[styles.backButton, GlobalStyles.itemCenter]}
-            onPress={() => navigation.navigate('home')}>
-            <LeftArrow />
-          </TouchableOpacity>
-          <Image
-            source={images.girl}
-            style={[GlobalStyles.fullWidth, styles.mainImage]}
-          />
-          <View
-            style={[
-              styles.buttonList,
-              GlobalStyles.row,
-              GlobalStyles.itemCenter,
-            ]}>
-            <TouchableOpacity
-              style={[styles.sideButton, GlobalStyles.itemCenter]}>
-              <LeftArrow />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.matchButton, GlobalStyles.itemCenter]}>
-              <LeftArrow />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.sideButton, GlobalStyles.itemCenter]}>
-              <LeftArrow />
-            </TouchableOpacity>
-          </View>
-          <View style={[styles.info, GlobalStyles.justifyCenter]}>
-            <View style={[GlobalStyles.row, GlobalStyles.justifyBetween]}>
-              <View>
-                <Text style={styles.name}>Jessica Parker, 23</Text>
-                <Text style={styles.secondaryText}>Proffesional model</Text>
-              </View>
-              <TouchableOpacity
-                style={[GlobalStyles.itemCenter, styles.messageButton]}>
-                <PaperPlane />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.section}>
-              <View>
-                <Text style={styles.title}>Location</Text>
-                <Text style={styles.secondaryText}>
-                  Chicago, IL United States
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={[
-                  GlobalStyles.row,
-                  GlobalStyles.justifyEvenly,
-                  GlobalStyles.alignCenter,
-                  styles.locationButton,
-                ]}>
-                <Location />
-                <Text style={styles.locationText}>1 km</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.section}>
-              <View>
-                <Text style={styles.title}>About</Text>
-                <TextShowMore numberOfLines={3} style={[styles.secondaryText]}>
-                  Lorem ipsum dolor sit amet, officia excepteur ex fugiat
-                  reprehenderit enim labore culpa sint ad nisi Lorem pariatur
-                  mollit ex esse exercitation amet. Nisi anim cupidatat
-                  excepteur officia. Reprehenderit nostrud nostrud ipsum Lorem
-                  est aliquip amet voluptate voluptate dolor minim nulla est
-                  proident. Nostrud officia pariatur ut officia. Sit irure elit
-                  esse ea nulla sunt ex occaecat reprehenderit commodo officia
-                </TextShowMore>
-              </View>
-            </View>
-            <View style={styles.section}>
-              <View style={GlobalStyles.flex}>
-                <Text style={styles.title}>Interests</Text>
-                <FlatList
-                  data={data}
-                  numColumns={3}
-                  columnWrapperStyle={GlobalStyles.justifyBetween}
-                  renderItem={({item}) => (
-                    <View
-                      style={[styles.interestItem, GlobalStyles.itemCenter]}>
-                      <Text style={styles.interestText}>{item.text}</Text>
-                    </View>
-                  )}
+    <>
+      {!data ? (
+        <LoaderScreen
+          message={'Few minutes to look inside'}
+          color={color.primary}
+        />
+      ) : (
+        <View useSafeArea>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.screen} backgroundColor={color.whiteBackground}>
+              <Image
+                source={{uri: data.avatarUrl}}
+                style={[GlobalStyles.fullWidth, styles.mainImage]}
+              />
+              <ThienButton
+                style={styles.backButton}
+                onPress={() => navigation.navigate('discover')}
+                children={<LeftArrow />}
+              />
+              <View row center absH style={styles.circleList}>
+                <Button
+                  round
+                  style={styles.sideCircle}
+                  backgroundColor={color.whiteBackground}
+                  children={<XStroke />}
+                />
+                <Button
+                  round
+                  marginH-20
+                  style={styles.matchCircle}
+                  backgroundColor={color.primary}
+                  children={<Heart />}
+                />
+                <Button
+                  round
+                  style={styles.sideCircle}
+                  backgroundColor={color.whiteBackground}
+                  children={<Star />}
                 />
               </View>
-            </View>
-            <View style={styles.section}>
-              <View style={GlobalStyles.flex}>
-                <Text style={styles.title}>Gallery</Text>
-                <View style={GlobalStyles.row}>
-                  <Image source={images.girl} style={styles.galleryImage} />
-                  <Image source={images.girl} style={styles.galleryImage} />
-                  <Image source={images.girl} style={styles.galleryImage} />
+              <View
+                centerV
+                paddingT-90
+                paddingB-40
+                paddingH-40
+                style={styles.info}
+                backgroundColor={color.whiteBackground}>
+                <View row spread>
+                  <View>
+                    <Text text50>
+                      {`${data.firstName} ${data.lastName}, ${getAge()}`}
+                    </Text>
+                    <Text text80 style={styles.secondaryText} numberOfLines={1}>
+                      {data.musicRoles.join(', ')}
+                    </Text>
+                  </View>
+                  <ThienButton
+                    onPress={() => navigation.navigate('messages')}
+                    style={styles.messageButton}
+                    children={<PaperPlane />}
+                  />
+                </View>
+                <View marginT-30 row spread>
+                  <View>
+                    <Text text70BO marginB-5>
+                      Location
+                    </Text>
+                    <Text text80 style={styles.secondaryText}>
+                      Chicago, IL United States
+                    </Text>
+                  </View>
+                  <Button
+                    text90
+                    size={Button.sizes.xSmall}
+                    backgroundColor={color.palette.primaryWithOpacity(0.1)}
+                    iconSource={(_: any) => (
+                      <View marginR-4 children={<Location />} />
+                    )}
+                    borderRadius={7}
+                    label="1 km"
+                    style={styles.locationButton}
+                    labelStyle={styles.mainText}
+                  />
+                </View>
+                <View marginT-30>
+                  <Text text70BO marginB-5>
+                    About
+                  </Text>
+                  <TextShowMore numberOfLines={3} style={styles.secondaryText}>
+                    Lorem ipsum dolor sit amet, qui minim labore adipisicing
+                    minim sint cillum sint consectetur cupidatat. Lorem ipsum
+                    dolor sit amet, qui minim labore adipisicing minim sint
+                    cillum sint consectetur cupidatat.
+                  </TextShowMore>
+                </View>
+                <View marginT-30>
+                  <Text text70BO marginB-5>
+                    Interests
+                  </Text>
+                  <ScrollView horizontal>
+                    <FlatList
+                      data={data.musicInterests}
+                      numColumns={3}
+                      renderItem={({item}) => (
+                        <View
+                          marginR-5
+                          marginB-10
+                          paddingH-10
+                          style={styles.interestItem}
+                          center>
+                          <Text
+                            numberOfLines={2}
+                            text90BO
+                            style={styles.mainText}>
+                            {item}
+                          </Text>
+                        </View>
+                      )}
+                    />
+                  </ScrollView>
+                </View>
+                <View marginT-30>
+                  <View flex>
+                    <View row spread>
+                      <Text text70BO marginB-5>
+                        Gallery
+                      </Text>
+                      <Button
+                        link
+                        text80BO
+                        linkColor={color.primary}
+                        label="See all"
+                      />
+                    </View>
+                    <ScrollView
+                      horizontal
+                      showsHorizontalScrollIndicator={false}>
+                      <Image source={images.girl} style={styles.galleryImage} />
+                      <Image source={images.girl} style={styles.galleryImage} />
+                      <Image source={images.girl} style={styles.galleryImage} />
+                      <Image source={images.girl} style={styles.galleryImage} />
+                      <Image
+                        source={{uri: data.avatarUrl}}
+                        style={styles.galleryImage}
+                      />
+                    </ScrollView>
+                  </View>
                 </View>
               </View>
             </View>
-          </View>
+          </ScrollView>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      )}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: color.whiteBackground,
-    height: 1325,
+    height: getSize.v(1325),
   },
-  buttonList: {
-    position: 'absolute',
+  circleList: {
     top: getSize.v(337),
-    left: 0,
-    right: 0,
     zIndex: 1,
   },
-  matchButton: {
+  mainText: {
+    color: color.primary,
+  },
+  secondaryText: {
+    color: color.palette.blackBlur,
+  },
+  matchCircle: {
     width: 99,
     height: 99,
-    borderRadius: 49.5,
-    marginHorizontal: 20,
-    backgroundColor: color.primary,
+    shadowRadius: 15,
+    shadowOpacity: 0.2,
     shadowColor: color.primary,
     shadowOffset: {
       width: 0,
       height: 15,
     },
-    shadowOpacity: 0.2,
-    shadowRadius: 15,
   },
-  sideButton: {
+  sideCircle: {
     width: 78,
     height: 78,
-    borderRadius: 39,
-    backgroundColor: color.whiteBackground,
+    shadowRadius: 15,
+    shadowOpacity: 0.07,
     shadowColor: color.palette.black,
     shadowOffset: {
       width: 0,
       height: 20,
     },
-    shadowOpacity: 0.07,
-    shadowRadius: 15,
   },
   messageButton: {
     width: 52,
@@ -187,12 +244,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 15,
     borderColor: color.line,
-  },
-  locationButton: {
-    width: 61,
-    height: 34,
-    backgroundColor: color.palette.primaryWithOpacity(0.1),
-    borderRadius: 7,
+    backgroundColor: color.whiteBackground,
   },
   backButton: {
     top: 15,
@@ -209,58 +261,25 @@ const styles = StyleSheet.create({
     height: getSize.v(415),
     zIndex: -1,
   },
-  locationText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: color.primary,
+  locationButton: {
+    height: 34,
   },
   info: {
     position: 'absolute',
     top: getSize.v(386),
-    paddingHorizontal: 40,
-    paddingTop: 90,
-    paddingBottom: 40,
     borderTopEndRadius: 30,
     borderTopStartRadius: 30,
-    backgroundColor: color.whiteBackground,
-  },
-  name: {
-    fontWeight: '700',
-    fontSize: 24,
-    lineHeight: 36,
-  },
-  title: {
-    fontWeight: '700',
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 5,
-  },
-  secondaryText: {
-    color: color.palette.blackBlur,
-    lineHeight: 21,
-    fontWeight: '400',
-  },
-  section: {
-    marginTop: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   interestItem: {
+    width: 92,
     height: 32,
-    width: 91,
     borderWidth: 1,
-    borderColor: color.primary,
-    marginBottom: 10,
     borderRadius: 5,
-  },
-  interestText: {
-    fontWeight: '700',
-    color: color.primary,
+    borderColor: color.primary,
   },
   galleryImage: {
-    width: 92,
+    flex: 1,
     margin: 5,
-    height: 122,
     borderRadius: 5,
   },
 });

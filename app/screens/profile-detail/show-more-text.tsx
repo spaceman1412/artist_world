@@ -1,11 +1,12 @@
-import {ReactNode, useEffect, useState} from 'react';
+import {React, ReactNode, useState} from 'react';
 import {
   Text,
   StyleSheet,
   StyleProp,
   TextStyle,
   TouchableOpacity,
-  LayoutChangeEvent,
+  NativeSyntheticEvent,
+  TextLayoutEventData,
 } from 'react-native';
 import {color} from '@theme';
 
@@ -23,11 +24,10 @@ const TextShowMore = ({style, children, numberOfLines}: Props) => {
     setAllText(!showAllText);
   };
 
-  const onLayout = (event: LayoutChangeEvent) => {
-    const {height} = event.nativeEvent.layout;
-    const maxHeight = numberOfLines * 21; // maxLine * lineHeight
+  const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
+    const lines = event.nativeEvent.lines;
 
-    setShowMore(numberOfLines > 0 && height > maxHeight);
+    setShowMore(lines.length >= numberOfLines);
   };
 
   return (
@@ -35,7 +35,7 @@ const TextShowMore = ({style, children, numberOfLines}: Props) => {
       <Text
         style={style}
         numberOfLines={!showAllText ? numberOfLines : 0}
-        onLayout={onLayout}>
+        onTextLayout={onTextLayout}>
         {children}
       </Text>
       {showMore && (
