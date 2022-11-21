@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {CommonType} from '@utils/types';
 import {color} from '@theme';
-import {images} from 'assets/images';
 import {getSize} from '@utils/responsive';
 import GlobalStyles from '@theme/styles/global-style';
-import {ScrollView, StyleSheet, Image, FlatList} from 'react-native';
+import {ScrollView, StyleSheet, FlatList} from 'react-native';
 import LeftArrow from '@assets/images/left-arrow.svg';
 import PaperPlane from '@assets/images/paper-plane.svg';
 import Location from '@assets/images/location.svg';
@@ -15,16 +14,25 @@ import Star from '@assets/images/star.svg';
 import {Button as ThienButton} from '@components';
 import {Button, View, Text, LoaderScreen} from 'react-native-ui-lib';
 import firestore from '@react-native-firebase/firestore';
+import {images} from '@assets/images';
+import InterestItem from './interest-item';
+import FastImage from 'react-native-fast-image';
+import GalleryImage from './gallery-image';
 
 interface Props {}
 
-// TODO: Replace with prop's uid
-const uid = '57ix0KpC41a91UNZF32SpKkxgNW2';
+const getAge = (date: string) => {
+  const today = new Date();
+  const birthDate = new Date(date);
+
+  return today.getFullYear() - birthDate.getFullYear();
+};
 
 export const ProfileDetail: CommonType.AppScreenProps<
   'profileDetail',
   Props
-> = ({navigation}) => {
+> = ({navigation, route}) => {
+  const uid = route.params?.uid || '57ix0KpC41a91UNZF32SpKkxgNW2';
   const [data, setData] = useState(undefined);
 
   useEffect(() => {
@@ -37,136 +45,120 @@ export const ProfileDetail: CommonType.AppScreenProps<
     getUserData().catch(console.error);
   });
 
-  const getAge = () => {
-    const today = new Date();
-    const birthDate = new Date(data.birthDate);
-
-    return today.getFullYear() - birthDate.getFullYear();
-  };
-
+  //FIXME: The ScrollView cannot be resized on content changing
   return (
     <>
       {!data ? (
-        <LoaderScreen
-          message={'Few minutes to look inside'}
-          color={color.primary}
-        />
+        <LoaderScreen message="Happy waiting..." color={color.primary} />
       ) : (
         <View useSafeArea>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={styles.screen} backgroundColor={color.whiteBackground}>
-              <Image
-                source={{uri: data.avatarUrl}}
-                style={[GlobalStyles.fullWidth, styles.mainImage]}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.screen}>
+            <FastImage
+              source={
+                data.avatarUrl ? {uri: data.avatarUrl} : images.placeholder
+              }
+              style={styles.mainImage}
+            />
+            <ThienButton
+              style={styles.backButton}
+              onPress={() => navigation.navigate('discover')}
+              children={<LeftArrow />}
+            />
+            <View row center absH style={styles.circleList}>
+              <Button
+                round
+                style={styles.sideCircle}
+                backgroundColor={color.whiteBackground}
+                children={<XStroke />}
               />
-              <ThienButton
-                style={styles.backButton}
-                onPress={() => navigation.navigate('discover')}
-                children={<LeftArrow />}
+              <Button
+                round
+                marginH-20
+                style={styles.matchCircle}
+                backgroundColor={color.primary}
+                children={<Heart />}
               />
-              <View row center absH style={styles.circleList}>
-                <Button
-                  round
-                  style={styles.sideCircle}
-                  backgroundColor={color.whiteBackground}
-                  children={<XStroke />}
-                />
-                <Button
-                  round
-                  marginH-20
-                  style={styles.matchCircle}
-                  backgroundColor={color.primary}
-                  children={<Heart />}
-                />
-                <Button
-                  round
-                  style={styles.sideCircle}
-                  backgroundColor={color.whiteBackground}
-                  children={<Star />}
+              <Button
+                round
+                style={styles.sideCircle}
+                backgroundColor={color.whiteBackground}
+                children={<Star />}
+              />
+            </View>
+            <View
+              centerV
+              paddingT-90
+              paddingB-40
+              paddingH-40
+              style={[GlobalStyles.fullWidth, styles.info]}
+              backgroundColor={color.whiteBackground}>
+              <View row spread>
+                <View>
+                  <Text text50>
+                    {`${data.firstName} ${data.lastName}, ${getAge(
+                      data.birthDate,
+                    )}`}
+                  </Text>
+                  <Text text80 style={styles.secondaryText} numberOfLines={1}>
+                    {data.musicRoles.join(', ')}
+                  </Text>
+                </View>
+                <ThienButton
+                  onPress={() => navigation.navigate('messages')}
+                  style={styles.messageButton}
+                  children={<PaperPlane />}
                 />
               </View>
-              <View
-                centerV
-                paddingT-90
-                paddingB-40
-                paddingH-40
-                style={styles.info}
-                backgroundColor={color.whiteBackground}>
-                <View row spread>
-                  <View>
-                    <Text text50>
-                      {`${data.firstName} ${data.lastName}, ${getAge()}`}
-                    </Text>
-                    <Text text80 style={styles.secondaryText} numberOfLines={1}>
-                      {data.musicRoles.join(', ')}
-                    </Text>
-                  </View>
-                  <ThienButton
-                    onPress={() => navigation.navigate('messages')}
-                    style={styles.messageButton}
-                    children={<PaperPlane />}
-                  />
+              <View marginT-30 row spread centerV>
+                <View>
+                  <Text text70BO marginB-5>
+                    Location
+                  </Text>
+                  <Text text80 style={styles.secondaryText}>
+                    Chicago, IL United States
+                  </Text>
                 </View>
-                <View marginT-30 row spread>
-                  <View>
-                    <Text text70BO marginB-5>
-                      Location
-                    </Text>
-                    <Text text80 style={styles.secondaryText}>
-                      Chicago, IL United States
-                    </Text>
-                  </View>
-                  <Button
-                    text90
-                    size={Button.sizes.xSmall}
-                    backgroundColor={color.palette.primaryWithOpacity(0.1)}
-                    iconSource={(_: any) => (
-                      <View marginR-4 children={<Location />} />
-                    )}
-                    borderRadius={7}
-                    label="1 km"
-                    style={styles.locationButton}
-                    labelStyle={styles.mainText}
-                  />
-                </View>
+                <Button
+                  text90
+                  size={Button.sizes.xSmall}
+                  backgroundColor={color.palette.PrimaryWithOpacity(0.1)}
+                  iconSource={(_: any) => (
+                    <View marginR-4 children={<Location />} />
+                  )}
+                  borderRadius={7}
+                  label="1 km"
+                  style={styles.locationButton}
+                  labelStyle={styles.mainText}
+                />
+              </View>
+              {data.about && (
                 <View marginT-30>
                   <Text text70BO marginB-5>
                     About
                   </Text>
                   <TextShowMore numberOfLines={3} style={styles.secondaryText}>
-                    Lorem ipsum dolor sit amet, qui minim labore adipisicing
-                    minim sint cillum sint consectetur cupidatat. Lorem ipsum
-                    dolor sit amet, qui minim labore adipisicing minim sint
-                    cillum sint consectetur cupidatat.
+                    {data.about}
                   </TextShowMore>
                 </View>
-                <View marginT-30>
-                  <Text text70BO marginB-5>
-                    Interests
-                  </Text>
-                  <ScrollView horizontal>
-                    <FlatList
-                      data={data.musicInterests}
-                      numColumns={3}
-                      renderItem={({item}) => (
-                        <View
-                          marginR-5
-                          marginB-10
-                          paddingH-10
-                          style={styles.interestItem}
-                          center>
-                          <Text
-                            numberOfLines={2}
-                            text90BO
-                            style={styles.mainText}>
-                            {item}
-                          </Text>
-                        </View>
-                      )}
-                    />
-                  </ScrollView>
-                </View>
-                <View marginT-30>
+              )}
+              <View marginT-30>
+                <Text text70BO marginB-5>
+                  Interests
+                </Text>
+                <ScrollView horizontal>
+                  <FlatList
+                    data={data.musicInterests}
+                    numColumns={3}
+                    renderItem={({item, index}) => (
+                      <InterestItem item={item} index={index} key={index} />
+                    )}
+                  />
+                </ScrollView>
+              </View>
+              {data.gallery && (
+                <View marginT-20>
                   <View flex>
                     <View row spread>
                       <Text text70BO marginB-5>
@@ -179,21 +171,14 @@ export const ProfileDetail: CommonType.AppScreenProps<
                         label="See all"
                       />
                     </View>
-                    <ScrollView
+                    <FlatList
                       horizontal
-                      showsHorizontalScrollIndicator={false}>
-                      <Image source={images.girl} style={styles.galleryImage} />
-                      <Image source={images.girl} style={styles.galleryImage} />
-                      <Image source={images.girl} style={styles.galleryImage} />
-                      <Image source={images.girl} style={styles.galleryImage} />
-                      <Image
-                        source={{uri: data.avatarUrl}}
-                        style={styles.galleryImage}
-                      />
-                    </ScrollView>
+                      data={data.gallery}
+                      renderItem={GalleryImage}
+                    />
                   </View>
                 </View>
-              </View>
+              )}
             </View>
           </ScrollView>
         </View>
@@ -259,7 +244,6 @@ const styles = StyleSheet.create({
   },
   mainImage: {
     height: getSize.v(415),
-    zIndex: -1,
   },
   locationButton: {
     height: 34,
@@ -269,17 +253,5 @@ const styles = StyleSheet.create({
     top: getSize.v(386),
     borderTopEndRadius: 30,
     borderTopStartRadius: 30,
-  },
-  interestItem: {
-    width: 92,
-    height: 32,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: color.primary,
-  },
-  galleryImage: {
-    flex: 1,
-    margin: 5,
-    borderRadius: 5,
   },
 });

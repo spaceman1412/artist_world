@@ -18,9 +18,6 @@ export const palette = {
   wispPink: '#FDECEE',
   primary40: 'rgba(114, 114, 114, 0.4)',
   primary60: 'rgba(114, 114, 114, 0.6)',
-    primaryWithOpacity: (opacity: number) =>
-    `background: rgba(233, 64, 87, ${opacity})`,
-
 
   textBlack: '#2C2C2C',
   black: '#1d1d1d',

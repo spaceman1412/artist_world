@@ -23,7 +23,7 @@ const TextShowMore = ({style, children, numberOfLines}: Props) => {
   };
 
   const onTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
-    //FIXME: do not work very well on IOS
+    //FIXME: this do not work very well on IOS
     // as it always return the same number of line with truncated text
     const lines = event.nativeEvent.lines;
 
