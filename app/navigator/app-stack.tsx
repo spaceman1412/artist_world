@@ -70,6 +70,11 @@ export const AppStack = () => {
       />
       <Stack.Screen name="discover" component={SCREENS.Discover} />
       <Stack.Screen name="profile" component={SCREENS.Profile} />
+      <Stack.Screen
+        name="profileDetail"
+        component={SCREENS.ProfileDetail}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
