@@ -24,4 +24,5 @@ export interface MessageBoxProps {
      */
     unreadCount?: number,
     onPress: () => void,
+    roomId: string,
 }

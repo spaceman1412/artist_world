@@ -10,32 +10,73 @@ Image,
 import { GiftedChat} from 'react-native-gifted-chat';
 import { MessageModalProps } from './messageModal.props';
 import { renderBubble, renderComposer, renderMessageText } from './messageStyle/messageStyle';
-
+import firestore from '@react-native-firebase/firestore';
 
 const MessageModal = (props: MessageModalProps) =>{
     const {
+        room,
         ...rest
     } = props
-    const [messages, setMessages] = React.useState([]);
-
-    React.useEffect(() => {
-      setMessages([
-        {
-          _id: 1,
-          text: 'Hello developer',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-      ])
-    }, [])
-    
-    const onSend = React.useCallback((messages = []) => {
+    console.log('roomId',room)
+    const [messages, setMessages] = React.useState([])
+    React.useLayoutEffect(() => {
+            firestore()
+            .collection('chat-messages')
+            .doc(room.roomId.trim())
+            .collection('messages')
+            .orderBy('createAt','desc')
+            .limit(10)
+            .onSnapshot(documentSnapshot => {
+                setMessages([])
+                documentSnapshot.forEach(data =>{
+                    const user = data.data();
+                    setMessages(pre => [...pre,{
+                        _id: data.id,
+                        text: user.text,
+                        createdAt: user.createAt.toDate(),
+                        user:{
+                            _id: user.sendBy,
+                            name: 'tri' ///auth
+                        }
+                    }])
+                });
+            });
+            
+        }
+    , [room])
+    const onSend = async (messages = []) => {
         setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-      }, [])
+        await sendDB(messages)
+    }
+    const sendDB = async(messages) =>{
+        return firestore()
+        .collection('chat-messages')
+        .doc(room.roomId)    /// chat room
+        .collection('messages')
+        .doc(messages[0]._id)
+        .set({
+            createAt: messages[0].createdAt,
+            text: messages[0].text,
+            sendBy:messages[0].user._id
+        })
+        .then(() => {
+            updateLastest(messages[0])
+        }
+            )
+    }
+    const updateLastest = (message) =>{
+        return firestore()
+                .collection('chat-messages')
+                .doc(room.roomId.trim())
+                .update({
+                    lastMessage : {
+                        createAt: messages[0].createdAt,
+                        _id: message._id,
+                        text: message.text,
+                        sendBy: message.user._id,
+                    }
+                }).then(() => console.log('updated'))
+    }
     return(
         <Modal 
         transparent={true}
@@ -47,27 +88,33 @@ const MessageModal = (props: MessageModalProps) =>{
                     <View style={styles.wrapper}>
                     <View style={styles.header}>
                     <Image  
-                    source={{uri: 'https://placeimg.com/140/140/any'}}
+                    source={room.avatar}
                     style={styles.avatar}/>
                     <View style={styles.info}>
-                        <Text style={styles.name}>Grace</Text>
+                        <Text style={styles.name}>{room.userName}</Text>
                         <View style={styles.status}>
                             <View style={styles.statusOnline}></View>
                             <Text style={styles.statusText}>Online</Text>
                         </View>
                     </View>
                     </View>
+                    {
+                        room !== null ?
                         <GiftedChat
                         messages={messages}
                         onSend={messages => onSend(messages)}
                         user={{
-                            _id: 1,
-                        }}
-                        renderAvatar={null}
-                        renderBubble={renderBubble}
-                        renderMessageText={renderMessageText}
-                        renderComposer={renderComposer}
-                        />
+                            _id: '1',   // thay auth vao
+                        }
+                    }
+                    renderAvatar={null}
+                    renderBubble={renderBubble}
+                    renderMessageText={renderMessageText}
+                    renderComposer={renderComposer}
+                    
+                    />
+                    : <></>
+                }
                     </View>
                 </View>
             </View>

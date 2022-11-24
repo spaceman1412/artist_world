@@ -11,7 +11,7 @@ const initialRouteName = auth().currentUser ? 'profileDetails' : 'login';
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={initialRouteName}>
+    <Stack.Navigator initialRouteName={'messages'}>
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
@@ -70,10 +70,7 @@ export const AppStack = () => {
       />
       <Stack.Screen name="discover" component={SCREENS.Discover} />
       <Stack.Screen name="profile" component={SCREENS.Profile} />
-      <Stack.Screen 
-      name = 'messages' 
-      options={{headerShown: false}}
-      component={SCREENS.Messages}/>
+      
     </Stack.Navigator>
   );
 };
