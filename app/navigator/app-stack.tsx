@@ -11,7 +11,7 @@ const initialRouteName = auth().currentUser ? 'profileDetails' : 'login';
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={initialRouteName}>
+    <Stack.Navigator initialRouteName={'matchList'}>
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
@@ -52,7 +52,14 @@ export const AppStack = () => {
           title: 'Counter',
         }}
       />
-
+      <Stack.Screen 
+      name='matchList' 
+      component={SCREENS.MatchList}
+      options={{
+        headerShown: false,
+      }}
+      />
+      
       <Stack.Screen name="prologue" component={SCREENS.Prologue} />
       <Stack.Screen name="selectCountry" component={SCREENS.SelectCountry} />
       <Stack.Screen name="phoneLogin" component={SCREENS.PhoneLogin} />
