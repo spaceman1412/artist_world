@@ -184,7 +184,10 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
             <Text style={styles.title}>Messages</Text>
             <View style={styles.messageList}>
               <FlatList
-                data={listUserfilter}
+                data={
+                listUserfilter.length === 0 ? 
+                roomchat : listUserfilter}
+                extraData={listUserfilter}
                 style={styles.messageList}
                 renderItem={({item}) => (
                   <MessageBox
@@ -202,6 +205,7 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
             <></>
           ) : (
             <MessageModal
+              onclose={onCloseModal}
               room={roomSelected}
               visible={modal}
               onRequestClose={onCloseModal}

@@ -6,26 +6,29 @@ StyleSheet,
 View,
 Text,
 Image,
+TouchableOpacity,
 } from 'react-native';
 import { GiftedChat} from 'react-native-gifted-chat';
 import { MessageModalProps } from './messageModal.props';
 import { renderBubble, renderComposer, renderMessageText } from './messageStyle/messageStyle';
 import firestore from '@react-native-firebase/firestore';
+import FastImage from 'react-native-fast-image';
 
 const MessageModal = (props: MessageModalProps) =>{
     const {
         room,
+        onclose,
+        
         ...rest
     } = props
-    console.log('roomId',room)
     const [messages, setMessages] = React.useState([])
     React.useLayoutEffect(() => {
+        const getData =
             firestore()
             .collection('chat-messages')
             .doc(room.roomId.trim())
             .collection('messages')
             .orderBy('createAt','desc')
-            .limit(10)
             .onSnapshot(documentSnapshot => {
                 setMessages([])
                 documentSnapshot.forEach(data =>{
@@ -42,6 +45,7 @@ const MessageModal = (props: MessageModalProps) =>{
                 });
             });
             
+            return () => getData()
         }
     , [room])
     const onSend = async (messages = []) => {
@@ -51,7 +55,7 @@ const MessageModal = (props: MessageModalProps) =>{
     const sendDB = async(messages) =>{
         return firestore()
         .collection('chat-messages')
-        .doc(room.roomId)    /// chat room
+        .doc(room.roomId.trim())    /// chat room
         .collection('messages')
         .doc(messages[0]._id)
         .set({
@@ -83,11 +87,13 @@ const MessageModal = (props: MessageModalProps) =>{
         animationType='slide'
         {...rest}
         >
-            <View style={styles.overplayed}>
+            <TouchableOpacity 
+            onPress={onclose}
+            style={styles.overplayed}>
                 <View style={styles.container}>
                     <View style={styles.wrapper}>
                     <View style={styles.header}>
-                    <Image  
+                    <FastImage  
                     source={room.avatar}
                     style={styles.avatar}/>
                     <View style={styles.info}>
@@ -117,7 +123,7 @@ const MessageModal = (props: MessageModalProps) =>{
                 }
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         </Modal>
     )
 }

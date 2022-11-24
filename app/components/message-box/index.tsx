@@ -5,6 +5,7 @@ import {color, spacing, size} from '@theme';
 import LinearGradient from 'react-native-linear-gradient';
 import * as React from 'react';
 import firestore from '@react-native-firebase/firestore';
+import FastImage from 'react-native-fast-image';
 
 
 export const MessageBox = (props: MessageBoxProps) => {
@@ -17,6 +18,7 @@ export const MessageBox = (props: MessageBoxProps) => {
     onPress,
   } = props;
   const [lastMessage, setLastMessage] = React.useState(null)
+  
   React.useLayoutEffect(() =>{
     const getLastMessage = async () =>
     {
@@ -25,7 +27,7 @@ export const MessageBox = (props: MessageBoxProps) => {
         .doc(roomId.trim())
         .onSnapshot(value => {
           const message = value.data()
-        setLastMessage(message.lastMessage)
+          setLastMessage(message.lastMessage)
         })
     }
     getLastMessage().catch(console.error)
@@ -41,11 +43,11 @@ export const MessageBox = (props: MessageBoxProps) => {
               color.palette.purple,
             ]}
             style={styles.imageWrapper}>
-            <Image source={image} style={styles.image} />
+            <FastImage source={image} style={styles.image} />
           </LinearGradient>
         ) : (
           <View style={styles.imageWrapper}>
-            <Image source={image} style={styles.image} />
+            <FastImage source={image} style={styles.image} />
           </View>
         )}
       </TouchableOpacity>

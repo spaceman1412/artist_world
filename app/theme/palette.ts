@@ -31,6 +31,9 @@ export const palette = {
   /**Origin color: #1A1A1A */
   blackWithOpacity: (opacity: number) =>
     `background: rgba(26, 26, 26, ${opacity})`,
+    
+  whiteWithOpacity: (opacity: number) =>
+    `background: rgba(255, 255, 255, ${opacity})`,
 
   PGreen60: '#016B69',
   PGreen50: '#127E74',
