@@ -117,6 +117,7 @@ const MessageModal = (props: MessageModalProps) =>{
                     renderBubble={renderBubble}
                     renderMessageText={renderMessageText}
                     renderComposer={renderComposer}
+                
                     
                     />
                     : <></>
