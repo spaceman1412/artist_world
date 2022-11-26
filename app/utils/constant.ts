@@ -15,3 +15,26 @@ export class AppDims {
     return 812;
   }
 }
+
+/**
+ * @param data list data to map list item
+ * @param renderItem custom type return
+ * @param separatorItem separator type in each item
+ * @returns return list renderItem type
+ */
+export const mapListComponent = <T, U>(
+  data: T[],
+  renderItem: (item: T, index: number) => U,
+  separatorItem?: (item: T, index: number) => U,
+): U[] => {
+  const components: U[] = [];
+  for (let index = 0; index < data.length; index++) {
+    const item = data[index];
+    if (separatorItem && index > 0) {
+      components.push(separatorItem(item, index));
+    }
+    components.push(renderItem(item, index));
+  }
+
+  return components;
+};
