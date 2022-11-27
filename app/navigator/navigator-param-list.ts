@@ -1,4 +1,5 @@
 export type AppNavigatorParamList = {
+  tab: undefined;
   home: undefined;
   resetDone: undefined;
   resetPassword: undefined;
