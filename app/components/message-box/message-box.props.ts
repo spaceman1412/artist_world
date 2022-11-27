@@ -1,4 +1,5 @@
 import { ImageSourcePropType } from "react-native";
+import { FastImageProps, Source } from "react-native-fast-image";
 
 export interface MessageBoxProps {
     /**
@@ -16,7 +17,7 @@ export interface MessageBoxProps {
      */
     time: number | string,
 
-    image: ImageSourcePropType,
+    image: number | Source,
     username: string,
 
     /**
@@ -24,4 +25,5 @@ export interface MessageBoxProps {
      */
     unreadCount?: number,
     onPress: () => void,
+    roomId: string,
 }

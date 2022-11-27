@@ -52,7 +52,14 @@ export const AppStack = () => {
           title: 'Counter',
         }}
       />
-
+      <Stack.Screen 
+      name='matchList' 
+      component={SCREENS.MatchList}
+      options={{
+        headerShown: false,
+      }}
+      />
+      
       <Stack.Screen name="prologue" component={SCREENS.Prologue} />
       <Stack.Screen name="selectCountry" component={SCREENS.SelectCountry} />
       <Stack.Screen name="phoneLogin" component={SCREENS.PhoneLogin} />

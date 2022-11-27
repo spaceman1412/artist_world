@@ -17,7 +17,9 @@ import firestore from '@react-native-firebase/firestore';
 import {images} from '@assets/images';
 import InterestItem from './interest-item';
 import FastImage from 'react-native-fast-image';
-import GalleryImage from './gallery-image';
+import {mapListComponent} from '@utils/constant';
+import {styles} from './styles';
+import SizedBox from '@components/sized-box';
 
 interface Props {}
 
@@ -26,6 +28,12 @@ const getAge = (date: string) => {
   const birthDate = new Date(date);
 
   return today.getFullYear() - birthDate.getFullYear();
+};
+
+const GalleryImage = ({item, index}) => {
+  return (
+    <FastImage key={item} source={{uri: item}} style={styles.galleryImage} />
+  );
 };
 
 export const ProfileDetail: CommonType.AppScreenProps<
@@ -51,14 +59,13 @@ export const ProfileDetail: CommonType.AppScreenProps<
       {!data ? (
         <LoaderScreen message="Happy waiting..." color={color.primary} />
       ) : (
-        <View useSafeArea>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.screen}>
+        <ScrollView showsVerticalScrollIndicator={false} bounces>
+          <View flex>
             <FastImage
               source={
                 data.avatarUrl ? {uri: data.avatarUrl} : images.placeholder
               }
+              resizeMode={'cover'}
               style={styles.mainImage}
             />
             <ThienButton
@@ -94,7 +101,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
               paddingH-40
               style={[GlobalStyles.fullWidth, styles.info]}
               backgroundColor={color.whiteBackground}>
-              <View row spread>
+              <View row spread flex>
                 <View>
                   <Text text50>
                     {`${data.firstName} ${data.lastName}, ${getAge(
@@ -147,15 +154,14 @@ export const ProfileDetail: CommonType.AppScreenProps<
                 <Text text70BO marginB-5>
                   Interests
                 </Text>
-                <ScrollView horizontal>
-                  <FlatList
-                    data={data.musicInterests}
-                    numColumns={3}
-                    renderItem={({item, index}) => (
-                      <InterestItem item={item} index={index} key={index} />
-                    )}
-                  />
-                </ScrollView>
+
+                <FlatList
+                  data={data.musicInterests}
+                  numColumns={3}
+                  renderItem={({item, index}) => (
+                    <InterestItem item={item} index={index} key={index} />
+                  )}
+                />
               </View>
               {data.gallery && (
                 <View marginT-20>
@@ -164,94 +170,24 @@ export const ProfileDetail: CommonType.AppScreenProps<
                       <Text text70BO marginB-5>
                         Gallery
                       </Text>
-                      <Button
-                        link
-                        text80BO
-                        linkColor={color.primary}
-                        label="See all"
-                      />
                     </View>
+                    <SizedBox height={10} />
                     <FlatList
-                      horizontal
                       data={data.gallery}
                       renderItem={GalleryImage}
+                      contentContainerStyle={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                      ItemSeparatorComponent={() => <SizedBox height={10} />}
                     />
                   </View>
                 </View>
               )}
             </View>
-          </ScrollView>
-        </View>
+          </View>
+        </ScrollView>
       )}
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    height: getSize.v(1325),
-  },
-  circleList: {
-    top: getSize.v(337),
-    zIndex: 1,
-  },
-  mainText: {
-    color: color.primary,
-  },
-  secondaryText: {
-    color: color.palette.blackBlur,
-  },
-  matchCircle: {
-    width: 99,
-    height: 99,
-    shadowRadius: 15,
-    shadowOpacity: 0.2,
-    shadowColor: color.primary,
-    shadowOffset: {
-      width: 0,
-      height: 15,
-    },
-  },
-  sideCircle: {
-    width: 78,
-    height: 78,
-    shadowRadius: 15,
-    shadowOpacity: 0.07,
-    shadowColor: color.palette.black,
-    shadowOffset: {
-      width: 0,
-      height: 20,
-    },
-  },
-  messageButton: {
-    width: 52,
-    height: 52,
-    borderWidth: 1,
-    borderRadius: 15,
-    borderColor: color.line,
-    backgroundColor: color.whiteBackground,
-  },
-  backButton: {
-    top: 15,
-    left: 15,
-    width: 52,
-    height: 52,
-    position: 'absolute',
-    backgroundColor: color.palette.whiteWithOpacity(0.2),
-    borderWidth: 1,
-    borderRadius: 15,
-    borderColor: color.line,
-  },
-  mainImage: {
-    height: getSize.v(415),
-  },
-  locationButton: {
-    height: 34,
-  },
-  info: {
-    position: 'absolute',
-    top: getSize.v(386),
-    borderTopEndRadius: 30,
-    borderTopStartRadius: 30,
-  },
-});
