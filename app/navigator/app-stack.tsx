@@ -4,6 +4,7 @@ import {AppNavigatorParamList} from './navigator-param-list';
 import * as SCREENS from '@screens';
 import {ProfileStack} from './profile-stack';
 import auth from '@react-native-firebase/auth';
+import {TabStack} from './tab-stack';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 
@@ -11,7 +12,13 @@ const initialRouteName = auth().currentUser ? 'profileDetails' : 'login';
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={'matchList'}>
+    <Stack.Navigator initialRouteName={'tab'}>
+      <Stack.Screen
+        name="tab"
+        component={TabStack}
+        options={{headerShown: false}}
+      />
+
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
@@ -52,14 +59,7 @@ export const AppStack = () => {
           title: 'Counter',
         }}
       />
-      <Stack.Screen 
-      name='matchList' 
-      component={SCREENS.MatchList}
-      options={{
-        headerShown: false,
-      }}
-      />
-      
+
       <Stack.Screen name="prologue" component={SCREENS.Prologue} />
       <Stack.Screen name="selectCountry" component={SCREENS.SelectCountry} />
       <Stack.Screen name="phoneLogin" component={SCREENS.PhoneLogin} />
@@ -70,13 +70,7 @@ export const AppStack = () => {
         component={SCREENS.Login}
         options={{headerShown: false}}
       />
-      <Stack.Screen
-        name="messages"
-        component={SCREENS.Messages}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen name="discover" component={SCREENS.Discover} />
-      <Stack.Screen name="profile" component={SCREENS.Profile} />
+
       <Stack.Screen
         name="profileDetail"
         component={SCREENS.ProfileDetail}
