@@ -219,7 +219,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       _id: '1',
       createAt: new Date,
       sendBy : authUser.toString(),
-      text: 'hello',}
+      text: 'Hello',}
     firestore().runTransaction(async transaction =>{
       await transaction.set(postReference,{
       lastMessage:lastMessage,
