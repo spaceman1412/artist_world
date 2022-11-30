@@ -2,10 +2,18 @@ import {Button} from '@components';
 import {getSize} from '@utils/responsive';
 import {CommonType} from '@utils/types';
 import React from 'react';
-import {SafeAreaView, Text, Image, StyleSheet, View} from 'react-native';
+import {
+  Platform,
+  SafeAreaView,
+  Text,
+  Image,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {firebase} from '@react-native-firebase/app-check';
 import {images} from '@assets/images';
-import {color} from '@theme';
+import {color, radius} from '@theme';
+import Heart from '@assets/images/heart.svg';
 
 interface Props {}
 export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
@@ -14,6 +22,7 @@ export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
   const user = 'Jack';
   const userImage = images.man;
   const matchImage = images.girl;
+
   const appCheckForDefaultApp = firebase.appCheck();
 
   console.log(appCheckForDefaultApp);
@@ -22,13 +31,31 @@ export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
     <SafeAreaView>
       <View style={styles.contentContainer}>
         <View style={styles.coupleImageContainer}>
-          <View>
+          <View
+            style={[
+              Platform.OS === 'android'
+                ? styles.androidShadow
+                : styles.iosShadow,
+              styles.userContainer,
+            ]}>
             <Image source={userImage} style={styles.userImageContent} />
-            <Image source={images.heart} style={styles.matchIcon1} />
+            <View style={styles.matchIcon1}>
+              <Image source={images.heart} style={styles.image} />
+            </View>
           </View>
-          <View>
+
+          <View
+            style={[
+              Platform.OS === 'android'
+                ? styles.androidShadow
+                : styles.iosShadow,
+              styles.matchContainer,
+            ]}>
             <Image source={matchImage} style={styles.matchImageContent} />
-            <Image source={images.heart} style={styles.matchIcon2} />
+
+            <View style={styles.matchIcon2}>
+              <Image source={images.heart} style={styles.image} />
+            </View>
           </View>
         </View>
         <Text style={styles.headerText}>It's a match, {user}</Text>
@@ -38,12 +65,14 @@ export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
         <Button
           text="Say hello"
           preset="primary"
+          textStyle={styles.buttonText1}
           style={styles.button1}
           onPress={() => navigation.navigate('home')}
         />
         <Button
           text="Keep swiping"
           preset="outline"
+          textStyle={styles.buttonText2}
           style={styles.button2}
           onPress={() => navigation.navigate('home')}
         />
@@ -52,12 +81,19 @@ export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
   );
 };
 const styles = StyleSheet.create({
-  skipButton: {
-    color: color.palette.purple,
-    fontWeight: '500',
-    fontSize: 20,
+  iosShadow: {
+    shadowColor: color.palette.black,
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  androidShadow: {
+    borderColor: color.palette.black,
+    elevation: 3,
+    shadowColor: color.palette.black,
   },
   contentContainer: {
+    top: 40,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
@@ -68,53 +104,59 @@ const styles = StyleSheet.create({
     alignContent: 'space-between',
     padding: 40,
   },
+  userContainer: {top: 20, transform: [{rotateZ: '-10deg'}]},
+  matchContainer: {transform: [{rotateZ: '10deg'}]},
   userImageContent: {
-    top: 40,
     width: getSize.v(160),
     height: getSize.v(240),
     borderRadius: 10,
-    padding: 20,
     alignContent: 'center',
-    transform: [{rotateZ: '-10deg'}],
   },
   matchImageContent: {
     width: getSize.v(160),
     height: getSize.v(240),
     borderRadius: 10,
-    padding: 20,
-    alignContent: 'center',
-    transform: [{rotateZ: '10deg'}],
-    elevation: -1,
   },
+
   headerText: {
+    top: 40,
     fontWeight: '700',
     fontSize: 36,
     padding: 20,
     textAlign: 'center',
     color: color.palette.Red,
+    fontFamily: 'Sk-Modernist',
   },
   bodyText: {
+    top: 10,
     fontWeight: '500',
     fontSize: 16,
     padding: 10,
     textAlign: 'center',
+    fontFamily: 'Sk-Modernist',
   },
   button1: {
     width: getSize.v(295),
     height: getSize.v(56),
     position: 'absolute',
     bottom: getSize.v(-160),
+    borderRadius: radius.ML,
+    color: color.palette.primary,
   },
+  buttonText1: {color: color.palette.white},
   button2: {
     width: getSize.v(295),
     height: getSize.v(56),
     position: 'absolute',
     bottom: getSize.v(-230),
+    borderRadius: radius.ML,
+    color: color.palette.secondary,
   },
+  buttonText2: {color: color.palette.orange},
   matchIcon1: {
     position: 'absolute',
-    left: getSize.v(7),
-    top: getSize.v(256),
+    left: getSize.v(-20),
+    top: getSize.v(210),
     width: getSize.v(50),
     height: getSize.v(50),
     borderRadius: 90,
@@ -123,9 +165,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: color.palette.white,
   },
+  image: {
+    display: 'flex',
+    width: getSize.v(35),
+    height: getSize.v(35),
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
   matchIcon2: {
     position: 'absolute',
-    left: getSize.v(7),
+    left: getSize.v(-22),
     top: getSize.v(-22),
     width: getSize.v(50),
     height: getSize.v(50),

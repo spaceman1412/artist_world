@@ -7,11 +7,11 @@ import auth from '@react-native-firebase/auth';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 
-const initialRouteName = auth().currentUser ? 'profileDetails' : 'login';
+const initialRouteName = auth().currentUser ? 'findOutMatch' : 'login';
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={initialRouteName}>
+    <Stack.Navigator initialRouteName="findOutMatch">
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
@@ -20,10 +20,10 @@ export const AppStack = () => {
           headerShown: false,
         }}
       />
-<      <Stack.Screen
+      <Stack.Screen
         name="findOutMatch"
         component={SCREENS.FindOutMatch}
-        options={{title: 'Find Out Match'}}
+        options={{headerShown: false}}
       />
       <Stack.Screen
         name="resetPassword"
@@ -68,16 +68,12 @@ export const AppStack = () => {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name='messages'
+        name="messages"
         component={SCREENS.Messages}
         options={{headerShown: false}}
       />
       <Stack.Screen name="discover" component={SCREENS.Discover} />
       <Stack.Screen name="profile" component={SCREENS.Profile} />
-      <Stack.Screen 
-      name = 'messages' 
-      options={{headerShown: false}}
-      component={SCREENS.Messages}/>
     </Stack.Navigator>
   );
 };
