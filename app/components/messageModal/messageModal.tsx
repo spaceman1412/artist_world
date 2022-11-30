@@ -5,7 +5,6 @@ Modal,
 StyleSheet,
 View,
 Text,
-Image,
 TouchableOpacity,
 } from 'react-native';
 import { GiftedChat} from 'react-native-gifted-chat';
@@ -13,12 +12,12 @@ import { MessageModalProps } from './messageModal.props';
 import { renderBubble, renderComposer, renderMessageText } from './messageStyle/messageStyle';
 import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
+import auth from '@react-native-firebase/auth';
 
 const MessageModal = (props: MessageModalProps) =>{
     const {
         room,
         onclose,
-        
         ...rest
     } = props
     const [messages, setMessages] = React.useState([])
@@ -39,7 +38,6 @@ const MessageModal = (props: MessageModalProps) =>{
                         createdAt: user.createAt.toDate(),
                         user:{
                             _id: user.sendBy,
-                            name: 'tri' ///auth
                         }
                     }])
                 });
@@ -110,7 +108,7 @@ const MessageModal = (props: MessageModalProps) =>{
                         messages={messages}
                         onSend={messages => onSend(messages)}
                         user={{
-                            _id: '1',   // thay auth vao
+                            _id: auth().currentUser.uid.trim(),   // thay auth vao
                         }
                     }
                     renderAvatar={null}

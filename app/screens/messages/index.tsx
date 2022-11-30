@@ -15,6 +15,7 @@ import {images} from '@assets/images';
 import {color} from '@theme';
 import MessageModal from '@components/messageModal/messageModal';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const styles = StyleSheet.create({
   container: {
@@ -109,9 +110,9 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
   }
   const findUser = async (userId: any) => {
     const id =
-      userId[0].trim() === 'pKqkxRR4uRfWmZ4JwXZi'
-        ? userId[1].trim()
-        : userId[0].trim();
+      userId[0].members.trim() === auth().currentUser.uid
+        ? userId[1].members.trim()
+        : userId[0].members.trim();
     return firestore()
       .collection('Users')
       .doc(id)
@@ -125,25 +126,34 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
       const getData = async () => {
       const res = await firestore()
         .collection('user-chat')
-        .doc('pKqkxRR4uRfWmZ4JwXZi')
+        .doc(auth().currentUser.uid.trim())
         .get();
         setRoomChats([]);
-        const data = res.data();
-        data.roomId.forEach(async element => {
-            firestore().collection('chat-messages')
-            .doc(element.trim())
-            .get()
-            .then(async value => {
-              const user = await findUser(value.data().members)
-              setRoomChats(prev => [...prev,{
-                userName: user.firstName + ' ' + user.lastName,
-                avatar: {uri: user.avatarUrl},
-                roomId: element,
-              }])
-            })
-        });
-        
+      const data = res.data();
+      for (let element of data.roomId)
+      {
+        await setRoomChat(element.trim())
+      }
     };
+
+    const setRoomChat = async (roomId) =>{
+      const postReference = firestore().doc(`chat-messages/${roomId}`)
+      firestore().runTransaction(async transaction =>{
+        const postSnapshot = await transaction.get(postReference)
+        const uid = postSnapshot.data().members
+        const id =
+        uid[0].trim() === auth().currentUser.uid
+        ? uid[1].trim()
+        : uid[0].trim();
+        const postRef = firestore().doc(`Users/${id}`)
+        const user = await transaction.get(postRef)
+        setRoomChats(prev => [...prev,{
+                  userName: user.data().firstName + ' ' + user.data().lastName,
+                  avatar: {uri: user.data().avatarUrl},
+                  roomId: roomId.trim(),
+                }])
+      })
+    }
     getData().catch(console.error);
   }, []);
 

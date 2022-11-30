@@ -22,17 +22,17 @@ export const matchSlice = createSlice({
             state.matchList = [action.payload,...state.matchList]
         },
         updateDataFirebase: state =>{
-            const uid = auth().currentUser.uid
+            const uid = auth().currentUser.uid.trim()
             const newid = state.matchList[0]
             try{
-            const postReference = firestore().doc(`user-match/${"pKqkxRR4uRfWmZ4JwXZi"}`)     // thay auth
+            const postReference = firestore().doc(`user-match/${uid}`)     // thay auth
             firestore().runTransaction(async transaction =>
                 { 
                     const postSnapshot = await transaction.get(postReference)
                     if(!postSnapshot.exists)
                     {
-                        transaction.set(postReference,{
-                            matches: state.matchList
+                        transaction.set(firestore().collection('user-match').doc(uid),{
+                            matches: [newid]
                         })
                     }
                     else
