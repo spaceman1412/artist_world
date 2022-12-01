@@ -116,12 +116,28 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
       const res = await firestore()
         .collection('user-chat')
         .doc(auth().currentUser.uid.trim())
-        .get();
-      setRoomChats([]);
-      const data = res.data();
-      for (let element of data.roomId) {
-        await setRoomChat(element.trim());
-      }
+        .onSnapshot(async documentSnapshot =>{
+          if(documentSnapshot.exists)
+          {
+            setRoomChats([]);
+            const data = documentSnapshot.data();
+          for (let element of data.roomId) {
+            await setRoomChat(element.trim());
+          }
+          }
+          else
+          {
+            await firestore()
+                      .collection('user-chat')
+                      .doc(auth().currentUser.uid.trim())
+                      .set({
+                        roomId: []
+                      })
+                      .then(() => console.log('created'))
+                      .catch(console.error)
+          }
+        })
+        res
     };
 
     const setRoomChat = async roomId => {
