@@ -88,6 +88,8 @@ const MessageModal = (props: MessageModalProps) =>{
             <TouchableOpacity 
             onPress={onclose}
             style={styles.overplayed}>
+            
+            </TouchableOpacity>
                 <View style={styles.container}>
                     <View style={styles.wrapper}>
                     <View style={styles.header}>
@@ -122,7 +124,6 @@ const MessageModal = (props: MessageModalProps) =>{
                 }
                     </View>
                 </View>
-            </TouchableOpacity>
         </Modal>
     )
 }
@@ -135,11 +136,13 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
         padding: 20,
+        zIndex: 10,
     },
     overplayed:{
         flex: 1,
         backgroundColor: color.palette.blackWithOpacity(0.5),
         justifyContent: 'flex-end',
+        zIndex: -1,
     },
     wrapper:{
         flex: 1,
