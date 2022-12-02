@@ -46,6 +46,27 @@ export const matchSlice = createSlice({
             console.log(error)
         };
         
+        },
+        createNewMatchUser : () =>{
+            const uid = auth().currentUser.uid.trim() 
+            firestore().collection('user-match')
+            .doc(uid).set({
+                matches : []
+            }).then(() => console.log('created'))
+        },
+        
+        removeMatchUser :(state, action: PayloadAction<string>) =>
+        {
+            const removeId = action.payload;
+            state.matchList = state.matchList.filter(value => value !== removeId)
+            const uid = auth().currentUser.uid.trim()
+            firestore()
+            .collection('user-match')
+            .doc(uid)
+            .update({
+                matches: firestore.FieldValue.arrayRemove(removeId.trim())
+            }).then(() => console.log('updated'))
+            .catch(console.error)
         }
     }
 })

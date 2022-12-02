@@ -56,7 +56,8 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       .then(documentSnapshot => {
         documentSnapshot.forEach(userData => {
           let user = userData.data();
-          if(userMatches.matches.length > 0)
+          
+          if(userMatches.matches?.length > 0)
           {
           if(!userMatches.matches.some(value => 
             value.trim() === userData.id
@@ -117,6 +118,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
         return value;
       }
       else{
+        dispatch(MatchAction.createNewMatchUser())
         return []
       }
     })
