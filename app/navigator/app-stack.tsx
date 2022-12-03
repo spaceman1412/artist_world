@@ -12,13 +12,12 @@ const initialRouteName = auth().currentUser ? 'profileDetails' : 'login';
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={'tab'}>
+    <Stack.Navigator initialRouteName={'findOutMatch'}>
       <Stack.Screen
         name="tab"
         component={TabStack}
         options={{headerShown: false}}
       />
-
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
@@ -27,7 +26,11 @@ export const AppStack = () => {
           headerShown: false,
         }}
       />
-
+      <Stack.Screen
+        name="findOutMatch"
+        component={SCREENS.FindOutMatch}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="resetPassword"
         component={SCREENS.ResetPassword}
@@ -71,6 +74,13 @@ export const AppStack = () => {
         options={{headerShown: false}}
       />
 
+      <Stack.Screen
+        name="messages"
+        component={SCREENS.Messages}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen name="discover" component={SCREENS.Discover} />
+      <Stack.Screen name="profile" component={SCREENS.Profile} />
       <Stack.Screen
         name="profileDetail"
         component={SCREENS.ProfileDetail}
