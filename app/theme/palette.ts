@@ -32,6 +32,9 @@ export const palette = {
   blackWithOpacity: (opacity: number) =>
     `background: rgba(26, 26, 26, ${opacity})`,
 
+  whiteWithOpacity: (opacity: number) =>
+    `background: rgba(255, 255, 255, ${opacity})`,
+
   PGreen60: '#016B69',
   PGreen50: '#127E74',
   PGreen40: '#18AA8C',
@@ -94,6 +97,7 @@ export const palette = {
 
   Gray: '#727272',
   GrayLight: '#8E5EA',
+  GrayTab: '#F3F3F3',
   Gray60: 'rgba(214, 213, 213, 0.6)',
   outOfGreyWithOpacity: (opacity: number) => `rgba(214, 213, 213, ${opacity})`,
 

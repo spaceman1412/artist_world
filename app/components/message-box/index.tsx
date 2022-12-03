@@ -1,20 +1,37 @@
-import {TouchableOpacity, StyleSheet, Image, Text, View} from 'react-native';
+import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 import {getSize} from '@utils/responsive';
 import type {MessageBoxProps} from './message-box.props';
 import {color, spacing, size} from '@theme';
 import LinearGradient from 'react-native-linear-gradient';
+import * as React from 'react';
+import firestore from '@react-native-firebase/firestore';
+import FastImage from 'react-native-fast-image';
+
 
 export const MessageBox = (props: MessageBoxProps) => {
   const {
     username,
-    message,
     image,
-    time,
     hasStory = false,
     unreadCount = 0,
+    roomId,
     onPress,
   } = props;
-
+  const [lastMessage, setLastMessage] = React.useState(null)
+  
+  React.useLayoutEffect(() =>{
+    const getLastMessage = async () =>
+    {
+        firestore()
+        .collection('chat-messages')
+        .doc(roomId.trim())
+        .onSnapshot(value => {
+          const message = value.data()
+          setLastMessage(message.lastMessage)
+        })
+    }
+    getLastMessage().catch(console.error)
+  },[])
   return (
     <View style={styles.container}>
       <TouchableOpacity>
@@ -26,11 +43,11 @@ export const MessageBox = (props: MessageBoxProps) => {
               color.palette.purple,
             ]}
             style={styles.imageWrapper}>
-            <Image source={image} style={styles.image} />
+            <FastImage source={image} style={styles.image} />
           </LinearGradient>
         ) : (
           <View style={styles.imageWrapper}>
-            <Image source={image} style={styles.image} />
+            <FastImage source={image} style={styles.image} />
           </View>
         )}
       </TouchableOpacity>
@@ -40,11 +57,17 @@ export const MessageBox = (props: MessageBoxProps) => {
           <Text style={[styles.text, styles.username]} numberOfLines={1}>
             {username}
           </Text>
-          <Text style={styles.time}>{time}</Text>
+          <Text style={styles.time}>
+            {/* {lastMessage !== null ?
+            lastMessage.createAt.getDate():
+            'none'} */}
+          </Text>
         </View>
         <View style={styles.content}>
           <Text style={styles.text} numberOfLines={1}>
-            {message}
+            
+            {lastMessage !== null ? 
+            lastMessage.text : null}
           </Text>
           {unreadCount > 0 && (
             <View style={styles.unread}>

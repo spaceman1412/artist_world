@@ -17,3 +17,6 @@ export * from './profile';
 export * from './discover';
 export * from './messages';
 export * from './find-out-match';
+export * from './profile-detail';
+export * from './match-list';
+

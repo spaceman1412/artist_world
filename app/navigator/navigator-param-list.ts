@@ -1,4 +1,5 @@
 export type AppNavigatorParamList = {
+  tab: undefined;
   home: undefined;
   resetDone: undefined;
   resetPassword: undefined;
@@ -12,9 +13,12 @@ export type AppNavigatorParamList = {
   login: undefined;
   profileDetails: undefined;
   profile: undefined;
+  profileDetail: {uid: string};
   discover: undefined;
   messages: undefined;
   findOutMatch: undefined;
+  matchList: undefined;
+
 };
 
 export type ProfileDetailsNavigatorParamList = {

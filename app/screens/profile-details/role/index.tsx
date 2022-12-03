@@ -49,9 +49,9 @@ export const Role: CommonType.ProfileDetailsScreenProps<'role', Props> = () => {
   const navigation = useNavigation();
 
   const onConfirm = () => {
-    dispatcher(ProfileActions.updateMusicRoles(selected));
-    dispatcher(ProfileActions.updateDataFirebase());
-    navigation.navigate('discover');
+    // dispatcher(ProfileActions.updateMusicRoles(selected));
+    // dispatcher(ProfileActions.updateDataFirebase());
+    navigation.navigate('profileDetail');
   };
 
   const renderItem = ({item}) => {
