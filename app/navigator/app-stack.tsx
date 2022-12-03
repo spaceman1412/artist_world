@@ -8,18 +8,16 @@ import {TabStack} from './tab-stack';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 
-const initialRouteName = auth().currentUser ? 'findOutMatch' : 'login';
+const initialRouteName = auth().currentUser ? 'profileDetails' : 'login';
 
 export const AppStack = () => {
   return (
-
-    <Stack.Navigator initialRouteName={'tab'}>
+    <Stack.Navigator initialRouteName={'findOutMatch'}>
       <Stack.Screen
         name="tab"
         component={TabStack}
         options={{headerShown: false}}
       />
-
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
         name="resetDone"
@@ -83,12 +81,11 @@ export const AppStack = () => {
       />
       <Stack.Screen name="discover" component={SCREENS.Discover} />
       <Stack.Screen name="profile" component={SCREENS.Profile} />
-
+      <Stack.Screen
         name="profileDetail"
         component={SCREENS.ProfileDetail}
         options={{headerShown: false}}
       />
-
     </Stack.Navigator>
   );
 };

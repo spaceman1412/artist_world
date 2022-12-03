@@ -25,8 +25,6 @@ export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
 
   const appCheckForDefaultApp = firebase.appCheck();
 
-  console.log(appCheckForDefaultApp);
-
   return (
     <SafeAreaView>
       <View style={styles.contentContainer}>
@@ -125,7 +123,6 @@ const styles = StyleSheet.create({
     padding: 20,
     textAlign: 'center',
     color: color.palette.Red,
-    fontFamily: 'Sk-Modernist',
   },
   bodyText: {
     top: 10,
@@ -133,7 +130,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 10,
     textAlign: 'center',
-    fontFamily: 'Sk-Modernist',
   },
   button1: {
     width: getSize.v(295),
