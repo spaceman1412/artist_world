@@ -10,6 +10,8 @@ import {
 import {color} from '@theme';
 import Heart from '@assets/images/heart.svg';
 import Stroke from '@assets/images/stroke.svg';
+import firestore from '@react-native-firebase/firestore';
+
 const styles = StyleSheet.create({
   container: {
     width: 140,
@@ -61,46 +63,64 @@ const styles = StyleSheet.create({
     margin: 5,
     lineHeight: 24,
   },
-  surround:{
+  surround: {
     width: '50%',
     justifyContent: 'center',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 });
 const UserCart = (props: userCartProps) => {
-  const {image, onHeartPress, onStokePress, name, age, ...rest} = props;
+  const {userID, onHeartPress, onStokePress, ...rest} = props;
+  const [user, setUser] = React.useState(null);
+  React.useEffect(() => {
+    firestore()
+      .collection('Users')
+      .doc(userID)
+      .get()
+      .then(value => {
+        const data = value.data();
+        setUser({
+          image: {uri: data.avatarUrl},
+          name: data.firstName + ' ' + data.lastName,
+        });
+      });
+  }, []);
   return (
-    <TouchableOpacity style={styles.surround}>
+    <TouchableOpacity style={styles.surround} {...rest}>
       <View style={styles.container}>
-      <ImageBackground
-        blurRadius={15}
-        borderRadius={15}
-        style={styles.image}
-        resizeMode={'stretch'}
-        source={image}>
-        <ImageBackground
-          style={styles.imageBlur}
-          borderTopLeftRadius={15}
-          borderTopRightRadius={15}
-          resizeMode={'center'}
-          source={image}>
-          <Text numberOfLines={1} style={styles.text}>
-            {name} , {age}
-          </Text>
-        </ImageBackground>
-      </ImageBackground>
+        {user !== null ? (
+          <ImageBackground
+            blurRadius={15}
+            borderRadius={15}
+            style={styles.image}
+            resizeMode="stretch"
+            source={user.image}>
+            <ImageBackground
+              style={styles.imageBlur}
+              borderTopLeftRadius={15}
+              borderTopRightRadius={15}
+              resizeMode={'stretch'}
+              source={user.image}>
+              <Text numberOfLines={1} style={styles.text}>
+                {user.name}
+              </Text>
+            </ImageBackground>
+          </ImageBackground>
+        ) : (
+          <></>
+        )}
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={onStokePress} style={styles.button}>
-          <Stroke width={14} height={14} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={onHeartPress}
-          style={[styles.button, styles.buttonLeft]}>
-          <Heart width={16} height={16} />
-        </TouchableOpacity>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={onStokePress} style={styles.button}>
+            <Stroke width={14} height={14} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onHeartPress}
+            style={[styles.button, styles.buttonLeft]}>
+            <Heart width={16} height={16} />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
     </TouchableOpacity>
   );
 };

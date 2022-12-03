@@ -6,6 +6,10 @@ import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import UserCart from './user-card';
 import SortArrow from '@assets/images/sort-two.svg';
 import {matchList} from './data';
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth'
+import { useAppDispatch, useAppSelector } from '@store/hook';
+import { MatchAction } from '@store/match/reducer';
 
 const styles = StyleSheet.create({
   container: {
@@ -48,8 +52,41 @@ interface Props {}
 export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
   navigation,
 }) => {
+  const dispatch = useAppDispatch();
+  const {matchList} = useAppSelector(state => state.match)
+  const fetchUserMatch = async() =>{
+    const data = await firestore()
+    .collection('user-match')
+    .doc(auth().currentUser.uid)
+    .get()
+    .then((valueData) =>{
+      if(valueData.exists)
+      {
+        const value = valueData.data();
+        dispatch(MatchAction.updateMatchList(value.matches))
+        return value;
+      }
+      else{
+        dispatch(MatchAction.createNewMatchUser())
+        return []
+      }
+    })
+    return data;
+  }
+
+  React.useEffect(() =>{
+    fetchUserMatch().catch(console.error)
+  },[])
+
   const handleHeartPress = () => {};
-  const handleUnMatchPress = () => {};
+  const handleUnMatchPress = (userId: string) => {
+    dispatch(MatchAction.removeMatchUser(userId))
+  };
+  const handleGotoDetail= (userId: string) =>{
+    navigation.navigate('profileDetail',{
+      uid: userId
+    })
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -67,11 +104,10 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
           numColumns={2}
           renderItem={({item}) => (
             <UserCart
-              name={item.name}
-              age={item.age}
-              image={item.image}
+              onPress={() => handleGotoDetail(item.trim())}
+              userID ={item}
               onHeartPress={handleHeartPress}
-              onStokePress={handleUnMatchPress}
+              onStokePress={() => handleUnMatchPress(item)}
             />
           )}
         />

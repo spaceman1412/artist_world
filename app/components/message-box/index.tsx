@@ -1,4 +1,4 @@
-import {TouchableOpacity, StyleSheet, Image, Text, View} from 'react-native';
+import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 import {getSize} from '@utils/responsive';
 import type {MessageBoxProps} from './message-box.props';
 import {color, spacing, size} from '@theme';

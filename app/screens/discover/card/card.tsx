@@ -19,7 +19,6 @@ export const Card = (props: CardProps) =>{
         outputRange: ['8deg', '0deg', '-8deg'],
       });
     
-    
       const animatedCardStyle = {
         transform: [...swipe.getTranslateTransform(), { rotate: rotate }],
       };
