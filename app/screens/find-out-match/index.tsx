@@ -62,7 +62,7 @@ export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
         </Text>
         <Button
           text="Say hello"
-          preset="primary"
+          // preset="primary"
           textStyle={styles.buttonText1}
           style={styles.button1}
           onPress={() => navigation.navigate('home')}
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     fontSize: 36,
     padding: 20,
     textAlign: 'center',
-    color: color.palette.Red,
+    color: color.primary,
   },
   bodyText: {
     top: 10,
@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     padding: 10,
     textAlign: 'center',
+    color: color.storybookTextColor,
   },
   button1: {
     width: getSize.v(295),
@@ -137,7 +138,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: getSize.v(-160),
     borderRadius: radius.ML,
-    color: color.palette.primary,
+    color: color.primary,
+    backgroundColor: color.primary,
   },
   buttonText1: {color: color.palette.white},
   button2: {
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.ML,
     color: color.palette.secondary,
   },
-  buttonText2: {color: color.palette.orange},
+  buttonText2: {color: color.primary},
   matchIcon1: {
     position: 'absolute',
     left: getSize.v(-20),

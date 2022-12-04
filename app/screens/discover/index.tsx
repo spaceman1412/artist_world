@@ -222,6 +222,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       createAt: new Date,
       sendBy : authUser.toString(),
       text: 'Hello',}
+      const sendMessage = 
     firestore().runTransaction(async transaction =>{
       await transaction.set(postReference,{
       lastMessage:lastMessage,
@@ -231,8 +232,9 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       }).get(postReference)
         await addNewMessageRoom(authUser,postReference.id.trim())
         await addNewMessageRoom( userId, postReference.id.trim())
-        navigation.navigate('messages')
+        // navigation.navigate('messages')
     } )
+    sendMessage.finally(() => navigation.navigate('messages'))
 
   }
       const addNewMessageRoom = async (
@@ -258,7 +260,6 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
        
 
   const handleMatch = (userId:string) =>{
-    console.log(userId)
     dispatch(MatchAction.addMatchList(userId.trim()));
     dispatch(MatchAction.updateDataFirebase());
     checkMatch(auth().currentUser.uid.trim(),userId)
@@ -299,7 +300,6 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       },
     }),
   ).current;
-
   const transitionNext = React.useCallback((value) => {
     setUserList(prevState => prevState.slice(1));
    
@@ -357,7 +357,9 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
             })
             .reverse()
         ) : (
-          <></>
+          <Text style={{color: color.storybookTextColor}}>
+            There is No one here
+            </Text>
         )}
       </View>
 
