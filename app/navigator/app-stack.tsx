@@ -12,7 +12,7 @@ const initialRouteName = auth().currentUser ? 'profileDetails' : 'login';
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={'findOutMatch'}>
+    <Stack.Navigator initialRouteName={'tab'}>
       <Stack.Screen
         name="tab"
         component={TabStack}
