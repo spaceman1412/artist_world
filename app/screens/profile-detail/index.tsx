@@ -17,7 +17,6 @@ import firestore from '@react-native-firebase/firestore';
 import {images} from '@assets/images';
 import InterestItem from './interest-item';
 import FastImage from 'react-native-fast-image';
-import {mapListComponent} from '@utils/constant';
 import {styles} from './styles';
 import SizedBox from '@components/sized-box';
 
@@ -55,7 +54,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
 
   //FIXME: The ScrollView cannot be resized on content changing
   return (
-    <>
+    <View flex backgroundColor={color.whiteBackground}>
       {!data ? (
         <LoaderScreen message="Happy waiting..." color={color.primary} />
       ) : (
@@ -70,7 +69,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
             />
             <ThienButton
               style={styles.backButton}
-              onPress={() => navigation.navigate('discover')}
+              onPress={() => navigation.goBack()}
               children={<LeftArrow />}
             />
             <View row center absH style={styles.circleList}>
@@ -194,6 +193,6 @@ export const ProfileDetail: CommonType.AppScreenProps<
           </View>
         </ScrollView>
       )}
-    </>
+    </View>
   );
 };

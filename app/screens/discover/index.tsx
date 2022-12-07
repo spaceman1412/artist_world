@@ -20,8 +20,8 @@ import BackIcon from '@assets/images/back-arrow.svg';
 import FilterIcon from '@assets/images/filter.svg';
 import FilterSearch from '@components/filterSearch/filterSearch';
 import firestore from '@react-native-firebase/firestore';
-import { useAppDispatch, useAppSelector } from '@store/hook';
-import { MatchAction } from '@store/match/reducer';
+import {useAppDispatch, useAppSelector} from '@store/hook';
+import {MatchAction} from '@store/match/reducer';
 import auth from '@react-native-firebase/auth';
 
 interface Props {}
@@ -47,7 +47,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   ];
   const {width} = Dimensions.get('screen');
   const dispatch = useAppDispatch();
-  const fetchUser = async (userMatches) => {
+  const fetchUser = async userMatches => {
     return firestore()
       .collection('Users')
       .orderBy(firestore.FieldPath.documentId())
@@ -56,35 +56,32 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       .then(documentSnapshot => {
         documentSnapshot.forEach(userData => {
           let user = userData.data();
-          
-          if(userMatches.matches?.length > 0)
-          {
-          if(!userMatches.matches.some(value => 
-            value.trim() === userData.id
-            || 
-            userData.id.trim() === auth().currentUser.uid.trim()))
-          {
-            
-            setUserList(prev => [
-              ...prev,
-              {
-                id: userData.id,
-                name: user.firstName + ' ' + user.lastName,
-                //uncomment this line when have the galary
-                // image: [...user.gallery ,user.avatarUrl],
-                images: [{uri: user.avatarUrl}],
-                // uncomment when have full user data
-                // musicInterests: user.musicInterests,
-                // musicRoles: user.musicRoles
-                //
-              },
-            ]);
-          }  
-          }
-          else{
-          
-            if(userData.id.trim() !== auth().currentUser.uid.trim())
-            {
+
+          if (userMatches.matches?.length > 0) {
+            if (
+              !userMatches.matches.some(
+                value =>
+                  value.trim() === userData.id ||
+                  userData.id.trim() === auth().currentUser.uid.trim(),
+              )
+            ) {
+              setUserList(prev => [
+                ...prev,
+                {
+                  id: userData.id,
+                  name: user.firstName + ' ' + user.lastName,
+                  //uncomment this line when have the galary
+                  // image: [...user.gallery ,user.avatarUrl],
+                  images: [{uri: user.avatarUrl}],
+                  // uncomment when have full user data
+                  // musicInterests: user.musicInterests,
+                  // musicRoles: user.musicRoles
+                  //
+                },
+              ]);
+            }
+          } else {
+            if (userData.id.trim() !== auth().currentUser.uid.trim()) {
               setUserList(prev => [
                 ...prev,
                 {
@@ -102,54 +99,54 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
             }
           }
         });
-
       });
   };
-  const fetchUserMatch = async() =>{
+  const fetchUserMatch = async () => {
     const data = await firestore()
-    .collection('user-match')
-    .doc(auth().currentUser.uid)
-    .get()
-    .then((valueData) =>{
-      if(valueData.exists)
-      {
-        const value = valueData.data();
-        dispatch(MatchAction.updateMatchList(value.matches))
-        return value;
-      }
-      else{
-        dispatch(MatchAction.createNewMatchUser())
-        return []
-      }
-    })
+      .collection('user-match')
+      .doc(auth().currentUser.uid)
+      .get()
+      .then(valueData => {
+        if (valueData.exists) {
+          const value = valueData.data();
+          dispatch(MatchAction.updateMatchList(value.matches));
+          return value;
+        } else {
+          dispatch(MatchAction.createNewMatchUser());
+          return [];
+        }
+      });
     return data;
-  }
+  };
 
   React.useEffect(() => {
-    const fetchData = async() =>{
+    const fetchData = async () => {
       const match = await fetchUserMatch;
       match().then(value => {
-        fetchUser(value)})
-    }
-    fetchData().catch(console.error)
+        fetchUser(value);
+      });
+    };
+    fetchData().catch(console.error);
   }, []);
 
   React.useEffect(() => {
-      if (userList.length === 2) {
-          firestore()
-          .collection('Users')
-          .orderBy(firestore.FieldPath.documentId())
-          .startAt(userList[1].id.trim())
-          .limit(5)
-          .get()
-          .then(documentSnapshot => {
-            documentSnapshot.forEach(userData => {
-              let user = userData.data();
-              if(!matchList.some(value => 
-                value === userData.id
-                || 
-                userData.id === auth().currentUser.uid.trim()))
-              {
+    if (userList.length === 2) {
+      firestore()
+        .collection('Users')
+        .orderBy(firestore.FieldPath.documentId())
+        .startAt(userList[1].id.trim())
+        .limit(5)
+        .get()
+        .then(documentSnapshot => {
+          documentSnapshot.forEach(userData => {
+            let user = userData.data();
+            if (
+              !matchList.some(
+                value =>
+                  value === userData.id ||
+                  userData.id === auth().currentUser.uid.trim(),
+              )
+            ) {
               setUserList(prev => [
                 ...prev,
                 {
@@ -165,106 +162,96 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
                 },
               ]);
             }
-            });
           });
-      }
+        });
+    }
   }, [userList]);
 
-  
-  
-
-  const checkMatch = async (userId, matchedUserId) =>{
-    return firestore().collection('user-match')
-          .doc(matchedUserId).get().then(
-            documentSnapshot => {
-              if(!documentSnapshot.exists)
-              {
-                console.log('not exist')
-              }
-              else
-              {
-                let documents = documentSnapshot.data().matches
-                documents.forEach((userData: string) =>{
-                    if(userData.trim() === userId.trim())
-                    {
-                      console.log(true) 
-                      alert(matchedUserId.trim())
-                      return;
-                    }
-                    else{
-                      console.log(false)
-                    }
-                })
-              }
+  const checkMatch = async (userId, matchedUserId) => {
+    return firestore()
+      .collection('user-match')
+      .doc(matchedUserId)
+      .get()
+      .then(documentSnapshot => {
+        if (!documentSnapshot.exists) {
+          console.log('not exist');
+        } else {
+          let documents = documentSnapshot.data().matches;
+          documents.forEach((userData: string) => {
+            if (userData.trim() === userId.trim()) {
+              console.log(true);
+              alert(matchedUserId.trim());
+              return;
+            } else {
+              console.log(false);
             }
-          )
-  }
-  const alert = (userId) =>{
-    console.log('userId',userId)
-    Alert.alert( 
-      "Alert Title",
-    "You are matched",
-    [
+          });
+        }
+      });
+  };
+  const alert = userId => {
+    console.log('userId', userId);
+    Alert.alert('Alert Title', 'You are matched', [
       {
-        text: "Keep swiping",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel"
+        text: 'Keep swiping',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
       },
-      { text: "Say Hello", onPress: () => createNewMessageRoom(userId) }
-    ])
-  }
+      {text: 'Say Hello', onPress: () => createNewMessageRoom(userId)},
+    ]);
+  };
 
-  const createNewMessageRoom = (userId) =>{
+  const createNewMessageRoom = userId => {
     const authUser = auth().currentUser.uid.trim();
-    const postReference = firestore().collection('chat-messages').doc()
+    const postReference = firestore().collection('chat-messages').doc();
     const lastMessage = {
       _id: '1',
-      createAt: new Date,
-      sendBy : authUser.toString(),
-      text: 'Hello',}
-      const sendMessage = 
-    firestore().runTransaction(async transaction =>{
-      await transaction.set(postReference,{
-      lastMessage:lastMessage,
-      members: [authUser, userId],
-      }).set(postReference.collection('messages').doc('1'),{
-        ...lastMessage
-      }).get(postReference)
-        await addNewMessageRoom(authUser,postReference.id.trim())
-        await addNewMessageRoom( userId, postReference.id.trim())
-        // navigation.navigate('messages')
-    } )
-    sendMessage.finally(() => navigation.navigate('messages'))
+      createAt: new Date(),
+      sendBy: authUser.toString(),
+      text: 'Hello',
+    };
+    const sendMessage = firestore().runTransaction(async transaction => {
+      await transaction
+        .set(postReference, {
+          lastMessage: lastMessage,
+          members: [authUser, userId],
+        })
+        .set(postReference.collection('messages').doc('1'), {
+          ...lastMessage,
+        })
+        .get(postReference);
+      await addNewMessageRoom(authUser, postReference.id.trim());
+      await addNewMessageRoom(userId, postReference.id.trim());
+      // navigation.navigate('messages')
+    });
+    sendMessage.finally(() => navigation.navigate('messages'));
+  };
+  const addNewMessageRoom = async (userId: string, idRoom: string) => {
+    const getUserRoom = await firestore()
+      .doc(`user-chat/${userId.trim()}`)
+      .get();
+    if (!getUserRoom.exists) {
+      firestore()
+        .collection('user-chat')
+        .doc(userId.trim())
+        .set({
+          roomId: [idRoom],
+        });
+    } else {
+      firestore()
+        .collection('user-chat')
+        .doc(userId.trim())
+        .update({
+          roomId: firestore.FieldValue.arrayUnion(idRoom),
+        });
+    }
+  };
 
-  }
-      const addNewMessageRoom = async (
-        userId: string, 
-        idRoom: string) =>{
-        const getUserRoom = await firestore().doc(`user-chat/${userId.trim()}`).get()
-        if(!getUserRoom.exists)
-        {
-          firestore().collection(`user-chat`)
-          .doc(userId.trim())
-          .set({
-            roomId: [idRoom]
-          })
-        }
-        else{
-          firestore().collection(`user-chat`)
-          .doc(userId.trim())
-          .update({
-            roomId: firestore.FieldValue.arrayUnion(idRoom)
-          })
-        }
-      }
-       
-
-  const handleMatch = (userId:string) =>{
+  const handleMatch = (userId: string) => {
     dispatch(MatchAction.addMatchList(userId.trim()));
     dispatch(MatchAction.updateDataFirebase());
-    checkMatch(auth().currentUser.uid.trim(),userId)
-  }
-
+    checkMatch(auth().currentUser.uid.trim(), userId);
+  };
 
   const panResponder = React.useRef(
     PanResponder.create({
@@ -300,18 +287,20 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       },
     }),
   ).current;
-  const transitionNext = React.useCallback((value) => {
-    setUserList(prevState => prevState.slice(1));
-   
-    swipe.setValue({x: 0, y: 0});
-  }, [swipe]);
+  const transitionNext = React.useCallback(
+    value => {
+      setUserList(prevState => prevState.slice(1));
+
+      swipe.setValue({x: 0, y: 0});
+    },
+    [swipe],
+  );
 
   const handleChoise = React.useCallback(
     (sign, userId) => {
       if (sign === 1) {
         //callAPI here
-        handleMatch(userId)
-        
+        handleMatch(userId);
       } else {
         // call API here
         console.log('unmatch');
@@ -359,7 +348,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
         ) : (
           <Text style={{color: color.storybookTextColor}}>
             There is No one here
-            </Text>
+          </Text>
         )}
       </View>
 

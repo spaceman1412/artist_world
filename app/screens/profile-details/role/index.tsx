@@ -7,8 +7,8 @@ import {getSize} from '@utils/responsive';
 import SizedBox from '@components/sized-box';
 import GlobalStyles from '@theme/styles/global-style';
 import {useAppDispatch} from '@store/hook';
-import {ProfileActions} from '@store/profile/reducer';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 interface Props {}
 
@@ -47,11 +47,14 @@ export const Role: CommonType.ProfileDetailsScreenProps<'role', Props> = () => {
   const [selected, setSelected] = useState([]);
   const dispatcher = useAppDispatch();
   const navigation = useNavigation();
+  const userId = auth().currentUser.uid;
 
   const onConfirm = () => {
     // dispatcher(ProfileActions.updateMusicRoles(selected));
     // dispatcher(ProfileActions.updateDataFirebase());
-    navigation.navigate('profileDetail');
+    navigation.navigate('profileDetail', {
+      uid: userId,
+    });
   };
 
   const renderItem = ({item}) => {

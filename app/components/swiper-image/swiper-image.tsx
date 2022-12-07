@@ -3,16 +3,13 @@ import {StyleSheet, View, ScrollView} from 'react-native';
 import {SwiperImageProps} from './swiper-image.props';
 import {OnboardingItem} from './onboardItem/onboardItem';
 import {color} from '@theme';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
 
 export function SwiperImage(props: SwiperImageProps) {
-  const {
-  images, 
-  width = 295, 
-  height = 500,
-  name, 
-  age,
-  } = props;
+  const {images, width = 295, height = 500, name, age} = props;
   const [imgActive, setImgActive] = React.useState(0);
+  const navigation = useNavigation();
   const sizeStyle = [{width, height}];
   const onSlide = nativeEvent => {
     if (nativeEvent) {
@@ -26,31 +23,36 @@ export function SwiperImage(props: SwiperImageProps) {
   };
 
   return (
-    <View  style={[styles.container, sizeStyle]}>
+    <View style={[styles.container, sizeStyle]}>
       <View style={sizeStyle}>
         <ScrollView
           onScroll={({nativeEvent}) => onSlide(nativeEvent)}
           pagingEnabled
           style={sizeStyle}>
-          {images.map((item, index) => (
-            <OnboardingItem
-              key={index}
-              image={item}
-              name={name}
-              age={age}
-              width={width}
-              height={height}
-              
-            />
-          ))}
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate('profileDetail', {
+                uid: props.userId,
+              })
+            }>
+            {images.map((item, index) => (
+              <OnboardingItem
+                key={index}
+                image={item}
+                name={name}
+                age={age}
+                width={width}
+                height={height}
+              />
+            ))}
+          </TouchableWithoutFeedback>
         </ScrollView>
         <View style={styles.wrapDot}>
           {images.map((e, index) => (
             <View
               key={index}
-              style={
-                imgActive === index ? styles.dotActive : styles.dot
-              }></View>
+              style={imgActive === index ? styles.dotActive : styles.dot}
+            />
           ))}
         </View>
       </View>

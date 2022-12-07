@@ -47,8 +47,8 @@ export const styles = StyleSheet.create({
     backgroundColor: color.whiteBackground,
   },
   backButton: {
-    top: 15,
-    left: 15,
+    top: 50,
+    left: 30,
     width: 52,
     height: 52,
     position: 'absolute',
