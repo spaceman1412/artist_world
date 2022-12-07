@@ -108,9 +108,11 @@ export const ProfileDetail: CommonType.AppScreenProps<
                       data.birthDate,
                     )}`}
                   </Text>
-                  <Text text80 style={styles.secondaryText} numberOfLines={1}>
-                    {data.musicRoles.join(', ')}
-                  </Text>
+                  {data.musicRoles && (
+                    <Text text80 style={styles.secondaryText} numberOfLines={1}>
+                      {data.musicRoles.join(', ')}
+                    </Text>
+                  )}
                 </View>
                 <ThienButton
                   onPress={() => navigation.navigate('messages')}
@@ -150,19 +152,23 @@ export const ProfileDetail: CommonType.AppScreenProps<
                   </TextShowMore>
                 </View>
               )}
-              <View marginT-30>
-                <Text text70BO marginB-5>
-                  Interests
-                </Text>
 
-                <FlatList
-                  data={data.musicInterests}
-                  numColumns={3}
-                  renderItem={({item, index}) => (
-                    <InterestItem item={item} index={index} key={index} />
-                  )}
-                />
-              </View>
+              {data.musicInterests && (
+                <View marginT-30>
+                  <Text text70BO marginB-5>
+                    Interests
+                  </Text>
+
+                  <FlatList
+                    data={data.musicInterests}
+                    numColumns={3}
+                    renderItem={({item, index}) => (
+                      <InterestItem item={item} index={index} key={index} />
+                    )}
+                  />
+                </View>
+              )}
+
               {data.gallery && (
                 <View marginT-20>
                   <View flex>

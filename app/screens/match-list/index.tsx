@@ -7,9 +7,9 @@ import UserCart from './user-card';
 import SortArrow from '@assets/images/sort-two.svg';
 import {matchList} from './data';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth'
-import { useAppDispatch, useAppSelector } from '@store/hook';
-import { MatchAction } from '@store/match/reducer';
+import auth from '@react-native-firebase/auth';
+import {useAppDispatch, useAppSelector} from '@store/hook';
+import {MatchAction} from '@store/match/reducer';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   },
   matchedListContainer: {
     marginHorizontal: 40,
+    flex: 1,
   },
   title: {
     color: color.storybookTextColor,
@@ -53,40 +54,38 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
   navigation,
 }) => {
   const dispatch = useAppDispatch();
-  const {matchList} = useAppSelector(state => state.match)
-  const fetchUserMatch = async() =>{
+  const {matchList} = useAppSelector(state => state.match);
+  const fetchUserMatch = async () => {
     const data = await firestore()
-    .collection('user-match')
-    .doc(auth().currentUser.uid)
-    .get()
-    .then((valueData) =>{
-      if(valueData.exists)
-      {
-        const value = valueData.data();
-        dispatch(MatchAction.updateMatchList(value.matches))
-        return value;
-      }
-      else{
-        dispatch(MatchAction.createNewMatchUser())
-        return []
-      }
-    })
+      .collection('user-match')
+      .doc(auth().currentUser.uid)
+      .get()
+      .then(valueData => {
+        if (valueData.exists) {
+          const value = valueData.data();
+          dispatch(MatchAction.updateMatchList(value.matches));
+          return value;
+        } else {
+          dispatch(MatchAction.createNewMatchUser());
+          return [];
+        }
+      });
     return data;
-  }
+  };
 
-  React.useEffect(() =>{
-    fetchUserMatch().catch(console.error)
-  },[])
+  React.useEffect(() => {
+    fetchUserMatch().catch(console.error);
+  }, []);
 
   const handleHeartPress = () => {};
   const handleUnMatchPress = (userId: string) => {
-    dispatch(MatchAction.removeMatchUser(userId))
+    dispatch(MatchAction.removeMatchUser(userId));
   };
-  const handleGotoDetail= (userId: string) =>{
-    navigation.navigate('profileDetail',{
-      uid: userId
-    })
-  }
+  const handleGotoDetail = (userId: string) => {
+    navigation.navigate('profileDetail', {
+      uid: userId,
+    });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -102,10 +101,11 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
         <FlatList
           data={matchList}
           numColumns={2}
+          showsVerticalScrollIndicator={false}
           renderItem={({item}) => (
             <UserCart
               onPress={() => handleGotoDetail(item.trim())}
-              userID ={item}
+              userID={item}
               onHeartPress={handleHeartPress}
               onStokePress={() => handleUnMatchPress(item)}
             />

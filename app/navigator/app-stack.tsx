@@ -8,11 +8,11 @@ import {TabStack} from './tab-stack';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 
-const initialRouteName = auth().currentUser ? 'profileDetails' : 'login';
+const initialRouteName = auth().currentUser ? 'tab' : 'login';
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={'tab'}>
+    <Stack.Navigator initialRouteName={initialRouteName}>
       <Stack.Screen
         name="tab"
         component={TabStack}
@@ -67,7 +67,11 @@ export const AppStack = () => {
       <Stack.Screen name="selectCountry" component={SCREENS.SelectCountry} />
       <Stack.Screen name="phoneLogin" component={SCREENS.PhoneLogin} />
 
-      <Stack.Screen name="createAccount" component={SCREENS.CreateAccount} />
+      <Stack.Screen
+        name="createAccount"
+        component={SCREENS.CreateAccount}
+        options={{headerShown: false}}
+      />
       <Stack.Screen
         name="login"
         component={SCREENS.Login}
