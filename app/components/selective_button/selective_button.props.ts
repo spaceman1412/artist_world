@@ -1,6 +1,8 @@
 import React from 'react';
 
 import {
+  ImageSourcePropType,
+  ImageStyle,
   StyleProp,
   TextStyle,
   TouchableOpacityProps,
@@ -8,33 +10,16 @@ import {
 } from 'react-native';
 
 export interface SelectiveButtonProps extends TouchableOpacityProps {
-  /**
-   * Text which is looked up via i18n.
-   */
 
-  /**
-   * The text to display if not using `tx` or nested components.
-   */
-  text?: string;
-
-  /**
-   * An optional style override useful for padding & margin.
-   */
+  state: boolean;
+  icon?: ImageSourcePropType;
+  iconPosition?: 'left' | 'right';
   style?: StyleProp<ViewStyle>;
-
-  /**
-   * An optional style override useful for the button text.
-   */
+  text?: string;
   textStyle?: StyleProp<TextStyle>;
-
-  /**
-   * One of the different types of text presets.
-   */
-  preset?: string;
-
-  /**
-   * One of the different types of text presets.
-   */
+  iconStyle?: StyleProp<ImageStyle>;
+  onPreset: string;
+  offPreset: string;
   children?: React.ReactNode;
 
   selectedColorBackground: string;
