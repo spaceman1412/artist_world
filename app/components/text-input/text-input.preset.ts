@@ -8,18 +8,18 @@ const BASE_OUTLINE: ViewStyle = {
     borderColor: color.primary,
     borderRadius: 25,
     flexDirection: 'row',
-    // alignItems: 'center',
-    // justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-around',
     paddingVertical: 8,
+    paddingHorizontal: 10,
     
 }
 
 const BASE_TEXT: TextStyle = {
     color: color.storybookTextColor,
     fontSize: 14,
-    fontWeight: '700',
-    width: '70%',
-    backgroundColor: 'blue',
+    fontWeight: '500',
+    width: '80%',
     height: 40,
     justifyContent: 'center',
     alignContent: 'center',
@@ -27,7 +27,7 @@ const BASE_TEXT: TextStyle = {
 
 const BASE_LABEL: TextStyle = {
     color: color.storybookTextColor,
-    paddingLeft: 40,
+    paddingLeft: 20,
 }
 
 export const LABEL_STYLE = StyleSheet.create({

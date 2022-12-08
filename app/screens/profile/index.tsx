@@ -54,19 +54,17 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
 }) => {
   const [pic, setPic] = React.useState('');
   const [user,setUser] = React.useState(null);
-  
   React.useEffect(() =>{
     const getUsers  =  firestore()
     .collection('Users')
     .doc(auth().currentUser.uid)
-    .get()
-    .then(value => 
+    .onSnapshot(value => 
       {
         const data = value.data();
         setUser(data)
       }
     )
-    getUsers.catch(console.error);
+    getUsers;
     
   },[])
   const onSend = async () => {

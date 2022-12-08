@@ -13,7 +13,7 @@ const initialRouteName = auth().currentUser ? 'tab' : 'login';
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={'tab'}>
+    <Stack.Navigator initialRouteName={initialRouteName}>
       <Stack.Screen
         name="tab"
         component={TabStack}

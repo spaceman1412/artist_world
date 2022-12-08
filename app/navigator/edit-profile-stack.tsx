@@ -7,8 +7,17 @@ const Stack = createStackNavigator<EditProfileNavigatorParamList>();
 export const EditProfileStack = () => {
     return(
         <Stack.Navigator initialRouteName='editProfile'>
-            <Stack.Screen name='editProfile' component={SCREENS.EditProfile}/>
-            <Stack.Screen name = 'editInterest' component={SCREENS.EditInterest}/>
+            <Stack.Screen name='editProfile' component={SCREENS.EditProfile}
+            options={{title: 'Edit Profile'}}
+            />
+            <Stack.Screen name = 'editInterest' 
+            component={SCREENS.EditInterest}
+            options={{title: 'Interests'}}
+            />
+            <Stack.Screen name='editRole' 
+            component={SCREENS.EditRole}
+            options={{title: 'Roles'}}
+            />
         </Stack.Navigator>
     )
 }

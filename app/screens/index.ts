@@ -21,3 +21,4 @@ export * from './profile-detail';
 export * from './match-list';
 export * from './edit-profiles/edit-interest';
 export * from './edit-profiles/edit-profile';
+export * from './edit-profiles/edit-role';

@@ -9,7 +9,7 @@ export function TextInputCustom(props: TextInputCustomProps)
     const {
         label,
         icon,
-        iconColor = color.palette.mischka,
+        iconColor = color.palette.Gray,
         iconSize=20,
         inputStyle: inputStyleOverride,
         containerStyle: containerStyleOverride,
@@ -25,14 +25,13 @@ export function TextInputCustom(props: TextInputCustomProps)
         return(
         
         <View>
-        {/* {
+        {
             label ?
             <Text style={labelStyles}>{label}</Text>
             :
             null
-        } */}
+        }
         <View style={viewStyles}>
-            <Text>{label}</Text>
             <TextInput
             style={textStyles}
             {...rest}

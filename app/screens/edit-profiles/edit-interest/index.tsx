@@ -1,4 +1,6 @@
 import { Button } from "@components";
+import { useAppDispatch} from "@store/hook";
+import { ProfileActions } from "@store/profile/reducer";
 import { color } from "@theme";
 import { CommonType } from "@utils/types";
 import { useState } from "react";
@@ -52,9 +54,10 @@ const styles = StyleSheet.create({
     }
 })
 export const EditInterest: CommonType.EditProfileScreenProps<'editInterest', Props> =({
-    navigation,
+    navigation, route
 }) => {
-    const [listInterest, setListInterest] = useState([]);
+    const dispatch = useAppDispatch();
+    const [listInterest, setListInterest] = useState(route.params.interests);
     const hanldeBadgePress = (interest: string) =>{
         if(listInterest.includes(interest))
         {
@@ -65,10 +68,17 @@ export const EditInterest: CommonType.EditProfileScreenProps<'editInterest', Pro
             setListInterest([...listInterest, interest])
         }
     }
+    const handleConfirm = async() =>{
+        const send = async() =>{
+            await dispatch(ProfileActions.updateMusicInterests(listInterest))
+            await dispatch(ProfileActions.updateInterestFirebase());
+        }
+        send().then(() => navigation.navigate('editProfile'))
+        
+    }
     return(
         <SafeAreaView style={styles.container}>
             <View style = {styles.content}>
-
             <Text style={styles.introduce}>
                 Select your interests to match with users who have
                 similar things in common.
@@ -97,6 +107,7 @@ export const EditInterest: CommonType.EditProfileScreenProps<'editInterest', Pro
             </View>
             </View>
             <Button
+            onPress={handleConfirm}
             text={'Confirm'}
             style={styles.buttonNext}
             />

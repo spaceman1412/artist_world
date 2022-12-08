@@ -64,6 +64,32 @@ export const profileSlice = createSlice({
         console.log(error);
       }
     },
+    updateInterestFirebase : state =>{
+      const uid = auth().currentUser.uid;
+      try{
+        firestore()
+        .collection('Users')
+        .doc(uid)
+        .update({
+          musicInterests: state.musicInterests
+        })
+      }
+      catch{console.error();
+      }
+    },
+    updateRolesFirebase : state =>{
+      const uid = auth().currentUser.uid;
+      try{
+        firestore()
+        .collection('Users')
+        .doc(uid)
+        .update({
+          musicRoles: state.musicRoles
+        })
+      }
+      catch{console.error();
+      }
+    }
   },
 });
 
