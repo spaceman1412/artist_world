@@ -11,6 +11,7 @@ export const images = {
   calendar: require('./calendar.svg'),
   man: require('./man.jpg'),
   heart: require('./heart.png'),
+  pen: require('./pen.png'),
 };
 
 export type ImageTypes = keyof typeof images;

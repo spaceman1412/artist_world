@@ -5,6 +5,7 @@ import * as SCREENS from '@screens';
 import {ProfileStack} from './profile-stack';
 import auth from '@react-native-firebase/auth';
 import {TabStack} from './tab-stack';
+import { EditProfileStack } from './edit-profile-stack';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 
@@ -12,7 +13,7 @@ const initialRouteName = auth().currentUser ? 'tab' : 'login';
 
 export const AppStack = () => {
   return (
-    <Stack.Navigator initialRouteName={initialRouteName}>
+    <Stack.Navigator initialRouteName={'tab'}>
       <Stack.Screen
         name="tab"
         component={TabStack}
@@ -90,6 +91,9 @@ export const AppStack = () => {
         component={SCREENS.ProfileDetail}
         options={{headerShown: false}}
       />
+      <Stack.Screen name='editProfiles'
+      component={EditProfileStack}
+      options={{headerShown: false}}/> 
     </Stack.Navigator>
   );
 };

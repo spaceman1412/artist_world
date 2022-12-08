@@ -42,6 +42,7 @@ export function SelectiveButton(props: SelectiveButtonProps) {
     </View>
   );
 
+  
   return (
     <TouchableOpacity style={viewStyles} {...rest}>
       {content}
