@@ -16,7 +16,7 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
-import { useAppDispatch, } from '@store/hook';
+import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 
 const styles = StyleSheet.create({
   container: {
@@ -81,6 +81,18 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 25,
     backgroundColor: color.primary,
+  },
+  buttonGallery:{
+    width: 295,
+    backgroundColor: color.palette.PrimaryWithOpacity(0.1),
+    borderRadius: 25,
+    height: 56,
+    marginBottom: 25,
+  },
+  textGallery:{
+    color: color.palette.PrimaryWithOpacity(0.7),
+    fontWeight: '500',
+    marginLeft: 10,
   }
 });
 interface Props {}
@@ -112,6 +124,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
   const [interests, setInterests] = useState([]);
   const [roles, setRoles] = useState([]);
   const [changePic, setChangePic] = useState(false);
+  const [gallery, setGallery] = useState([]);
   const handleInterest = () => {
     navigation.push('editInterest',{interests: interests})
   };
@@ -121,6 +134,9 @@ export const EditProfile: CommonType.EditProfileScreenProps<
   const handleChangeAvatar = (value) =>{
     setChangePic(true)
     setPic(value)
+  }
+  const handleGallery = () =>{
+    navigation.navigate('editGallery', {gallery: gallery})
   }
 
   const postPic = async(picture) =>{
@@ -154,15 +170,30 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             birthDate: birthDate,
         })
         setPic(value)
-        setChangePic(false)
       }
         ).catch(console.error);
+      }
+      else
+      {
+        firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .update({
+            firstName: firstName,
+            lastName: lastName,
+            avatarUrl: pic,
+            about: about,
+            musicRoles: roles,
+            musicInterests: interests,
+            sex: gender,
+            birthDate: birthDate,
+        })
       }
 
     }  
     if(firstName.trim() !== '' && lastName.trim() !== '')
     {
-      sendData().catch(console.error)
+      sendData().then(() => setChangePic(false)).catch(console.error)
     }
     else
     {
@@ -185,6 +216,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             setAbout(data.about ? data.about:'')
             setInterests(data.musicInterests ? data.musicInterests : [])
             setRoles(data.musicRoles ? data.musicRoles : [])
+            setGallery(data.gallery ? data.gallery : [])
         })
     }
     fetchData().catch(console.error)
@@ -276,6 +308,19 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             </TouchableOpacity>
           </View>
         </View>
+
+        <Button 
+        text = 'Your Gallery'
+        style={styles.buttonGallery}
+        onPress={handleGallery}
+        >
+          <Icon name = 'image-album' 
+          size={20} 
+          color={color.palette.PrimaryWithOpacity(0.7)}/>
+          <Text style={styles.textGallery}>
+            Your Gallery
+            </Text>
+        </Button>
 
         <Button text='Save Changes'
         onPress={handleSaveChange}

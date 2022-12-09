@@ -18,6 +18,10 @@ export const EditProfileStack = () => {
             component={SCREENS.EditRole}
             options={{title: 'Roles'}}
             />
+            <Stack.Screen name ='editGallery'
+            component={SCREENS.EditGallery}
+            options={{title: 'Gallery'}}
+            />
         </Stack.Navigator>
     )
 }

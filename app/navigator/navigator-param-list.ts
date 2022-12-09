@@ -32,4 +32,5 @@ export type EditProfileNavigatorParamList = {
   editProfile: undefined;
   editRole: {roles: Array<string>};
   editInterest: {interests : Array<string>};
+  editGallery: {gallery : Array<string>};
 }
