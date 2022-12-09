@@ -3,10 +3,10 @@ import {CommonType} from '@utils/types';
 import React from 'react';
 import {Text, View, StyleSheet, SafeAreaView } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
 import { SettingItem } from './setting-item/settting-item';
 import auth from '@react-native-firebase/auth';
 import FastImage from 'react-native-fast-image';
+import { LoaderScreen } from 'react-native-ui-lib';
 
 interface Props {}
 
@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
 export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
   navigation,
 }) => {
-  const [pic, setPic] = React.useState('');
   const [user,setUser] = React.useState(null);
   React.useEffect(() =>{
     const getUsers  =  firestore()
@@ -67,25 +66,6 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
     getUsers;
     
   },[])
-  const onSend = async () => {
-    var parts = pic.split('/');
-    var picRef = parts[parts.length - 1];
-    console.log(picRef);
-    const ref = storage().ref(picRef);
-    await ref.putFile(pic);
-    const url = await storage().ref(picRef).getDownloadURL();
-
-    firestore()
-      .collection('Users')
-      .add({
-        name: 'Ada Lovelace',
-        age: 30,
-        pic: url,
-      })
-      .then(() => {
-        console.log('User added!');
-      });
-  };
   const handleLogout = async () =>{
     const logout = auth().signOut();
     logout.finally(
@@ -112,7 +92,7 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
             }
           </Text> 
           </>:
-          <></>
+          <LoaderScreen/>
           }
       </View>
       <SettingItem 

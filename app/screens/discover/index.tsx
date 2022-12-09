@@ -179,19 +179,16 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           let documents = documentSnapshot.data().matches;
           documents.forEach((userData: string) => {
             if (userData.trim() === userId.trim()) {
-              console.log(true);
               alert(matchedUserId.trim());
               return;
             } else {
-              console.log(false);
             }
           });
         }
       });
   };
   const alert = userId => {
-    console.log('userId', userId);
-    Alert.alert('Alert Title', 'You are matched', [
+    Alert.alert('Info', 'You are matched', [
       {
         text: 'Keep swiping',
         onPress: () => console.log('Cancel Pressed'),

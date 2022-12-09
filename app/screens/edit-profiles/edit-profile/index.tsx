@@ -12,11 +12,15 @@ import {
   Text,
   TextInput,
   ScrollView,
+  Alert
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import { LoaderScreen } from 'react-native-ui-lib';
+import { useAppDispatch } from '@store/hook';
+import { ProfileActions } from '@store/profile/reducer';
 
 const styles = StyleSheet.create({
   container: {
@@ -117,7 +121,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
       label: 'dont\' want to share',
     },
   ];
-  const [gender, setGender] = useState('');
+  const [gender, setGender] = useState<'man'|'not'|'woman'>('man');
   const [dateTimePicker, setDateTimePicker] = useState(false);
   const [birthDate, setBirthDate] = useState('Choose your birth date');
   const [about, setAbout] = useState('');
@@ -125,6 +129,8 @@ export const EditProfile: CommonType.EditProfileScreenProps<
   const [roles, setRoles] = useState([]);
   const [changePic, setChangePic] = useState(false);
   const [gallery, setGallery] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
   const handleInterest = () => {
     navigation.push('editInterest',{interests: interests})
   };
@@ -145,10 +151,6 @@ export const EditProfile: CommonType.EditProfileScreenProps<
         const ref = storage().ref(picRef);
         await ref.putFile(picture)
         return storage().ref(picRef).getDownloadURL()
-        .then(
-          value =>  value
-        )
-        
   }
   
   const handleSaveChange = () =>{
@@ -156,54 +158,55 @@ export const EditProfile: CommonType.EditProfileScreenProps<
       if(changePic)
       {
         postPic(pic).then((value) => {
-        firestore()
-        .collection('Users')
-        .doc(auth().currentUser.uid)
-        .update({
+          dispatch(ProfileActions.updateBasicInfo({
+            avatarUrl: value,
             firstName: firstName,
             lastName: lastName,
-            avatarUrl: value,
-            about: about,
-            musicRoles: roles,
-            musicInterests: interests,
-            sex: gender,
             birthDate: birthDate,
-        })
+          }))
         setPic(value)
       }
         ).catch(console.error);
       }
       else
       {
-        firestore()
-        .collection('Users')
-        .doc(auth().currentUser.uid)
-        .update({
-            firstName: firstName,
-            lastName: lastName,
-            avatarUrl: pic,
-            about: about,
-            musicRoles: roles,
-            musicInterests: interests,
-            sex: gender,
-            birthDate: birthDate,
-        })
+        dispatch(ProfileActions.updateBasicInfo({
+          avatarUrl: pic,
+          firstName: firstName,
+          lastName: lastName,
+          birthDate: birthDate,
+        }))
       }
+      dispatch(ProfileActions.updateAbout(about))
+      dispatch(ProfileActions.updateSex(gender))
+      dispatch(ProfileActions.updateMusicInterests(interests))
+      dispatch(ProfileActions.updateMusicRoles(roles))
+      dispatch(ProfileActions.updateGallery(gallery))
 
     }  
     if(firstName.trim() !== '' && lastName.trim() !== '')
     {
-      sendData().then(() => setChangePic(false)).catch(console.error)
+      sendData().then(
+        () => dispatch(ProfileActions.updateDataFirebase())
+      ).finally(() => {
+        setChangePic(false)
+        setLoading(false)
+      }).catch(console.error)
     }
     else
     {
-      console.log('loi roi');
+      Alert.alert('Warning', 'Your information should not be empty',[
+        {
+          text: 'OK',
+          style: 'cancel',
+        }
+      ])
     }
   }
   useEffect(() =>{
 
     const fetchData = async () =>{
-        const user = await firestore()
+        await firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
         .onSnapshot(value => {
@@ -218,6 +221,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             setRoles(data.musicRoles ? data.musicRoles : [])
             setGallery(data.gallery ? data.gallery : [])
         })
+        
     }
     fetchData().catch(console.error)
     
@@ -231,8 +235,8 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             pic ? <UploadImage
             source={pic}
             onUpload={handleChangeAvatar}
-             />:
-             <></>
+            />:
+            <LoaderScreen message='loading'/>
         }
         
         <View style={styles.infoContainer}>
@@ -323,6 +327,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
         </Button>
 
         <Button text='Save Changes'
+        disabled={loading}
         onPress={handleSaveChange}
         style={styles.buttonSave}/>
       </ScrollView>
