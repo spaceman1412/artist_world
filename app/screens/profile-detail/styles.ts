@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
     width: 52,
     height: 52,
     position: 'absolute',
-    backgroundColor: color.palette.whiteWithOpacity(0.2),
+    backgroundColor: color.whiteBackground,
     borderWidth: 1,
     borderRadius: 15,
     borderColor: color.line,

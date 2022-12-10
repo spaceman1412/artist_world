@@ -1,12 +1,12 @@
 import {color} from '@theme';
 import {CommonType} from '@utils/types';
 import React from 'react';
-import {Text, View, StyleSheet, SafeAreaView } from 'react-native';
+import {Text, View, StyleSheet, SafeAreaView, Image } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import { SettingItem } from './setting-item/settting-item';
 import auth from '@react-native-firebase/auth';
 import FastImage from 'react-native-fast-image';
-import { LoaderScreen } from 'react-native-ui-lib';
+import { images } from '@assets/images';
 
 interface Props {}
 
@@ -46,7 +46,19 @@ const styles = StyleSheet.create({
     color: color.storybookTextColor,
     fontSize: 20,
     fontWeight: '700',
-  }
+  },
+  loadingImage:{
+    width: 106,
+    height: 106,
+    justifyContent: 'center',
+    alignItems: 'center',
+},
+placeHoler:{
+  width: 99,
+  height: 99,
+  borderRadius: 25,
+
+}
 });
 
 export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
@@ -92,7 +104,11 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
             }
           </Text> 
           </>:
-          <LoaderScreen/>
+           <View style={styles.loadingImage}>
+           <Image 
+           style={styles.placeHoler}
+           source={images.placeholder}/>
+         </View>
           }
       </View>
       <SettingItem 

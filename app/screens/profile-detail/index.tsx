@@ -1,16 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {CommonType} from '@utils/types';
 import {color} from '@theme';
-import {getSize} from '@utils/responsive';
 import GlobalStyles from '@theme/styles/global-style';
 import {ScrollView, StyleSheet, FlatList} from 'react-native';
-import LeftArrow from '@assets/images/left-arrow.svg';
+import BackIcon from '@assets/images/back-arrow.svg';
 import PaperPlane from '@assets/images/paper-plane.svg';
 import Location from '@assets/images/location.svg';
 import TextShowMore from './show-more-text';
-import Heart from '@assets/images/heart.svg';
-import XStroke from '@assets/images/stroke.svg';
-import Star from '@assets/images/star.svg';
 import {Button as ThienButton} from '@components';
 import {Button, View, Text, LoaderScreen} from 'react-native-ui-lib';
 import firestore from '@react-native-firebase/firestore';
@@ -70,9 +66,11 @@ export const ProfileDetail: CommonType.AppScreenProps<
             <ThienButton
               style={styles.backButton}
               onPress={() => navigation.goBack()}
-              children={<LeftArrow />}
+              children={<BackIcon />}
             />
-            <View row center absH style={styles.circleList}>
+
+            {/*Not support yet */}
+            {/* <View row center absH style={styles.circleList}>
               <Button
                 round
                 style={styles.sideCircle}
@@ -92,7 +90,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
                 backgroundColor={color.whiteBackground}
                 children={<Star />}
               />
-            </View>
+            </View> */}
             <View
               centerV
               paddingT-90

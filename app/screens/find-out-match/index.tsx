@@ -65,14 +65,14 @@ export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
           // preset="primary"
           textStyle={styles.buttonText1}
           style={styles.button1}
-          onPress={() => navigation.navigate('home')}
+          onPress={() => {}}
         />
         <Button
           text="Keep swiping"
           preset="outline"
           textStyle={styles.buttonText2}
           style={styles.button2}
-          onPress={() => navigation.navigate('home')}
+          onPress={() => {}}
         />
       </View>
     </SafeAreaView>

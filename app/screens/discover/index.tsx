@@ -23,6 +23,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useAppDispatch, useAppSelector} from '@store/hook';
 import {MatchAction} from '@store/match/reducer';
 import auth from '@react-native-firebase/auth';
+import {showMatch} from '@utils/constant';
 
 interface Props {}
 
@@ -188,60 +189,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       });
   };
   const alert = userId => {
-    Alert.alert('Info', 'You are matched', [
-      {
-        text: 'Keep swiping',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {text: 'Say Hello', onPress: () => createNewMessageRoom(userId)},
-    ]);
-  };
-
-  const createNewMessageRoom = userId => {
-    const authUser = auth().currentUser.uid.trim();
-    const postReference = firestore().collection('chat-messages').doc();
-    const lastMessage = {
-      _id: '1',
-      createAt: new Date(),
-      sendBy: authUser.toString(),
-      text: 'Hello',
-    };
-    const sendMessage = firestore().runTransaction(async transaction => {
-      await transaction
-        .set(postReference, {
-          lastMessage: lastMessage,
-          members: [authUser, userId],
-        })
-        .set(postReference.collection('messages').doc('1'), {
-          ...lastMessage,
-        })
-        .get(postReference);
-      await addNewMessageRoom(authUser, postReference.id.trim());
-      await addNewMessageRoom(userId, postReference.id.trim());
-      // navigation.navigate('messages')
-    });
-    sendMessage.finally(() => navigation.navigate('messages'));
-  };
-  const addNewMessageRoom = async (userId: string, idRoom: string) => {
-    const getUserRoom = await firestore()
-      .doc(`user-chat/${userId.trim()}`)
-      .get();
-    if (!getUserRoom.exists) {
-      firestore()
-        .collection('user-chat')
-        .doc(userId.trim())
-        .set({
-          roomId: [idRoom],
-        });
-    } else {
-      firestore()
-        .collection('user-chat')
-        .doc(userId.trim())
-        .update({
-          roomId: firestore.FieldValue.arrayUnion(idRoom),
-        });
-    }
+    showMatch({userId: userId});
   };
 
   const handleMatch = (userId: string) => {

@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 30,
     alignItems: 'center',
+    backgroundColor: color.whiteBackground,
   },
   header: {
     flexDirection: 'row',
@@ -116,28 +117,25 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
       const res = await firestore()
         .collection('user-chat')
         .doc(auth().currentUser.uid.trim())
-        .onSnapshot(async documentSnapshot =>{
-          if(documentSnapshot.exists)
-          {
+        .onSnapshot(async documentSnapshot => {
+          if (documentSnapshot.exists) {
             setRoomChats([]);
             const data = documentSnapshot.data();
-          for (let element of data.roomId) {
-            await setRoomChat(element.trim());
-          }
-          }
-          else
-          {
+            for (let element of data.roomId) {
+              await setRoomChat(element.trim());
+            }
+          } else {
             await firestore()
-                      .collection('user-chat')
-                      .doc(auth().currentUser.uid.trim())
-                      .set({
-                        roomId: []
-                      })
-                      .then(() => console.log('created'))
-                      .catch(console.error)
+              .collection('user-chat')
+              .doc(auth().currentUser.uid.trim())
+              .set({
+                roomId: [],
+              })
+              .then(() => console.log('created'))
+              .catch(console.error);
           }
-        })
-        res
+        });
+      res;
     };
 
     const setRoomChat = async roomId => {
