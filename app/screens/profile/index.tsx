@@ -48,15 +48,16 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   loadingImage:{
-    width: 106,
-    height: 106,
+    width: 155,
+    height: 155,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 100,
 },
 placeHoler:{
-  width: 99,
-  height: 99,
-  borderRadius: 25,
+  width: 155,
+  height: 155,
+  borderRadius: 100,
 
 }
 });
@@ -92,7 +93,7 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
     <SafeAreaView style = {styles.container}>
       <View style = {styles.avatarContainer}>
         {
-          user  ?
+          !user  ?
           <>
           <FastImage 
           style={styles.image}
