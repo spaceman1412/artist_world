@@ -12,7 +12,8 @@ import {
   Text,
   TextInput,
   ScrollView,
-  Alert
+  Alert,
+  Image,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -21,6 +22,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import { LoaderScreen } from 'react-native-ui-lib';
 import { useAppDispatch } from '@store/hook';
 import { ProfileActions } from '@store/profile/reducer';
+import { images } from '@assets/images';
 
 const styles = StyleSheet.create({
   container: {
@@ -97,6 +99,18 @@ const styles = StyleSheet.create({
     color: color.palette.PrimaryWithOpacity(0.7),
     fontWeight: '500',
     marginLeft: 10,
+  },
+  loadingImage:{
+      width: 101,
+      height: 106,
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+  placeHoler:{
+    width: 99,
+    height: 99,
+    borderRadius: 25,
+
   }
 });
 interface Props {}
@@ -236,7 +250,11 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             source={pic}
             onUpload={handleChangeAvatar}
             />:
-            <LoaderScreen message='loading'/>
+            <View style={styles.loadingImage}>
+              <Image 
+              style={styles.placeHoler}
+              source={images.placeholder}/>
+            </View>
         }
         
         <View style={styles.infoContainer}>
