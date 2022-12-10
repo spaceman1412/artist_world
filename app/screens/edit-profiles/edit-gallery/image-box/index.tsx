@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         height: 420,
         justifyContent: 'center',
         alignItems: 'center',
-        marginVertical: 20,
+        marginVertical: 20
     },
     buttonDelete:{
         width: 40,

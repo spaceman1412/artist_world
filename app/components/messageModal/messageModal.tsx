@@ -13,6 +13,7 @@ import { renderBubble, renderComposer, renderMessageText } from './messageStyle/
 import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
 import auth from '@react-native-firebase/auth';
+import { LoaderScreen } from 'react-native-ui-lib';
 
 const MessageModal = (props: MessageModalProps) =>{
     const {
@@ -120,7 +121,7 @@ const MessageModal = (props: MessageModalProps) =>{
                 
                     
                     />
-                    : <></>
+                    : <LoaderScreen/>
                 }
                     </View>
                 </View>
