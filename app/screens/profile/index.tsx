@@ -7,6 +7,7 @@ import {Text, View, StyleSheet, TextInput} from 'react-native';
 import {Incubator} from 'react-native-ui-lib';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import {showMatch} from '@utils/constant';
 
 interface Props {}
 
@@ -22,23 +23,25 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
 }) => {
   const [pic, setPic] = React.useState('');
   const onSend = async () => {
-    var parts = pic.split('/');
-    var picRef = parts[parts.length - 1];
-    console.log(picRef);
-    const ref = storage().ref(picRef);
-    await ref.putFile(pic);
-    const url = await storage().ref(picRef).getDownloadURL();
+    console.log('called');
+    showMatch({});
 
-    firestore()
-      .collection('Users')
-      .add({
-        name: 'Ada Lovelace',
-        age: 30,
-        pic: url,
-      })
-      .then(() => {
-        console.log('User added!');
-      });
+    // var parts = pic.split('/');
+    // var picRef = parts[parts.length - 1];
+    // console.log(picRef);
+    // const ref = storage().ref(picRef);
+    // await ref.putFile(pic);
+    // const url = await storage().ref(picRef).getDownloadURL();
+    // firestore()
+    //   .collection('Users')
+    //   .add({
+    //     name: 'Ada Lovelace',
+    //     age: 30,
+    //     pic: url,
+    //   })
+    //   .then(() => {
+    //     console.log('User added!');
+    //   });
   };
 
   return (

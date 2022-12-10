@@ -1,3 +1,5 @@
+import {MatchModalRef} from '@components/MatchBottomSheet';
+import {createRef} from 'react';
 import {Dimensions} from 'react-native';
 const {height, width, fontScale, scale} = Dimensions.get('window');
 
@@ -38,3 +40,12 @@ export const mapListComponent = <T, U>(
 
   return components;
 };
+
+///TODO: Call phone modal
+export const matchModalRef = createRef<MatchModalRef>();
+
+export const showMatch: MatchModalRef['show'] = params =>
+  matchModalRef.current?.show(params);
+
+export const hideMatch: MatchModalRef['hide'] = () =>
+  matchModalRef.current?.hide();

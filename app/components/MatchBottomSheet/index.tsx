@@ -1,32 +1,101 @@
-import {Button} from '@components';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react';
+import Modal from 'react-native-modal';
+import {StyleSheet, View, Text, Platform, Image} from 'react-native';
+import {ModalTypes} from '@utils/types';
 import {getSize} from '@utils/responsive';
-import {CommonType} from '@utils/types';
-import React from 'react';
-import {
-  Platform,
-  SafeAreaView,
-  Text,
-  Image,
-  StyleSheet,
-  View,
-} from 'react-native';
-import {firebase} from '@react-native-firebase/app-check';
+import {color} from '@theme/color';
+import {radius} from '@theme';
+import {Button} from '@components';
 import {images} from '@assets/images';
-import {color, radius} from '@theme';
-import Heart from '@assets/images/heart.svg';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
 
-interface Props {}
-export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
-  navigation,
-}) => {
-  const user = 'Jack';
+const INITIAL_MATCH_STATE: ModalTypes.Match = {
+  isVisible: false,
+  userId: '',
+};
+
+export interface MatchModalRef {
+  show: (params: Omit<ModalTypes.Match, 'isVisible'>) => void;
+  hide: () => void;
+}
+
+export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
+  const [state, setState] = useState(INITIAL_MATCH_STATE);
+  const navigation = useNavigation();
   const userImage = images.man;
   const matchImage = images.girl;
 
-  const appCheckForDefaultApp = firebase.appCheck();
+  const createNewMessageRoom = userId => {
+    const authUser = auth().currentUser.uid.trim();
+    const postReference = firestore().collection('chat-messages').doc();
+    const lastMessage = {
+      _id: '1',
+      createAt: new Date(),
+      sendBy: authUser.toString(),
+      text: 'Hello',
+    };
+    const sendMessage = firestore().runTransaction(async transaction => {
+      await transaction
+        .set(postReference, {
+          lastMessage: lastMessage,
+          members: [authUser, userId],
+        })
+        .set(postReference.collection('messages').doc('1'), {
+          ...lastMessage,
+        })
+        .get(postReference);
+      await addNewMessageRoom(authUser, postReference.id.trim());
+      await addNewMessageRoom(userId, postReference.id.trim());
+      // navigation.navigate('messages')
+    });
+    sendMessage.finally(() => navigation.navigate('messages'));
+  };
+  const addNewMessageRoom = async (userId: string, idRoom: string) => {
+    const getUserRoom = await firestore()
+      .doc(`user-chat/${userId.trim()}`)
+      .get();
+    if (!getUserRoom.exists) {
+      firestore()
+        .collection('user-chat')
+        .doc(userId.trim())
+        .set({
+          roomId: [idRoom],
+        });
+    } else {
+      firestore()
+        .collection('user-chat')
+        .doc(userId.trim())
+        .update({
+          roomId: firestore.FieldValue.arrayUnion(idRoom),
+        });
+    }
+  };
+
+  const show: MatchModalRef['show'] = params => {
+    setState({...INITIAL_MATCH_STATE, ...params, isVisible: true});
+  };
+
+  const hide: MatchModalRef['hide'] = () => {
+    setState(INITIAL_MATCH_STATE);
+  };
+
+  useImperativeHandle(ref, () => ({show, hide}), []);
+
+  useEffect(() => {
+    if (!ref) {
+      throw new Error('Chưa đăng kí ref');
+    }
+  }, []);
 
   return (
-    <SafeAreaView>
+    <Modal isVisible={state.isVisible} style={styles.modalContainer}>
       <View style={styles.contentContainer}>
         <View style={styles.coupleImageContainer}>
           <View
@@ -56,7 +125,7 @@ export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
             </View>
           </View>
         </View>
-        <Text style={styles.headerText}>It's a match, {user}</Text>
+        <Text style={styles.headerText}>It's a match</Text>
         <Text style={styles.bodyText}>
           start a conversation with eachother!
         </Text>
@@ -65,20 +134,25 @@ export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
           // preset="primary"
           textStyle={styles.buttonText1}
           style={styles.button1}
-          onPress={() => {}}
+          onPress={() => createNewMessageRoom(state.userId)}
         />
         <Button
           text="Keep swiping"
           preset="outline"
           textStyle={styles.buttonText2}
           style={styles.button2}
-          onPress={() => {}}
+          onPress={hide}
         />
       </View>
-    </SafeAreaView>
+    </Modal>
   );
-};
+});
+
 const styles = StyleSheet.create({
+  modalContainer: {
+    margin: 0, // This is the important style you need to set
+    backgroundColor: color.whiteBackground,
+  },
   iosShadow: {
     shadowColor: color.palette.black,
     shadowOffset: {width: -2, height: 4},
@@ -91,16 +165,12 @@ const styles = StyleSheet.create({
     shadowColor: color.palette.black,
   },
   contentContainer: {
-    top: 40,
-    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
+    paddingBottom: 100,
   },
   coupleImageContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    alignContent: 'space-between',
-    padding: 40,
+    paddingBottom: 100,
   },
   userContainer: {top: 20, transform: [{rotateZ: '-10deg'}]},
   matchContainer: {transform: [{rotateZ: '10deg'}]},
@@ -136,7 +206,7 @@ const styles = StyleSheet.create({
     width: getSize.v(295),
     height: getSize.v(56),
     position: 'absolute',
-    bottom: getSize.v(-160),
+    bottom: getSize.v(0),
     borderRadius: radius.ML,
     color: color.primary,
     backgroundColor: color.primary,
@@ -146,7 +216,7 @@ const styles = StyleSheet.create({
     width: getSize.v(295),
     height: getSize.v(56),
     position: 'absolute',
-    bottom: getSize.v(-230),
+    bottom: getSize.v(-70),
     borderRadius: radius.ML,
     color: color.palette.secondary,
   },

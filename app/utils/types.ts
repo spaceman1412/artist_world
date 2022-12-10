@@ -21,3 +21,10 @@ export declare namespace CommonType {
     >
   >;
 }
+
+export declare namespace ModalTypes {
+  interface Match {
+    isVisible: boolean;
+    userId: string;
+  }
+}
