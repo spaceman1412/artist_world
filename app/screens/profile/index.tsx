@@ -93,7 +93,7 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
     <SafeAreaView style = {styles.container}>
       <View style = {styles.avatarContainer}>
         {
-          !user  ?
+          user  ?
           <>
           <FastImage 
           style={styles.image}
