@@ -11,6 +11,8 @@ export interface ProfileState {
   sex: 'man' | 'woman' | 'not';
   musicInterests: string[];
   musicRoles: string[];
+  gallery: string[];
+  about: string;
 }
 
 const initialState: ProfileState = {
@@ -21,6 +23,8 @@ const initialState: ProfileState = {
   sex: 'man',
   musicInterests: [],
   musicRoles: [],
+  gallery : [],
+  about: '',
 };
 
 export const profileSlice = createSlice({
@@ -43,6 +47,13 @@ export const profileSlice = createSlice({
     updateMusicRoles: (state, action: PayloadAction<string[]>) => {
       state.musicRoles = action.payload;
     },
+    updateGallery:(state, action: PayloadAction<string[]>) =>{
+      state.gallery = action.payload;
+    },
+    updateAbout:(state, action: PayloadAction<string>) =>{
+      state.about = action.payload;
+    },
+    
     updateDataFirebase: state => {
       console.log('called');
       const uid = auth().currentUser.uid;
@@ -58,12 +69,56 @@ export const profileSlice = createSlice({
             sex: state.sex,
             musicInterests: state.musicInterests,
             musicRoles: state.musicRoles,
+            about: state.about,
+            gallery: state.gallery,
           })
           .then(() => console.log('Added'));
       } catch (error) {
         console.log(error);
       }
     },
+    updateInterestFirebase : state =>{
+      const uid = auth().currentUser.uid;
+      try{
+        firestore()
+        .collection('Users')
+        .doc(uid)
+        .update({
+          musicInterests: state.musicInterests
+        })
+      }
+      catch{console.error();
+      }
+    },
+    updateRolesFirebase : state =>{
+      const uid = auth().currentUser.uid;
+      try{
+        firestore()
+        .collection('Users')
+        .doc(uid)
+        .update({
+          musicRoles: state.musicRoles
+        })
+      }
+      catch{console.error();
+      }
+    },
+    updateGalleryFirebase : state =>{
+      const uid = auth().currentUser.uid;
+      try{
+        firestore()
+        .collection('Users')
+        .doc(uid)
+        .update({
+          gallery: state.gallery
+        })
+        .then(() => console.log('done')
+        )
+      }
+      catch{console.error();
+      }
+    },
+
   },
 });
 

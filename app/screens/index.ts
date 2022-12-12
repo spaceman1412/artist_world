@@ -19,4 +19,7 @@ export * from './messages';
 export * from './find-out-match';
 export * from './profile-detail';
 export * from './match-list';
-
+export * from './edit-profiles/edit-interest';
+export * from './edit-profiles/edit-profile';
+export * from './edit-profiles/edit-role';
+export * from './edit-profiles/edit-gallery';

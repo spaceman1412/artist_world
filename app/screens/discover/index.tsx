@@ -180,11 +180,9 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           let documents = documentSnapshot.data().matches;
           documents.forEach((userData: string) => {
             if (userData.trim() === userId.trim()) {
-              console.log(true);
               alert(matchedUserId.trim());
               return;
             } else {
-              console.log(false);
             }
           });
         }

@@ -25,7 +25,7 @@ export const DropDown = (props:DropDownProps) =>{
     itemStyles: itemStylesOverride,
     onSelect,
     dropDownWidth = 295,
-    maxDropdownHeight = 100,
+    maxDropdownHeight = 200,
     placeHolder,
     } = props
     const [modal,setModal]= React.useState(false)

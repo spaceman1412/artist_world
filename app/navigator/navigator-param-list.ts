@@ -18,7 +18,7 @@ export type AppNavigatorParamList = {
   messages: undefined;
   findOutMatch: undefined;
   matchList: undefined;
-
+  editProfiles: undefined;
 };
 
 export type ProfileDetailsNavigatorParamList = {
@@ -27,3 +27,10 @@ export type ProfileDetailsNavigatorParamList = {
   interests: undefined;
   role: undefined;
 };
+
+export type EditProfileNavigatorParamList = {
+  editProfile: undefined;
+  editRole: {roles: Array<string>};
+  editInterest: {interests : Array<string>};
+  editGallery: {gallery : Array<string>};
+}

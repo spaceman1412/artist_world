@@ -1,13 +1,12 @@
-import {Button, UploadImage} from '@components';
-import SizedBox from '@components/sized-box';
 import {color} from '@theme';
 import {CommonType} from '@utils/types';
 import React from 'react';
-import {Text, View, StyleSheet, TextInput} from 'react-native';
-import {Incubator} from 'react-native-ui-lib';
+import {Text, View, StyleSheet, SafeAreaView, Image } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
-import storage from '@react-native-firebase/storage';
-import {showMatch} from '@utils/constant';
+import { SettingItem } from './setting-item/settting-item';
+import auth from '@react-native-firebase/auth';
+import FastImage from 'react-native-fast-image';
+import { images } from '@assets/images';
 
 interface Props {}
 
@@ -16,65 +15,115 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 34,
   },
+  container:{
+    flex: 1,
+    backgroundColor: color.whiteBackground,
+    alignItems: 'center',
+    padding: 20,
+  }, 
+  avatarContainer:{
+    borderBottomColor: color.palette.mischka,
+    borderBottomWidth: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  avatarBox:{
+    margin: 10,
+  },
+  image:{
+    width: 155,
+    height: 155,
+    borderRadius: 100,
+    marginBottom: 10,
+  },
+  iconEditButton:{
+    width: 18,
+    height: 18,
+  },
+  name:{
+    color: color.storybookTextColor,
+    fontSize: 20,
+    fontWeight: '700',
+  },
+  loadingImage:{
+    width: 155,
+    height: 155,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 100,
+},
+placeHoler:{
+  width: 155,
+  height: 155,
+  borderRadius: 100,
+
+}
 });
 
 export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
   navigation,
 }) => {
-  const [pic, setPic] = React.useState('');
-  const onSend = async () => {
-    console.log('called');
-    showMatch({});
-
-    // var parts = pic.split('/');
-    // var picRef = parts[parts.length - 1];
-    // console.log(picRef);
-    // const ref = storage().ref(picRef);
-    // await ref.putFile(pic);
-    // const url = await storage().ref(picRef).getDownloadURL();
-    // firestore()
-    //   .collection('Users')
-    //   .add({
-    //     name: 'Ada Lovelace',
-    //     age: 30,
-    //     pic: url,
-    //   })
-    //   .then(() => {
-    //     console.log('User added!');
-    //   });
-  };
+  const [user,setUser] = React.useState(null);
+  React.useEffect(() =>{
+    const getUsers  =  firestore()
+    .collection('Users')
+    .doc(auth().currentUser.uid)
+    .onSnapshot(value => 
+      {
+        const data = value.data();
+        setUser(data)
+      }
+    )
+    getUsers;
+    
+  },[])
+  const handleLogout = async () =>{
+    const logout = auth().signOut();
+    logout.finally(
+      () => navigation.navigate('login')
+    )
+  }
+  const handleOnEditProfile = () =>{
+    navigation.navigate('editProfiles')
+  }
 
   return (
-    <View
-      style={{flex: 1, backgroundColor: color.whiteBackground, padding: 40}}>
-      <Text style={styles.header}>Profile details</Text>
-      <View
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 25,
-          backgroundColor: 'red',
-        }}
+    <SafeAreaView style = {styles.container}>
+      <View style = {styles.avatarContainer}>
+        {
+          user  ?
+          <>
+          <FastImage 
+          style={styles.image}
+          source={{uri: user.avatarUrl}}
+          />
+          <Text style={styles.name}>
+            {
+              user.firstName +" "+user.lastName
+            }
+          </Text> 
+          </>:
+           <View style={styles.loadingImage}>
+           <Image 
+           style={styles.placeHoler}
+           source={images.placeholder}/>
+         </View>
+          }
+      </View>
+      <SettingItem 
+      icon={'account'}
+      text={'Edit Profile'}
+      onPress={handleOnEditProfile}
       />
-
-      <SizedBox height={10} />
-
-      <Incubator.TextField
-        placeholder={'Placeholder'}
-        floatingPlaceholder
-        containerStyle={{backgroundColor: 'gray'}}
+      <SettingItem 
+      icon={'logout'}
+      text={'Logout'}
+      onPress={handleLogout}
       />
-      <SizedBox height={10} />
-      <Incubator.TextField
-        placeholder={'Placeholder'}
-        floatingPlaceholder
-        containerStyle={{backgroundColor: 'gray'}}
-      />
-
-      <SizedBox height={10} />
-      <Button text="Send" onPress={onSend} />
-    </View>
-  );
+    </SafeAreaView>
+  )
 };
 
 export default Profile;
