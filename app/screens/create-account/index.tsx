@@ -22,7 +22,7 @@ export const CreateAccount: CommonType.AppScreenProps<
 > = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(true);
   const [error, setError] = useState({isError: false, message: ''});
 
   const login = () => {

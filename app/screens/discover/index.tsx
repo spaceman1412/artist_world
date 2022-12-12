@@ -8,7 +8,6 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
-  Alert,
 } from 'react-native';
 import {Dimensions} from 'react-native';
 import {color} from '@theme';
@@ -262,15 +261,12 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Button style={styles.buttonHeader}>
-          <BackIcon />
-        </Button>
         <Text style={styles.title}>Discover</Text>
-        <Button
+        {/* <Button
           onPress={() => setModalVisible(true)}
           style={styles.buttonHeader}>
           <FilterIcon />
-        </Button>
+        </Button> */}
       </View>
       <View style={styles.carouselContainer}>
         {userList.length > 0 ? (
@@ -390,5 +386,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 24,
     lineHeight: 28.5,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   },
 });

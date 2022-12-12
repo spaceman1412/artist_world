@@ -12,7 +12,6 @@ import {
 import DateTimePicker from '@components/date-time-picker/date-time-picker';
 import GlobalStyles from '@theme/styles/global-style';
 import SizedBox from '@components/sized-box';
-import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {styles} from '../style';
 import auth from '@react-native-firebase/auth';
@@ -91,9 +90,6 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.container}>
-        {/* <TouchableOpacity style={styles.headerButton}>
-          <Text style={styles.headerButtonContent}>Skip</Text>
-        </TouchableOpacity> */}
         <Text style={styles.title}>Profile details</Text>
         <SizedBox height={20} />
         <View style={GlobalStyles.itemCenter}>

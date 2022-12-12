@@ -15,6 +15,7 @@ import InterestItem from './interest-item';
 import FastImage from 'react-native-fast-image';
 import {styles} from './styles';
 import SizedBox from '@components/sized-box';
+import auth from '@react-native-firebase/auth';
 
 interface Props {}
 
@@ -35,7 +36,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
   'profileDetail',
   Props
 > = ({navigation, route}) => {
-  const uid = route.params?.uid || '57ix0KpC41a91UNZF32SpKkxgNW2';
+  const uid = route.params?.uid || auth().currentUser.uid;
   const [data, setData] = useState(undefined);
 
   useEffect(() => {
@@ -93,7 +94,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
             </View> */}
             <View
               centerV
-              paddingT-90
+              paddingT-40
               paddingB-40
               paddingH-40
               style={[GlobalStyles.fullWidth, styles.info]}

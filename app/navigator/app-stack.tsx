@@ -5,19 +5,44 @@ import * as SCREENS from '@screens';
 import {ProfileStack} from './profile-stack';
 import auth from '@react-native-firebase/auth';
 import {TabStack} from './tab-stack';
-import { EditProfileStack } from './edit-profile-stack';
+import {EditProfileStack} from './edit-profile-stack';
+import firestore from '@react-native-firebase/firestore';
+import {LoaderScreen} from 'react-native-ui-lib';
+import {color} from '@theme/color';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 
-const initialRouteName = auth().currentUser ? 'tab' : 'login';
-
 export const AppStack = () => {
-  return (
+  const [loginRoute, setLoginRoute] = React.useState();
+  const initialRouteName = auth().currentUser ? loginRoute : 'login';
+  console.log(auth().currentUser);
+
+  React.useEffect(() => {
+    const getUserData = async () => {
+      const uid = await auth().currentUser.uid;
+
+      const res = await firestore().collection('Users').doc(uid).get();
+
+      console.log(res.data());
+
+      if (res.data()) {
+        setLoginRoute('tab');
+      } else {
+        setLoginRoute('profileDetails');
+      }
+    };
+
+    getUserData().catch(console.error);
+  });
+
+  return !loginRoute && auth().currentUser ? (
+    <LoaderScreen message="Happy waiting..." color={color.primary} />
+  ) : (
     <Stack.Navigator initialRouteName={initialRouteName}>
       <Stack.Screen
         name="tab"
         component={TabStack}
-        options={{headerShown: false}}
+        options={{headerShown: false, headerTitle: 'Home'}}
       />
       <Stack.Screen name="home" component={SCREENS.Home} />
       <Stack.Screen
@@ -91,9 +116,11 @@ export const AppStack = () => {
         component={SCREENS.ProfileDetail}
         options={{headerShown: false}}
       />
-      <Stack.Screen name='editProfiles'
-      component={EditProfileStack}
-      options={{headerShown: false}}/> 
+      <Stack.Screen
+        name="editProfiles"
+        component={EditProfileStack}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };

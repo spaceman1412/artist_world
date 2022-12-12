@@ -174,9 +174,9 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.screenTitle}>Messages</Text>
-          <Button style={styles.filterButton}>
+          {/* <Button style={styles.filterButton}>
             <Filter />
-          </Button>
+          </Button> */}
         </View>
         <View style={styles.searchContainer}>
           <View style={styles.searchBox}>
@@ -192,7 +192,7 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
           </View>
         </View>
         <View style={styles.messageSection}>
-          <Text style={styles.title}>Messages</Text>
+          <Text style={styles.title}>Your DMs</Text>
           <View style={styles.messageList}>
             <FlatList
               data={listUserfilter.length === 0 ? roomchat : listUserfilter}

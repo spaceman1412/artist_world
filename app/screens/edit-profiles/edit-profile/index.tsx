@@ -1,3 +1,4 @@
+import React from 'react';
 import {Button, UploadImage} from '@components';
 import {DropDown} from '@components';
 import DateTimePicker from '@components/date-time-picker/date-time-picker';
@@ -19,18 +20,19 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import { LoaderScreen } from 'react-native-ui-lib';
-import { useAppDispatch } from '@store/hook';
-import { ProfileActions } from '@store/profile/reducer';
-import { images } from '@assets/images';
+import {useAppDispatch} from '@store/hook';
+import {ProfileActions} from '@store/profile/reducer';
+import {images} from '@assets/images';
+import {getSize} from '@utils/responsive';
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: color.whiteBackground,
   },
-  contentContainer:{
+  contentContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: getSize.v(50),
   },
   infoContainer: {
     paddingHorizontal: 20,
@@ -63,8 +65,8 @@ const styles = StyleSheet.create({
     height: 112,
     borderRadius: 25,
     color: color.storybookTextColor,
-    paddingHorizontal: 30,
-    marginTop: 10,
+    paddingHorizontal: 20,
+    paddingTop: 10,
   },
   labelTextCustom: {
     marginVertical: 10,
@@ -78,40 +80,39 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginVertical: 5,
   },
-  genderLabel:{
+  genderLabel: {
     color: color.storybookTextColor,
     marginLeft: 25,
   },
-  buttonSave:{
+  buttonSave: {
     width: 295,
     height: 56,
     borderRadius: 25,
     backgroundColor: color.primary,
   },
-  buttonGallery:{
+  buttonGallery: {
     width: 295,
     backgroundColor: color.palette.PrimaryWithOpacity(0.1),
     borderRadius: 25,
     height: 56,
     marginBottom: 25,
   },
-  textGallery:{
+  textGallery: {
     color: color.palette.PrimaryWithOpacity(0.7),
     fontWeight: '500',
     marginLeft: 10,
   },
-  loadingImage:{
-      width: 101,
-      height: 106,
-      justifyContent: 'center',
-      alignItems: 'center',
+  loadingImage: {
+    width: 101,
+    height: 106,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  placeHoler:{
+  placeHoler: {
     width: 99,
     height: 99,
     borderRadius: 25,
-
-  }
+  },
 });
 interface Props {}
 export const EditProfile: CommonType.EditProfileScreenProps<
@@ -132,10 +133,10 @@ export const EditProfile: CommonType.EditProfileScreenProps<
     },
     {
       id: '3',
-      label: 'dont\' want to share',
+      label: "dont' want to share",
     },
   ];
-  const [gender, setGender] = useState<'man'|'not'|'woman'>('man');
+  const [gender, setGender] = useState<'man' | 'not' | 'woman'>('man');
   const [dateTimePicker, setDateTimePicker] = useState(false);
   const [birthDate, setBirthDate] = useState('Choose your birth date');
   const [about, setAbout] = useState('');
@@ -146,133 +147,126 @@ export const EditProfile: CommonType.EditProfileScreenProps<
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const handleInterest = () => {
-    navigation.push('editInterest',{interests: interests})
+    navigation.push('editInterest', {interests: interests});
   };
-  const handleRoles = () =>{
-    navigation.navigate('editRole',{roles: roles})
+  const handleRoles = () => {
+    navigation.navigate('editRole', {roles: roles});
   };
-  const handleChangeAvatar = (value) =>{
-    setChangePic(true)
-    setPic(value)
-  }
-  const handleGallery = () =>{
-    navigation.navigate('editGallery', {gallery: gallery})
-  }
+  const handleChangeAvatar = value => {
+    setChangePic(true);
+    setPic(value);
+  };
+  const handleGallery = () => {
+    navigation.navigate('editGallery', {gallery: gallery});
+  };
 
-  const postPic = async(picture) =>{
-        var parts = picture.split('/');
-        var picRef = parts[parts.length - 1]
-        const ref = storage().ref(picRef);
-        await ref.putFile(picture)
-        return storage().ref(picRef).getDownloadURL()
-  }
-  
-  const handleSaveChange = () =>{
-    const sendData = async() =>{
-      if(changePic)
-      {
-        postPic(pic).then((value) => {
-          dispatch(ProfileActions.updateBasicInfo({
-            avatarUrl: value,
+  const postPic = async picture => {
+    var parts = picture.split('/');
+    var picRef = parts[parts.length - 1];
+    const ref = storage().ref(picRef);
+    await ref.putFile(picture);
+    return storage().ref(picRef).getDownloadURL();
+  };
+
+  const handleSaveChange = () => {
+    const sendData = async () => {
+      if (changePic) {
+        postPic(pic)
+          .then(value => {
+            dispatch(
+              ProfileActions.updateBasicInfo({
+                avatarUrl: value,
+                firstName: firstName,
+                lastName: lastName,
+                birthDate: birthDate,
+              }),
+            );
+            setPic(value);
+          })
+          .catch(console.error);
+      } else {
+        dispatch(
+          ProfileActions.updateBasicInfo({
+            avatarUrl: pic,
             firstName: firstName,
             lastName: lastName,
             birthDate: birthDate,
-          }))
-        setPic(value)
+          }),
+        );
       }
-        ).catch(console.error);
-      }
-      else
-      {
-        dispatch(ProfileActions.updateBasicInfo({
-          avatarUrl: pic,
-          firstName: firstName,
-          lastName: lastName,
-          birthDate: birthDate,
-        }))
-      }
-      dispatch(ProfileActions.updateAbout(about))
-      dispatch(ProfileActions.updateSex(gender))
-      dispatch(ProfileActions.updateMusicInterests(interests))
-      dispatch(ProfileActions.updateMusicRoles(roles))
-      dispatch(ProfileActions.updateGallery(gallery))
-
-    }  
-    if(firstName.trim() !== '' && lastName.trim() !== '')
-    {
-      sendData().then(
-        () => dispatch(ProfileActions.updateDataFirebase())
-      ).finally(() => {
-        setChangePic(false)
-        setLoading(false)
-      }).catch(console.error)
-    }
-    else
-    {
-      Alert.alert('Warning', 'Your information should not be empty',[
+      dispatch(ProfileActions.updateAbout(about));
+      dispatch(ProfileActions.updateSex(gender));
+      dispatch(ProfileActions.updateMusicInterests(interests));
+      dispatch(ProfileActions.updateMusicRoles(roles));
+      dispatch(ProfileActions.updateGallery(gallery));
+    };
+    if (firstName.trim() !== '' && lastName.trim() !== '') {
+      sendData()
+        .then(() => dispatch(ProfileActions.updateDataFirebase()))
+        .finally(() => {
+          setChangePic(false);
+          setLoading(false);
+          navigation.goBack();
+        })
+        .catch(console.error);
+    } else {
+      Alert.alert('Warning', 'Your information should not be empty', [
         {
           text: 'OK',
           style: 'cancel',
-        }
-      ])
+        },
+      ]);
     }
-  }
-  useEffect(() =>{
-
-    const fetchData = async () =>{
-        await firestore()
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      await firestore()
         .collection('Users')
         .doc(auth().currentUser.uid)
         .onSnapshot(value => {
-            const data = value.data();
-            setBirthDate(data.birthDate)
-            setPic(data.avatarUrl.trim())
-            setFirstName(data.firstName)
-            setLastName(data.lastName)
-            setGender(data.sex)
-            setAbout(data.about ? data.about:'')
-            setInterests(data.musicInterests ? data.musicInterests : [])
-            setRoles(data.musicRoles ? data.musicRoles : [])
-            setGallery(data.gallery ? data.gallery : [])
-        })
-        
-    }
-    fetchData().catch(console.error)
-    
-  },[])
-  
+          const data = value.data();
+          setBirthDate(data.birthDate);
+          setPic(data.avatarUrl.trim());
+          setFirstName(data.firstName);
+          setLastName(data.lastName);
+          setGender(data.sex);
+          setAbout(data.about ? data.about : '');
+          setInterests(data.musicInterests ? data.musicInterests : []);
+          setRoles(data.musicRoles ? data.musicRoles : []);
+          setGallery(data.gallery ? data.gallery : []);
+        });
+    };
+    fetchData().catch(console.error);
+  }, []);
+
   return (
     <>
-      <ScrollView style={styles.container}
-      contentContainerStyle={styles.contentContainer}>
-        {
-            pic ? <UploadImage
-            source={pic}
-            onUpload={handleChangeAvatar}
-            />:
-            <View style={styles.loadingImage}>
-              <Image 
-              style={styles.placeHoler}
-              source={images.placeholder}/>
-            </View>
-        }
-        
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}>
+        {pic ? (
+          <UploadImage source={pic} onUpload={handleChangeAvatar} />
+        ) : (
+          <View style={styles.loadingImage}>
+            <Image style={styles.placeHoler} source={images.placeholder} />
+          </View>
+        )}
+
         <View style={styles.infoContainer}>
           <View style={styles.inputContainer}>
             <TextInputCustom
-            value={firstName}
+              value={firstName}
               labelStyle={styles.labelTextCustom}
               label={'FirstName'}
               icon={'account'}
-              onChangeText={(text) => setFirstName(text)}
-              
+              onChangeText={text => setFirstName(text)}
             />
           </View>
 
           <View style={styles.inputContainer}>
             <TextInputCustom
               labelStyle={styles.labelTextCustom}
-              label='LastName'
+              label="LastName"
               value={lastName}
               icon={'account'}
               onChangeText={text => setLastName(text)}
@@ -300,16 +294,18 @@ export const EditProfile: CommonType.EditProfileScreenProps<
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>About</Text>
-            <TextInput multiline={true} 
-            onChangeText={text => setAbout(text)}
-            value={about}
-            style={styles.about} />
+            <TextInput
+              multiline={true}
+              onChangeText={text => setAbout(text)}
+              value={about}
+              style={styles.about}
+            />
           </View>
 
           <View style={styles.inputContainer}>
             <TouchableOpacity onPress={handleInterest}>
               <TextInputCustom
-                value = {interests ? interests.join(','): ''}
+                value={interests ? interests.join(',') : ''}
                 label="Interests"
                 labelStyle={styles.labelTextCustom}
                 editable={false}
@@ -331,23 +327,24 @@ export const EditProfile: CommonType.EditProfileScreenProps<
           </View>
         </View>
 
-        <Button 
-        text = 'Your Gallery'
-        style={styles.buttonGallery}
-        onPress={handleGallery}
-        >
-          <Icon name = 'image-album' 
-          size={20} 
-          color={color.palette.PrimaryWithOpacity(0.7)}/>
-          <Text style={styles.textGallery}>
-            Your Gallery
-            </Text>
+        <Button
+          text="Your Gallery"
+          style={styles.buttonGallery}
+          onPress={handleGallery}>
+          <Icon
+            name="image-album"
+            size={20}
+            color={color.palette.PrimaryWithOpacity(0.7)}
+          />
+          <Text style={styles.textGallery}>Your Gallery</Text>
         </Button>
 
-        <Button text='Save Changes'
-        disabled={loading}
-        onPress={handleSaveChange}
-        style={styles.buttonSave}/>
+        <Button
+          text="Save Changes"
+          disabled={loading}
+          onPress={handleSaveChange}
+          style={styles.buttonSave}
+        />
       </ScrollView>
 
       <DateTimePicker
