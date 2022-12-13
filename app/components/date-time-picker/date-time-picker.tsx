@@ -11,6 +11,7 @@ const DateTimePicker = (props: DateTimePickerProps) => {
   return (
     <Modal animationType="slide" visible={visible} transparent {...rest}>
       <TouchableOpacity style={styles.overplayed} onPress={onBackPress}>
+      </TouchableOpacity>
         <View style={styles.container}>
           <Text style={styles.text}>Birthday</Text>
           <Calendar
@@ -31,16 +32,15 @@ const DateTimePicker = (props: DateTimePickerProps) => {
             <Text style={styles.buttonText}>Save</Text>
           </TouchableOpacity>
         </View>
-      </TouchableOpacity>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
   overplayed: {
-    height: '100%',
+    flex: 1,
     backgroundColor: color.palette.blackWithOpacity(0.3),
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
   },
   container: {
     width: '100%',
