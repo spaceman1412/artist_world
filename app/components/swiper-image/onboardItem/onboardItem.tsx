@@ -5,6 +5,7 @@ import {OnboardingItemProps} from './onboardingItem.props';
 
 export const OnboardingItem = (props: OnboardingItemProps) => {
   const {image, name, age, width = 300, height = 500} = props;
+  
   const sizeStyle = {width, height};
   return (
     <View style={[sizeStyle, styles.container]}>

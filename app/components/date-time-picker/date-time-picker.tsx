@@ -5,12 +5,7 @@ import {DateTimePickerProps} from './date-time-picker.props';
 import {Calendar} from 'react-native-calendars';
 
 const DateTimePicker = (props: DateTimePickerProps) => {
-  let dateTime = new Date();
-  const offset = dateTime.getTimezoneOffset();
-  const yourDate = new Date(dateTime.getTime() - offset * 60 * 1000);
-  const currentDay = yourDate.toISOString().split('T')[0];
-
-  const [date, setDate] = React.useState(currentDay);
+  const [date, setDate] = React.useState('2001-1-1');
   const {onBackPress, onSave, visible, ...rest} = props;
 
   return (
