@@ -71,7 +71,10 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
       }
     } catch (error) {
       console.log(imagePath);
-      Alert.alert('Error', 'Some error occurred. Please try again');
+      Alert.alert(
+        'Error',
+        'Your image is too big. Please try again with another image.',
+      );
     }
   };
 
