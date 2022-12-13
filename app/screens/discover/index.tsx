@@ -47,6 +47,12 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   ];
   const {width} = Dimensions.get('screen');
   const dispatch = useAppDispatch();
+  const getAge = (date: string) => {
+    const today = new Date();
+    const birthDate = new Date(date);
+  
+    return today.getFullYear() - birthDate.getFullYear();
+  };
   const fetchUser = async userMatches => {
     return firestore()
       .collection('Users')
@@ -70,12 +76,13 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
                 {
                   id: userData.id,
                   name: user.firstName + ' ' + user.lastName,
-                  //uncomment this line when have the galary
-                  // image: [...user.gallery ,user.avatarUrl],
-                  images: [{uri: user.avatarUrl}],
-                  // uncomment when have full user data
-                  // musicInterests: user.musicInterests,
-                  // musicRoles: user.musicRoles
+                  images: user?.gallery ?  
+                  [...user?.gallery ,user?.avatarUrl]
+                  .map(image => ({uri: image})) 
+                  : [{uri: user.avatarUrl}] ,
+                  musicInterests: user!.musicInterests,
+                  musicRoles: user!.musicRoles,
+                  age: getAge(user!.birthDate)
                   //
                 },
               ]);
@@ -87,13 +94,10 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
                 {
                   id: userData.id,
                   name: user.firstName + ' ' + user.lastName,
-                  //uncomment this line when have the galary
-                  // image: [...user.gallery ,user.avatarUrl],
                   images: [{uri: user.avatarUrl}],
-                  // uncomment when have full user data
-                  // musicInterests: user.musicInterests,
-                  // musicRoles: user.musicRoles
-                  //
+                  musicInterests: user!.musicInterests,
+                  musicRoles: user!.musicRoles,
+                  age: getAge(user!.birthDate)
                 },
               ]);
             }
@@ -153,11 +157,15 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
                   id: userData.id,
                   name: user.firstName + ' ' + user.lastName,
                   //uncomment this line when have the galary
-                  // image: [...user.gallery ,user.avatarUrl],
-                  images: [{uri: user.avatarUrl}],
+                  images: user?.gallery ?  
+                  [...user?.gallery ,user?.avatarUrl]
+                  .map(image => ({uri: image})) 
+                  : [{uri: user.avatarUrl}] ,
+                  // images: [{uri: user.avatarUrl}],
                   // uncomment when have full user data
-                  // musicInterests: user.musicInterests,
-                  // musicRoles: user.musicRoles
+                  musicInterests: user.musicInterests,
+                  musicRoles: user.musicRoles,
+                  age: getAge(user!.birthDate)
                   //
                 },
               ]);

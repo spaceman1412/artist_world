@@ -1,4 +1,4 @@
-import {Button, MessageBox} from '@components';
+import { MessageBox} from '@components';
 import {CommonType} from '@utils/types';
 import * as React from 'react';
 import {
@@ -10,7 +10,6 @@ import {
   TextInput,
   FlatList,
 } from 'react-native';
-import Filter from '@assets/images/filter.svg';
 import {images} from '@assets/images';
 import {color} from '@theme';
 import MessageModal from '@components/messageModal/messageModal';
@@ -92,14 +91,15 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
   const typingTimeOut = React.useRef<any>();
   const [search, setSearch] = React.useState('');
   const [listUserfilter, setListUserFiler] = React.useState([]);
-  const handleChangeSearch = (e: any) => {
+  const handleChangeSearch = (e: any) => {  
+    
     if (typingTimeOut.current) {
       clearTimeout(typingTimeOut.current);
     }
     typingTimeOut.current = setTimeout(() => {
-      let search = e.trim();
+      let searchWord = e.trim();
       let filter = roomchat!.filter(item => {
-        if (search === '') {
+        if (searchWord === '') {
           return item;
         } else {
           return item.userName
@@ -107,11 +107,12 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
             .includes(search.toLowerCase().trim());
         }
       });
+      
       setListUserFiler(filter);
     }, 600);
     setSearch(e);
   };
-
+  
   React.useEffect(() => {
     const getData = async () => {
       const res = await firestore()
@@ -195,8 +196,8 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
           <Text style={styles.title}>Your DMs</Text>
           <View style={styles.messageList}>
             <FlatList
-              data={listUserfilter.length === 0 ? roomchat : listUserfilter}
-              extraData={listUserfilter}
+              data={ search.trim() === '' ? roomchat : listUserfilter}
+              extraData={search}
               style={styles.messageList}
               renderItem={({item}) => (
                 <MessageBox

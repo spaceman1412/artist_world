@@ -31,8 +31,10 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
   const navigation = useNavigation();
   const userImage = images.man;
   const matchImage = images.girl;
-
+  const [disbaleOnPress, setDisableOnPress] = useState(false);
+  
   const createNewMessageRoom = userId => {
+    setDisableOnPress(true);
     const authUser = auth().currentUser.uid.trim();
     const postReference = firestore().collection('chat-messages').doc();
     const lastMessage = {
@@ -55,8 +57,10 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
       await addNewMessageRoom(userId, postReference.id.trim());
       // navigation.navigate('messages')
     });
-    sendMessage.finally(() => navigation.navigate('messages'));
+    sendMessage.then(() => navigation.navigate('messages'))
+    .finally(hide)
   };
+  
   const addNewMessageRoom = async (userId: string, idRoom: string) => {
     const getUserRoom = await firestore()
       .doc(`user-chat/${userId.trim()}`)
@@ -67,7 +71,8 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
         .doc(userId.trim())
         .set({
           roomId: [idRoom],
-        });
+        })
+        ;
     } else {
       firestore()
         .collection('user-chat')
@@ -130,8 +135,8 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
           start a conversation with eachother!
         </Text>
         <Button
-          text="Say hello"
-          // preset="primary"
+          text={disbaleOnPress ? '...Loading' : 'Say Hello'}
+          disabled={disbaleOnPress}
           textStyle={styles.buttonText1}
           style={styles.button1}
           onPress={() => createNewMessageRoom(state.userId)}

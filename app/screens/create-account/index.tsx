@@ -113,6 +113,7 @@ export const CreateAccount: CommonType.AppScreenProps<
               borderBottomWidth: 2,
               padding: 5,
               fontWeight: 'bold',
+              color: color.storybookTextColor,
             }}
           />
         </View>
@@ -150,6 +151,7 @@ export const CreateAccount: CommonType.AppScreenProps<
                 borderBottomWidth: 2,
                 padding: 5,
                 fontWeight: 'bold',
+                color: color.storybookTextColor,
               }}
               secureTextEntry={toggle ? true : false}
               value={password}

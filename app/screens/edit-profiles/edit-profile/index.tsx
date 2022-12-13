@@ -142,7 +142,6 @@ export const EditProfile: CommonType.EditProfileScreenProps<
   const [about, setAbout] = useState('');
   const [interests, setInterests] = useState([]);
   const [roles, setRoles] = useState([]);
-  const [changePic, setChangePic] = useState(false);
   const [gallery, setGallery] = useState([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
@@ -153,7 +152,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
     navigation.navigate('editRole', {roles: roles});
   };
   const handleChangeAvatar = value => {
-    setChangePic(true);
+   
     setPic(value);
   };
   const handleGallery = () => {
@@ -165,14 +164,20 @@ export const EditProfile: CommonType.EditProfileScreenProps<
     var picRef = parts[parts.length - 1];
     const ref = storage().ref(picRef);
     await ref.putFile(picture);
-    return storage().ref(picRef).getDownloadURL();
+    return storage().ref(picRef).getDownloadURL().then(
+      value => value
+      
+    );
   };
 
   const handleSaveChange = () => {
+    setLoading(true)
     const sendData = async () => {
-      if (changePic) {
-        postPic(pic)
+      if (!pic.includes('https')) {
+        await postPic(pic)
           .then(value => {
+            console.log(value);
+            
             dispatch(
               ProfileActions.updateBasicInfo({
                 avatarUrl: value,
@@ -194,17 +199,18 @@ export const EditProfile: CommonType.EditProfileScreenProps<
           }),
         );
       }
-      dispatch(ProfileActions.updateAbout(about));
-      dispatch(ProfileActions.updateSex(gender));
-      dispatch(ProfileActions.updateMusicInterests(interests));
-      dispatch(ProfileActions.updateMusicRoles(roles));
-      dispatch(ProfileActions.updateGallery(gallery));
+      await dispatch(ProfileActions.updateAbout(about));
+      await dispatch(ProfileActions.updateSex(gender));
+      await dispatch(ProfileActions.updateMusicInterests(interests));
+      await dispatch(ProfileActions.updateMusicRoles(roles));
+      await dispatch(ProfileActions.updateGallery(gallery));
     };
     if (firstName.trim() !== '' && lastName.trim() !== '') {
       sendData()
-        .then(() => dispatch(ProfileActions.updateDataFirebase()))
+        .then(() => 
+        {
+          dispatch(ProfileActions.updateDataFirebase())})
         .finally(() => {
-          setChangePic(false);
           setLoading(false);
           navigation.goBack();
         })
@@ -340,7 +346,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
         </Button>
 
         <Button
-          text="Save Changes"
+          text={loading ? '...Saving' : 'Save'}
           disabled={loading}
           onPress={handleSaveChange}
           style={styles.buttonSave}
