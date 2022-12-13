@@ -55,6 +55,11 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
 }) => {
   const dispatch = useAppDispatch();
   const {matchList} = useAppSelector(state => state.match);
+  
+  const handleDeleteChatRoom = ()  =>{
+    
+  }
+
   const fetchUserMatch = async () => {
     const data = await firestore()
       .collection('user-match')

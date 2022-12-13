@@ -132,27 +132,36 @@ const MessageModal = (props: MessageModalProps) =>{
 const styles = StyleSheet.create({
     container:{
         width: '100%',
-        height: 716,
         backgroundColor: color.whiteBackground,
         borderTopRightRadius: 25,
         borderTopLeftRadius: 25,
+        borderTopWidth: 1,
+        borderTopColor: color.line,
         padding: 20,
         zIndex: 10,
+        height: '90%', 
+        position: 'absolute',
+        bottom: 0,   
     },
     overplayed:{
         flex: 1,
         backgroundColor: color.palette.blackWithOpacity(0.5),
         justifyContent: 'flex-end',
         zIndex: -1,
+        
     },
     wrapper:{
         flex: 1,
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
     },
     header:{
         height: 60,
         width: '100%',
         alignItems: 'center',
         flexDirection: 'row',
+        borderTopRightRadius: 25,
+        borderTopLeftRadius: 25,
     },
     avatar:{
         width: 48,

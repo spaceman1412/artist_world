@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     height: getSize.v(56),
-    backgroundColor: color.background,
+    backgroundColor: color.transparent,
     marginVertical: 10,
   },
   info: {
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: spacing.small,
     borderBottomWidth: size.XXS,
-    borderBottomColor: color.line,
+    borderBottomColor: color.palette.mischka,
   },
   content: {
     flexDirection: 'row',
