@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   },
   matchedListContainer: {
     marginHorizontal: 40,
+    marginTop: 20,
     flex: 1,
   },
   title: {
