@@ -54,15 +54,15 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
     return today.getFullYear() - birthDate.getFullYear();
   };
   const fetchUser = async userMatches => {
-    return firestore()
-      .collection('Users')
-      .orderBy(firestore.FieldPath.documentId())
-      .limit(5)
-      .get()
-      .then(documentSnapshot => {
-        documentSnapshot.forEach(userData => {
-          let user = userData.data();
+    let results = []
 
+
+    let filter = await firestore()
+      .collection('Users')
+      .get();
+
+    filter.forEach(userData => {
+          let user = userData.data();
           if (userMatches.matches?.length > 0) {
             if (
               !userMatches.matches.some(
@@ -71,40 +71,36 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
                   userData.id.trim() === auth().currentUser.uid.trim(),
               )
             ) {
-              setUserList(prev => [
-                ...prev,
-                {
-                  id: userData.id,
-                  name: user.firstName + ' ' + user.lastName,
-                  images: user?.gallery ?  
-                  [...user?.gallery ,user?.avatarUrl]
-                  .map(image => ({uri: image})) 
-                  : [{uri: user.avatarUrl}] ,
-                  musicInterests: user!.musicInterests,
-                  musicRoles: user!.musicRoles,
-                  age: getAge(user!.birthDate)
-                  //
-                },
-              ]);
+              results.push(  {
+                id: userData.id,
+                name: user.firstName + ' ' + user.lastName,
+                // images: user?.gallery ?  
+                // [...user?.gallery ,user?.avatarUrl]
+                // .map(image => ({uri: image})) 
+                // : [{uri: user.avatarUrl}] ,
+                images : [{uri: user.avatarUrl}],
+                musicInterests: user!.musicInterests,
+                musicRoles: user!.musicRoles,
+                age: getAge(user!.birthDate)
+                //
+              })
+              
             }
-          } else {
+          } 
+          else {
             if (userData.id.trim() !== auth().currentUser.uid.trim()) {
-              setUserList(prev => [
-                ...prev,
-                {
-                  id: userData.id,
+              results.push({
+                id: userData.id,
                   name: user.firstName + ' ' + user.lastName,
                   images: [{uri: user.avatarUrl}],
                   musicInterests: user!.musicInterests,
                   musicRoles: user!.musicRoles,
                   age: getAge(user!.birthDate)
-                },
-              ]);
-            }
-          }
-        });
-      });
-  };
+              })
+  };}})
+
+  return results
+}
   const fetchUserMatch = async () => {
     const data = await firestore()
       .collection('user-match')
@@ -122,59 +118,59 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       });
     return data;
   };
-
+  
   React.useEffect(() => {
     const fetchData = async () => {
-      const match = await fetchUserMatch;
-      match().then(value => {
-        fetchUser(value);
-      });
+      const match = await fetchUserMatch();
+      let fetchU = await fetchUser(match);
+      setUserList(fetchU)
+    
     };
     fetchData().catch(console.error);
   }, []);
 
-  React.useEffect(() => {
-    if (userList.length === 2) {
-      firestore()
-        .collection('Users')
-        .orderBy(firestore.FieldPath.documentId())
-        .startAt(userList[1].id.trim())
-        .limit(5)
-        .get()
-        .then(documentSnapshot => {
-          documentSnapshot.forEach(userData => {
-            let user = userData.data();
-            if (
-              !matchList.some(
-                value =>
-                  value === userData.id ||
-                  userData.id === auth().currentUser.uid.trim(),
-              )
-            ) {
-              setUserList(prev => [
-                ...prev,
-                {
-                  id: userData.id,
-                  name: user.firstName + ' ' + user.lastName,
-                  //uncomment this line when have the galary
-                  images: user?.gallery ?  
-                  [...user?.gallery ,user?.avatarUrl]
-                  .map(image => ({uri: image})) 
-                  : [{uri: user.avatarUrl}] ,
-                  // images: [{uri: user.avatarUrl}],
-                  // uncomment when have full user data
-                  musicInterests: user.musicInterests,
-                  musicRoles: user.musicRoles,
-                  age: getAge(user!.birthDate)
-                  //
-                },
-              ]);
-            }
-          });
-        });
-    }
-  }, [userList]);
-
+  // React.useEffect(() => {
+  //   if (userList.length === 2) {
+  //     firestore()
+  //       .collection('Users')
+  //       .orderBy(firestore.FieldPath.documentId())
+  //       .startAt(userList[1].id.trim())
+  //       .limit(5)
+  //       .get()
+  //       .then(documentSnapshot => {
+  //         documentSnapshot.forEach(userData => {
+  //           let user = userData.data();
+  //           if (
+  //             !matchList.some(
+  //               value =>
+  //                 value === userData.id ||
+  //                 userData.id === auth().currentUser.uid.trim(),
+  //             )
+  //           ) {
+  //             setUserList(prev => [
+  //               ...prev,
+  //               {
+  //                 id: userData.id,
+  //                 name: user.firstName + ' ' + user.lastName,
+  //                 //uncomment this line when have the galary
+  //                 images: user?.gallery ?  
+  //                 [...user?.gallery ,user?.avatarUrl]
+  //                 .map(image => ({uri: image})) 
+  //                 : [{uri: user.avatarUrl}] ,
+  //                 // images: [{uri: user.avatarUrl}],
+  //                 // uncomment when have full user data
+  //                 musicInterests: user.musicInterests,
+  //                 musicRoles: user.musicRoles,
+  //                 age: getAge(user!.birthDate)
+  //                 //
+  //               },
+  //             ]);
+  //           }
+  //         });
+  //       });
+  //   }
+  // }, [userList]);
+  
   const checkMatch = async (userId, matchedUserId) => {
     return firestore()
       .collection('user-match')
@@ -333,7 +329,8 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       />
     </SafeAreaView>
   );
-};
+        };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -8,7 +8,8 @@ import auth from '@react-native-firebase/auth';
 import FastImage from 'react-native-fast-image';
 import {images} from '@assets/images';
 import {getSize} from '@utils/responsive';
-
+import { useAppDispatch, useAppSelector } from '@store/hook';
+import { ProfileActions } from '@store/profile/reducer';
 interface Props {}
 
 const styles = StyleSheet.create({
@@ -66,16 +67,38 @@ const styles = StyleSheet.create({
 export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
   navigation,
 }) => {
-  const [user, setUser] = React.useState(null);
-  React.useEffect(() => {
-    const getUsers = firestore()
+  const dispatch = useAppDispatch();
+  const {
+    avatarUrl, 
+    firstName,
+    lastName,
+   } = useAppSelector(state => state.profile)
+   const [onImageLoad, setImageLoad] = React.useState(true);
+
+
+  React.useLayoutEffect(() => {
+    const getUsers = async() =>{
+      let userinfo = await firestore()
       .collection('Users')
       .doc(auth().currentUser.uid)
-      .onSnapshot(value => {
-        const data = value.data();
-        setUser(data);
-      });
-    getUsers;
+      .get()
+      let user = userinfo.data()
+      dispatch(ProfileActions.updateUserFullInfo(
+        {
+          avatarUrl: user.avatarUrl ? user.avatarUrl : '',
+          firstName : user.firstName ? user.firstName : '',
+          lastName: user.lastName ? user.lastName : '',
+          birthDate: user.birthDate ? user.birthDate : '',
+          musicInterests: user.musicInterests ? user.musicInterests : [],
+          musicRoles: user.musicRoles ? user.musicRoles : [],
+          gallery: user.gallery ? user.gallery : [],
+          sex: user.sex ? user.sex : 'not',
+          about: user.about ? user.about : '',
+        })
+      )
+    } 
+      getUsers()
+    ;
   }, []);
   const handleLogout = async () => {
     const logout = auth().signOut();
@@ -88,19 +111,19 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.avatarContainer}>
-        {user ? (
-          <>
-            <FastImage style={styles.image} source={{uri: user.avatarUrl}} />
+        {/* {!onImageLoad ? (
+          <> */}
+            <FastImage onLoadEnd={() => setImageLoad(false)} style={styles.image} source={!onImageLoad ? {uri: avatarUrl} : images.placeholder} />
 
             <Text style={styles.name}>
-              {user.firstName + ' ' + user.lastName}
+              {firstName + ' ' + lastName}
             </Text>
-          </>
-        ) : (
+          {/* </> */}
+        {/* ) : (
           <View style={styles.loadingImage}>
             <Image style={styles.placeHoler} source={images.placeholder} />
           </View>
-        )}
+        )} */}
       </View>
 
       <SettingItem

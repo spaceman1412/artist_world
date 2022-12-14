@@ -11,6 +11,8 @@ import {color} from '@theme';
 import Heart from '@assets/images/heart.svg';
 import Stroke from '@assets/images/stroke.svg';
 import firestore from '@react-native-firebase/firestore';
+import { images } from '@assets/images';
+import { getSize } from '@utils/responsive';
 
 const styles = StyleSheet.create({
   container: {
@@ -20,27 +22,35 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   image: {
-    width: 140,
-    height: 200,
+    width: getSize.v(140),
+    height: getSize.v(200),
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1,
   },
   imageBlur: {
-    width: 140,
-    height: 160,
+    width: 120,
+    height: 180,
     position: 'absolute',
+    borderRadius: 25,
+    zIndex: 1,
   },
 
   buttonContainer: {
-    height: 40,
-    width: '100%',
-    backgroundColor: color.palette.GrayWithOpacity(0.6),
+    height: 45,
+    width: 45,
+    backgroundColor: color.whiteBackground,
+    borderWidth: 1,
     position: 'absolute',
-    bottom: 0,
-    borderBottomLeftRadius: 15,
-    borderBottomRightRadius: 15,
+    top: -5,
+    zIndex: 2,
+    borderRadius: 50,
+    // borderBottomLeftRadius: 15,
+    // borderBottomRightRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    left: 0,
+    right: -8,
   },
   button: {
     backgroundColor: color.transparent,
@@ -72,6 +82,7 @@ const styles = StyleSheet.create({
 const UserCart = (props: userCartProps) => {
   const {userID, onHeartPress, onStokePress, ...rest} = props;
   const [user, setUser] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
     firestore()
       .collection('Users')
@@ -89,37 +100,43 @@ const UserCart = (props: userCartProps) => {
     <TouchableOpacity style={styles.surround} {...rest}>
       <View style={styles.container}>
         {user !== null ? (
+          <>
           <ImageBackground
+            onLoadEnd={() => setLoading(false)}
             blurRadius={15}
             borderRadius={15}
             style={styles.image}
             resizeMode="stretch"
-            source={user.image}>
+            source={loading ? images.placeholder : user.image}>
             <ImageBackground
+              onLoadEnd={ () => setLoading(false)}
               style={styles.imageBlur}
               borderTopLeftRadius={15}
               borderTopRightRadius={15}
               resizeMode={'stretch'}
-              source={user.image}>
+              source={loading ? images.placeholder : user.image}>
               <Text numberOfLines={1} style={styles.text}>
                 {user.name}
               </Text>
             </ImageBackground>
           </ImageBackground>
+          <View style={styles.buttonContainer}>
+          <TouchableOpacity onPress={onStokePress} style={styles.button}>
+            <Stroke width={14} height={14} />
+          </TouchableOpacity>
+        </View>
+          </>
+
         ) : (
           <></>
         )}
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={onStokePress} style={styles.button}>
-            <Stroke width={14} height={14} />
-          </TouchableOpacity>
-          <TouchableOpacity
+        
+          {/* <TouchableOpacity
             onPress={onHeartPress}
             style={[styles.button, styles.buttonLeft]}>
             <Heart width={16} height={16} />
-          </TouchableOpacity>
-        </View>
+          </TouchableOpacity> */}
       </View>
     </TouchableOpacity>
   );

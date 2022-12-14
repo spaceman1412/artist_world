@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   },
   matchedListContainer: {
     marginHorizontal: 40,
+    marginTop: 20,
     flex: 1,
   },
   title: {
@@ -81,7 +82,7 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
   React.useEffect(() => {
     fetchUserMatch().catch(console.error);
   }, []);
-
+  
   const handleHeartPress = () => {};
   const handleUnMatchPress = (userId: string) => {
     dispatch(MatchAction.removeMatchUser(userId));

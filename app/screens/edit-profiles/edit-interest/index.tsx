@@ -70,6 +70,7 @@ export const EditInterest: CommonType.EditProfileScreenProps<'editInterest', Pro
     }
     const handleConfirm = async() =>{
         const send = async() =>{
+            
             await dispatch(ProfileActions.updateMusicInterests(listInterest))
             await dispatch(ProfileActions.updateInterestFirebase());
         }

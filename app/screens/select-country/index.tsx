@@ -13,7 +13,6 @@ import { CommonType } from '@utils/types';
 import { color } from '@theme';
 import {images} from '@assets/images'
 import { Button } from '@components';
-
 interface Props{}
 export const SelectCountry: CommonType.AppScreenProps<'selectCountry', Props> = 
 ({navigation}) => {

@@ -6,6 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import * as React from 'react';
 import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
+import { images } from '@assets/images';
 
 
 export const MessageBox = (props: MessageBoxProps) => {
@@ -18,7 +19,7 @@ export const MessageBox = (props: MessageBoxProps) => {
     onPress,
   } = props;
   const [lastMessage, setLastMessage] = React.useState(null)
-  
+  const [loading, setLoading] = React.useState(true);
   React.useLayoutEffect(() =>{
     const getLastMessage = async () =>
     {
@@ -47,7 +48,11 @@ export const MessageBox = (props: MessageBoxProps) => {
           </LinearGradient>
         ) : (
           <View style={styles.imageWrapper}>
-            <FastImage source={image} style={styles.image} />
+            <FastImage
+            onLoadEnd={() => setLoading(false)}
+    
+            source={loading ? images.placeholder : image} 
+            style={styles.image} />
           </View>
         )}
       </TouchableOpacity>
