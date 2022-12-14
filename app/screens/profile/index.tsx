@@ -73,7 +73,8 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
     firstName,
     lastName,
    } = useAppSelector(state => state.profile)
-  
+   const [onImageLoad, setImageLoad] = React.useState(true);
+
 
   React.useLayoutEffect(() => {
     const getUsers = async() =>{
@@ -110,19 +111,19 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.avatarContainer}>
-        {avatarUrl ? (
-          <>
-            <FastImage style={styles.image} source={{uri: avatarUrl}} />
+        {/* {!onImageLoad ? (
+          <> */}
+            <FastImage onLoadEnd={() => setImageLoad(false)} style={styles.image} source={!onImageLoad ? {uri: avatarUrl} : images.placeholder} />
 
             <Text style={styles.name}>
               {firstName + ' ' + lastName}
             </Text>
-          </>
-        ) : (
+          {/* </> */}
+        {/* ) : (
           <View style={styles.loadingImage}>
             <Image style={styles.placeHoler} source={images.placeholder} />
           </View>
-        )}
+        )} */}
       </View>
 
       <SettingItem

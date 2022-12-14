@@ -1,3 +1,4 @@
+import { images } from '@assets/images';
 import {color} from '@theme';
 import * as React from 'react';
 import {View, Image, StyleSheet, Text} from 'react-native';
@@ -5,12 +6,13 @@ import {OnboardingItemProps} from './onboardingItem.props';
 
 export const OnboardingItem = (props: OnboardingItemProps) => {
   const {image, name, age, width = 300, height = 500} = props;
-  
+  const [loading, setLoading] = React.useState(true);
   const sizeStyle = {width, height};
   return (
     <View style={[sizeStyle, styles.container]}>
       <Image
-        source={image}
+        onLoadEnd={() => setLoading(false)}
+        source={loading ? images.placeholder : image}
         resizeMode="stretch"
         style={[sizeStyle, styles.container]}
       />

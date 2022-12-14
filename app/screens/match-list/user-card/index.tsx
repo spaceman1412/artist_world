@@ -11,6 +11,7 @@ import {color} from '@theme';
 import Heart from '@assets/images/heart.svg';
 import Stroke from '@assets/images/stroke.svg';
 import firestore from '@react-native-firebase/firestore';
+import { images } from '@assets/images';
 
 const styles = StyleSheet.create({
   container: {
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
 const UserCart = (props: userCartProps) => {
   const {userID, onHeartPress, onStokePress, ...rest} = props;
   const [user, setUser] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
     firestore()
       .collection('Users')
@@ -90,17 +92,19 @@ const UserCart = (props: userCartProps) => {
       <View style={styles.container}>
         {user !== null ? (
           <ImageBackground
+            onLoadEnd={() => setLoading(false)}
             blurRadius={15}
             borderRadius={15}
             style={styles.image}
             resizeMode="stretch"
-            source={user.image}>
+            source={loading ? images.placeholder : user.image}>
             <ImageBackground
+              onLoadEnd={ () => setLoading(false)}
               style={styles.imageBlur}
               borderTopLeftRadius={15}
               borderTopRightRadius={15}
               resizeMode={'stretch'}
-              source={user.image}>
+              source={loading ? images.placeholder : user.image}>
               <Text numberOfLines={1} style={styles.text}>
                 {user.name}
               </Text>

@@ -14,6 +14,7 @@ import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
 import auth from '@react-native-firebase/auth';
 import { LoaderScreen } from 'react-native-ui-lib';
+import { images } from '@assets/images';
 
 const MessageModal = (props: MessageModalProps) =>{
     const {
@@ -22,6 +23,7 @@ const MessageModal = (props: MessageModalProps) =>{
         ...rest
     } = props
     const [messages, setMessages] = React.useState([])
+    const [loading, setLoading] = React.useState(true);
     React.useLayoutEffect(() => {
         const getData =
             firestore()
@@ -93,8 +95,9 @@ const MessageModal = (props: MessageModalProps) =>{
                 <View style={styles.container}>
                     <View style={styles.wrapper}>
                     <View style={styles.header}>
-                    <FastImage  
-                    source={room.avatar}
+                    <FastImage
+                    onLoadEnd={() => setLoading(false)}
+                    source={loading ? images.placeholder : room.avatar}
                     style={styles.avatar}/>
                     <View style={styles.info}>
                         <Text style={styles.name}>{room.userName}</Text>
