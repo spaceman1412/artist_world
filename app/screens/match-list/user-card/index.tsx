@@ -80,43 +80,45 @@ const styles = StyleSheet.create({
   },
 });
 const UserCart = (props: userCartProps) => {
-  const {userID, onHeartPress, onStokePress, ...rest} = props;
-  const [user, setUser] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
-  React.useEffect(() => {
-    firestore()
-      .collection('Users')
-      .doc(userID)
-      .get()
-      .then(value => {
-        const data = value.data();
-        setUser({
-          image: {uri: data.avatarUrl},
-          name: data.firstName + ' ' + data.lastName,
-        });
-      });
-  }, []);
+  const {userID, onHeartPress, onStokePress,
+    image,
+    name,
+    ...rest} = props;
+    
+  // React.useEffect(() => {
+  //   firestore()
+  //     .collection('Users')
+  //     .doc(userID)
+  //     .get()
+  //     .then(value => {
+  //       const data = value.data();
+  //       setUser({
+  //         image: {uri: data.avatarUrl},
+  //         name: data.firstName + ' ' + data.lastName,
+  //       });
+  //     });
+  // }, []);
   return (
     <TouchableOpacity style={styles.surround} {...rest}>
       <View style={styles.container}>
-        {user !== null ? (
+        {name !== null ? (
           <>
           <ImageBackground
-            onLoadEnd={() => setLoading(false)}
+            // onLoadEnd={() => setLoading(false)}
             blurRadius={15}
             borderRadius={15}
             style={styles.image}
             resizeMode="stretch"
-            source={loading ? images.placeholder : user.image}>
+            source={{uri:image}}>
             <ImageBackground
-              onLoadEnd={ () => setLoading(false)}
+              // onLoadEnd={ () => setLoading(false)}
               style={styles.imageBlur}
               borderTopLeftRadius={15}
               borderTopRightRadius={15}
               resizeMode={'stretch'}
-              source={loading ? images.placeholder : user.image}>
+              source={{uri: image}}>
               <Text numberOfLines={1} style={styles.text}>
-                {user.name}
+                {name}
               </Text>
             </ImageBackground>
           </ImageBackground>
@@ -140,6 +142,6 @@ const UserCart = (props: userCartProps) => {
       </View>
     </TouchableOpacity>
   );
-};
+}
 
 export default UserCart;
