@@ -20,7 +20,7 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import {useAppDispatch} from '@store/hook';
+import {useAppDispatch, useAppSelector} from '@store/hook';
 import {ProfileActions} from '@store/profile/reducer';
 import {images} from '@assets/images';
 import {getSize} from '@utils/responsive';
@@ -119,9 +119,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
   'editProfile',
   Props
 > = ({navigation}) => {
-  const [pic, setPic] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+
   const genderList = [
     {
       id: '1',
@@ -133,23 +131,36 @@ export const EditProfile: CommonType.EditProfileScreenProps<
     },
     {
       id: '3',
-      label: "dont' want to share",
+      label: "not",
     },
   ];
-  const [gender, setGender] = useState<'man' | 'not' | 'woman'>('man');
+  const {
+    avatarUrl,
+    firstName,
+    lastName,
+    sex,
+    about,
+    birthDate, 
+    musicInterests,
+    musicRoles,
+    gallery
+  } = useAppSelector(state => state.profile)
+    console.log(musicInterests);
+    
+  const [pic, setPic] = useState(avatarUrl);
+  const [ufirstName, setFirstName] = useState(firstName);
+  const [ulastName, setLastName] = useState(lastName);
+  const [gender, setGender] = useState<'man' | 'woman' | 'not'>(sex);
   const [dateTimePicker, setDateTimePicker] = useState(false);
-  const [birthDate, setBirthDate] = useState('Choose your birth date');
-  const [about, setAbout] = useState('');
-  const [interests, setInterests] = useState([]);
-  const [roles, setRoles] = useState([]);
-  const [gallery, setGallery] = useState([]);
+  const [ubirthDate, setBirthDate] = useState(birthDate);
+  const [uabout, setAbout] = useState(about);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const handleInterest = () => {
-    navigation.push('editInterest', {interests: interests});
+    navigation.push('editInterest', {interests: musicInterests});
   };
   const handleRoles = () => {
-    navigation.navigate('editRole', {roles: roles});
+    navigation.navigate('editRole', {roles: musicRoles});
   };
   const handleChangeAvatar = value => {
    
@@ -169,7 +180,8 @@ export const EditProfile: CommonType.EditProfileScreenProps<
       
     );
   };
-
+  console.log(gender);
+  
   const handleSaveChange = () => {
     setLoading(true)
     const sendData = async () => {
@@ -178,34 +190,37 @@ export const EditProfile: CommonType.EditProfileScreenProps<
           .then(value => {
             console.log(value);
             
-            dispatch(
-              ProfileActions.updateBasicInfo({
-                avatarUrl: value,
-                firstName: firstName,
-                lastName: lastName,
-                birthDate: birthDate,
-              }),
-            );
+            dispatch(ProfileActions.updateUserFullInfo({
+              avatarUrl: value,
+              firstName: ufirstName,
+              lastName: ulastName,
+              birthDate: ubirthDate,
+              about: uabout,
+              sex: gender,
+              musicInterests: musicInterests,
+              musicRoles: musicRoles,
+              gallery: gallery,
+            }))
             setPic(value);
           })
           .catch(console.error);
       } else {
         dispatch(
-          ProfileActions.updateBasicInfo({
-            avatarUrl: pic,
-            firstName: firstName,
-            lastName: lastName,
-            birthDate: birthDate,
+          ProfileActions.updateUserFullInfo({
+              avatarUrl: pic,
+              firstName: ufirstName,
+              lastName: ulastName,
+              birthDate: ubirthDate,
+              about: uabout,
+              sex: gender,
+              musicInterests: musicInterests,
+              musicRoles: musicRoles,
+              gallery: gallery,
           }),
         );
       }
-      await dispatch(ProfileActions.updateAbout(about));
-      await dispatch(ProfileActions.updateSex(gender));
-      await dispatch(ProfileActions.updateMusicInterests(interests));
-      await dispatch(ProfileActions.updateMusicRoles(roles));
-      await dispatch(ProfileActions.updateGallery(gallery));
     };
-    if (firstName.trim() !== '' && lastName.trim() !== '') {
+    if (ufirstName.trim() !== '' && ulastName.trim() !== '') {
       sendData()
         .then(() => 
         {
@@ -224,26 +239,8 @@ export const EditProfile: CommonType.EditProfileScreenProps<
       ]);
     }
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      await firestore()
-        .collection('Users')
-        .doc(auth().currentUser.uid)
-        .onSnapshot(value => {
-          const data = value.data();
-          setBirthDate(data.birthDate);
-          setPic(data.avatarUrl.trim());
-          setFirstName(data.firstName);
-          setLastName(data.lastName);
-          setGender(data.sex);
-          setAbout(data.about ? data.about : '');
-          setInterests(data.musicInterests ? data.musicInterests : []);
-          setRoles(data.musicRoles ? data.musicRoles : []);
-          setGallery(data.gallery ? data.gallery : []);
-        });
-    };
-    fetchData().catch(console.error);
-  }, []);
+
+  
 
   return (
     <>
@@ -261,7 +258,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
         <View style={styles.infoContainer}>
           <View style={styles.inputContainer}>
             <TextInputCustom
-              value={firstName}
+              value={ufirstName}
               labelStyle={styles.labelTextCustom}
               label={'FirstName'}
               icon={'account'}
@@ -273,7 +270,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             <TextInputCustom
               labelStyle={styles.labelTextCustom}
               label="LastName"
-              value={lastName}
+              value={ulastName}
               icon={'account'}
               onChangeText={text => setLastName(text)}
             />
@@ -294,7 +291,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             <TouchableOpacity
               style={styles.birthdayButton}
               onPress={() => setDateTimePicker(true)}>
-              <Text style={styles.textButtonBirthday}>{birthDate}</Text>
+              <Text style={styles.textButtonBirthday}>{ubirthDate}</Text>
             </TouchableOpacity>
           </View>
 
@@ -303,7 +300,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             <TextInput
               multiline={true}
               onChangeText={text => setAbout(text)}
-              value={about}
+              value={uabout}
               style={styles.about}
             />
           </View>
@@ -311,7 +308,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
           <View style={styles.inputContainer}>
             <TouchableOpacity onPress={handleInterest}>
               <TextInputCustom
-                value={interests ? interests.join(',') : ''}
+                value={musicInterests ? musicInterests.join(',') : ''}
                 label="Interests"
                 labelStyle={styles.labelTextCustom}
                 editable={false}
@@ -323,7 +320,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
           <View style={styles.inputContainer}>
             <TouchableOpacity onPress={handleRoles}>
               <TextInputCustom
-                value={roles ? roles.join(' , ') : ''}
+                value={musicRoles ? musicRoles.join(' , ') : ''}
                 label="Roles"
                 labelStyle={styles.labelTextCustom}
                 editable={false}

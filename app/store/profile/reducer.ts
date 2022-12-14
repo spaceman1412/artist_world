@@ -53,7 +53,29 @@ export const profileSlice = createSlice({
     updateAbout:(state, action: PayloadAction<string>) =>{
       state.about = action.payload;
     },
-    
+    updateUserFullInfo :(state, action: PayloadAction<Profile.UserInfo>) =>{
+      const {
+      lastName,
+      firstName,
+      avatarUrl,
+      birthDate,
+      musicInterests,
+      musicRoles,
+      gallery,
+      sex,
+      about} = action.payload;
+
+      state.avatarUrl = avatarUrl;
+      state.firstName = firstName;
+      state.lastName = lastName;
+      state.birthDate = birthDate;
+      state.musicInterests= musicInterests;
+      state.musicRoles = musicRoles;
+      state.gallery = gallery;
+      state.about = about;
+      state.sex = sex;
+    }
+    ,
     updateDataFirebase: state => {
       console.log('called');
       const uid = auth().currentUser.uid;

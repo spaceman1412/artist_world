@@ -136,7 +136,7 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
               .catch(console.error);
           }
         });
-      res;
+      return () => res();
     };
 
     const setRoomChat = async roomId => {

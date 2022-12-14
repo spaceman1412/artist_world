@@ -43,7 +43,6 @@ const MessageModal = (props: MessageModalProps) =>{
                     }])
                 });
             });
-            
             return () => getData()
         }
     , [room])

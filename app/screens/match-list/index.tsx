@@ -81,7 +81,7 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
   React.useEffect(() => {
     fetchUserMatch().catch(console.error);
   }, []);
-
+  
   const handleHeartPress = () => {};
   const handleUnMatchPress = (userId: string) => {
     dispatch(MatchAction.removeMatchUser(userId));
