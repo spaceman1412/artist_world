@@ -73,6 +73,8 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
   );
   const [onImageLoad, setImageLoad] = React.useState(true);
 
+  const dispatcher = useAppDispatch();
+
   React.useEffect(() => {
     const getUsers = async () => {
       let userinfo = await firestore()
@@ -103,6 +105,7 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
 
   const handleLogout = async () => {
     const logout = auth().signOut();
+    dispatcher(ProfileActions.logOut());
     logout.finally(() => navigation.navigate('login'));
   };
   const handleOnEditProfile = () => {
@@ -132,7 +135,11 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
       <SettingItem
         icon={'face-man-profile'}
         text={'My Profile'}
-        onPress={() => navigation.navigate('profileDetail')}
+        onPress={() =>
+          navigation.navigate('profileDetail', {
+            uid: auth().currentUser.uid,
+          })
+        }
       />
 
       <SettingItem

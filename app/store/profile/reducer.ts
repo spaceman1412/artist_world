@@ -149,6 +149,9 @@ export const profileSlice = createSlice({
         console.error();
       }
     },
+    logOut: state => {
+      return initialState;
+    },
   },
 });
 
