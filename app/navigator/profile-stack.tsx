@@ -6,13 +6,6 @@ import * as SCREENS from '@screens';
 const Stack = createStackNavigator<ProfileDetailsNavigatorParamList>();
 
 export const ProfileStack = ({navigation}) => {
-  React.useEffect(() => {
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'profileDetails'}],
-    });
-  }, []);
-
   return (
     <Stack.Navigator initialRouteName="basicInfo">
       <Stack.Screen
