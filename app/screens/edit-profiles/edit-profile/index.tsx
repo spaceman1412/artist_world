@@ -199,6 +199,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
                 musicInterests: musicInterests,
                 musicRoles: musicRoles,
                 gallery: gallery,
+                location: location,
               }),
             );
             setPic(value);
