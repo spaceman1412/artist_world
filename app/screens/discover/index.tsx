@@ -53,6 +53,8 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   
     return today.getFullYear() - birthDate.getFullYear();
   };
+
+  console.log(auth().currentUser.uid)
   const fetchUser = async userMatches => {
     let results = []
 

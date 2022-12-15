@@ -55,13 +55,14 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
         .get(postReference);
       await addNewMessageRoom(authUser, postReference.id.trim());
       await addNewMessageRoom(userId, postReference.id.trim());
-      // navigation.navigate('messages')
     });
     sendMessage
       .then(() => {
         setTimeout(() => navigation.navigate('messages'), 2000);
       })
-      .finally(hide);
+      .finally(() => {
+        setTimeout(() => hide(), 2000);
+      });
   };
 
   const addNewMessageRoom = async (userId: string, idRoom: string) => {
