@@ -4,7 +4,6 @@ import {color} from '@theme';
 import GlobalStyles from '@theme/styles/global-style';
 import {ScrollView, StyleSheet, FlatList, Linking} from 'react-native';
 import BackIcon from '@assets/images/back-arrow.svg';
-import PaperPlane from '@assets/images/paper-plane.svg';
 import Location from '@assets/images/location.svg';
 import TextShowMore from './show-more-text';
 import {Button as ThienButton} from '@components';

@@ -72,6 +72,7 @@ export const profileSlice = createSlice({
         gallery,
         sex,
         about,
+        location,
       } = action.payload;
 
       state.avatarUrl = avatarUrl;
@@ -83,6 +84,7 @@ export const profileSlice = createSlice({
       state.gallery = gallery;
       state.about = about;
       state.sex = sex;
+      state.location = location;
     },
     updateDataFirebase: state => {
       console.log('called');

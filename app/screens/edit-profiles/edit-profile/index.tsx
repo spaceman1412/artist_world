@@ -141,6 +141,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
     musicInterests,
     musicRoles,
     gallery,
+    location,
   } = useAppSelector(state => state.profile);
   console.log(musicInterests);
 
@@ -215,6 +216,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             musicInterests: musicInterests,
             musicRoles: musicRoles,
             gallery: gallery,
+            location: location,
           }),
         );
       }
@@ -326,6 +328,13 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             </TouchableOpacity>
           </View>
         </View>
+
+        <Button
+          style={styles.birthdayButton}
+          textStyle={{color: color.palette.Blue30, fontSize: 16}}
+          text={location || 'Choose Your City'}
+          onPress={() => navigation.navigate('selectCity')}
+        />
 
         <Button
           text="Your Gallery"
