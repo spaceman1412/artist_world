@@ -29,7 +29,9 @@ export const CreateAccount: CommonType.AppScreenProps<
     auth()
       .signInWithEmailAndPassword(email.trim(), password.trim())
       .then(() => {
-        navigation.navigate('tab');
+        navigation.navigate('tab', {
+          screen: 'discover',
+        });
       })
       .catch(error => {
         console.log(error);

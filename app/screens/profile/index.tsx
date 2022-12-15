@@ -8,8 +8,8 @@ import auth from '@react-native-firebase/auth';
 import FastImage from 'react-native-fast-image';
 import {images} from '@assets/images';
 import {getSize} from '@utils/responsive';
-import { useAppDispatch, useAppSelector } from '@store/hook';
-import { ProfileActions } from '@store/profile/reducer';
+import {useAppDispatch, useAppSelector} from '@store/hook';
+import {ProfileActions} from '@store/profile/reducer';
 interface Props {}
 
 const styles = StyleSheet.create({
@@ -68,25 +68,22 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
   navigation,
 }) => {
   const dispatch = useAppDispatch();
-  const {
-    avatarUrl, 
-    firstName,
-    lastName,
-   } = useAppSelector(state => state.profile)
-   const [onImageLoad, setImageLoad] = React.useState(true);
+  const {avatarUrl, firstName, lastName} = useAppSelector(
+    state => state.profile,
+  );
+  const [onImageLoad, setImageLoad] = React.useState(true);
 
-
-  React.useLayoutEffect(() => {
-    const getUsers = async() =>{
+  React.useEffect(() => {
+    const getUsers = async () => {
       let userinfo = await firestore()
-      .collection('Users')
-      .doc(auth().currentUser.uid)
-      .get()
-      let user = userinfo.data()
-      dispatch(ProfileActions.updateUserFullInfo(
-        {
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .get();
+      let user = userinfo.data();
+      dispatch(
+        ProfileActions.updateUserFullInfo({
           avatarUrl: user.avatarUrl ? user.avatarUrl : '',
-          firstName : user.firstName ? user.firstName : '',
+          firstName: user.firstName ? user.firstName : '',
           lastName: user.lastName ? user.lastName : '',
           birthDate: user.birthDate ? user.birthDate : '',
           musicInterests: user.musicInterests ? user.musicInterests : [],
@@ -94,12 +91,14 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
           gallery: user.gallery ? user.gallery : [],
           sex: user.sex ? user.sex : 'not',
           about: user.about ? user.about : '',
-        })
-      )
-    } 
-      getUsers()
-    ;
+        }),
+      );
+    };
+    getUsers();
+
+    console.log('render');
   }, []);
+
   const handleLogout = async () => {
     const logout = auth().signOut();
     logout.finally(() => navigation.navigate('login'));
@@ -113,12 +112,14 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
       <View style={styles.avatarContainer}>
         {/* {!onImageLoad ? (
           <> */}
-            <FastImage onLoadEnd={() => setImageLoad(false)} style={styles.image} source={!onImageLoad ? {uri: avatarUrl} : images.placeholder} />
+        <FastImage
+          onLoadEnd={() => setImageLoad(false)}
+          style={styles.image}
+          source={!onImageLoad ? {uri: avatarUrl} : images.placeholder}
+        />
 
-            <Text style={styles.name}>
-              {firstName + ' ' + lastName}
-            </Text>
-          {/* </> */}
+        <Text style={styles.name}>{firstName + ' ' + lastName}</Text>
+        {/* </> */}
         {/* ) : (
           <View style={styles.loadingImage}>
             <Image style={styles.placeHoler} source={images.placeholder} />

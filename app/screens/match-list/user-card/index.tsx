@@ -8,11 +8,8 @@ import {
   View,
 } from 'react-native';
 import {color} from '@theme';
-import Heart from '@assets/images/heart.svg';
 import Stroke from '@assets/images/stroke.svg';
-import firestore from '@react-native-firebase/firestore';
-import { images } from '@assets/images';
-import { getSize } from '@utils/responsive';
+import {getSize} from '@utils/responsive';
 
 const styles = StyleSheet.create({
   container: {
@@ -80,11 +77,8 @@ const styles = StyleSheet.create({
   },
 });
 const UserCart = (props: userCartProps) => {
-  const {userID, onHeartPress, onStokePress,
-    image,
-    name,
-    ...rest} = props;
-    
+  const {userID, onHeartPress, onStokePress, image, name, ...rest} = props;
+
   // React.useEffect(() => {
   //   firestore()
   //     .collection('Users')
@@ -103,38 +97,36 @@ const UserCart = (props: userCartProps) => {
       <View style={styles.container}>
         {name !== null ? (
           <>
-          <ImageBackground
-            // onLoadEnd={() => setLoading(false)}
-            blurRadius={15}
-            borderRadius={15}
-            style={styles.image}
-            resizeMode="stretch"
-            source={{uri:image}}>
             <ImageBackground
-              // onLoadEnd={ () => setLoading(false)}
-              style={styles.imageBlur}
-              borderTopLeftRadius={15}
-              borderTopRightRadius={15}
-              resizeMode={'stretch'}
+              // onLoadEnd={() => setLoading(false)}
+              blurRadius={15}
+              borderRadius={15}
+              style={styles.image}
+              resizeMode="stretch"
               source={{uri: image}}>
-              <Text numberOfLines={1} style={styles.text}>
-                {name}
-              </Text>
+              <ImageBackground
+                // onLoadEnd={ () => setLoading(false)}
+                style={styles.imageBlur}
+                borderTopLeftRadius={15}
+                borderTopRightRadius={15}
+                resizeMode={'stretch'}
+                source={{uri: image}}>
+                <Text numberOfLines={1} style={styles.text}>
+                  {name}
+                </Text>
+              </ImageBackground>
             </ImageBackground>
-          </ImageBackground>
-          <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={onStokePress} style={styles.button}>
-            <Stroke width={14} height={14} />
-          </TouchableOpacity>
-        </View>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={onStokePress} style={styles.button}>
+                <Stroke width={14} height={14} />
+              </TouchableOpacity>
+            </View>
           </>
-
         ) : (
           <></>
         )}
 
-        
-          {/* <TouchableOpacity
+        {/* <TouchableOpacity
             onPress={onHeartPress}
             style={[styles.button, styles.buttonLeft]}>
             <Heart width={16} height={16} />
@@ -142,6 +134,6 @@ const UserCart = (props: userCartProps) => {
       </View>
     </TouchableOpacity>
   );
-}
+};
 
 export default UserCart;
