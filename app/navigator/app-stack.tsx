@@ -71,7 +71,7 @@ export const AppStack = () => {
         name="otpVerify"
         component={SCREENS.OTPverify}
         options={{
-          title: 'Forgot Password',
+          title: 'OTP Verification',
         }}
       />
       <Stack.Screen
@@ -91,7 +91,11 @@ export const AppStack = () => {
 
       <Stack.Screen name="prologue" component={SCREENS.Prologue} />
       <Stack.Screen name="selectCountry" component={SCREENS.SelectCountry} />
-      <Stack.Screen name="phoneLogin" component={SCREENS.PhoneLogin} />
+      <Stack.Screen
+        name="phoneLogin"
+        component={SCREENS.PhoneLogin}
+        options={{headerTitle: 'Phone Login'}}
+      />
 
       <Stack.Screen
         name="createAccount"

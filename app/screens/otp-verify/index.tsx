@@ -32,15 +32,18 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
     try {
       const result = await confirmation.confirm(code);
 
-      console.log('Login done --> ', result)
+      console.log('Login done --> ', result);
+      navigation.navigate('tab', {
+        screen: 'discover',
+      });
     } catch (error) {
       console.log('Invalid code.');
     }
   }
   const setCode = (value: string) => {
     setCodes(prev => {
-        prev[inputting] = value;
-        return prev;
+      prev[inputting] = value;
+      return prev;
     });
     setInputting(inputting + 1);
 
@@ -52,8 +55,8 @@ export const OTPverify: CommonType.AppScreenProps<'otpVerify', Props> = ({
 
   const handleDelete = () => {
     setCodes(prev => {
-        prev[inputting] = '';
-        return prev;
+      prev[inputting] = '';
+      return prev;
     });
 
     if (inputting > 0) {
