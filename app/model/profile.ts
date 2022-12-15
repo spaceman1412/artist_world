@@ -13,5 +13,6 @@ namespace Profile {
     musicRoles: string[];
     gallery: string[];
     about: string;
+    favouriteSong: string;
   }
 }

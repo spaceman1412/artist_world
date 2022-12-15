@@ -15,6 +15,9 @@ import FastImage from 'react-native-fast-image';
 import {styles} from './styles';
 import SizedBox from '@components/sized-box';
 import auth from '@react-native-firebase/auth';
+import PaperPlane from '@assets/images/paper-plane.svg';
+import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import {getSize} from '@utils/responsive';
 
 interface Props {}
 
@@ -32,7 +35,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
   const [data, setData] = useState(undefined);
   const [age, setAge] = useState('');
 
-  const location = data.location || 'Việt Nam';
+  const location = (data && data.location) || 'Việt Nam';
 
   useEffect(() => {
     const getUserData = async () => {
@@ -123,11 +126,19 @@ export const ProfileDetail: CommonType.AppScreenProps<
                     </Text>
                   )}
                 </View>
-                {/* <ThienButton
-                  onPress={() => navigation.navigate('messages')}
+                <ThienButton
+                  onPress={() =>
+                    data.favouriteSong && Linking.openURL(data.favouriteSong)
+                  }
                   style={styles.messageButton}
-                  children={<PaperPlane />}
-                /> */}
+                  children={
+                    <Icon
+                      name="youtube"
+                      size={getSize.v(30)}
+                      color={color.primary}
+                    />
+                  }
+                />
               </View>
               <View marginT-30 row spread centerV>
                 <View>

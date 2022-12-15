@@ -15,6 +15,7 @@ import {
   ScrollView,
   Alert,
   Image,
+  Linking,
 } from 'react-native';
 import storage from '@react-native-firebase/storage';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
@@ -142,6 +143,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
     musicRoles,
     gallery,
     location,
+    favouriteSong: myFavourite,
   } = useAppSelector(state => state.profile);
   console.log(musicInterests);
 
@@ -153,6 +155,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
   const [ubirthDate, setBirthDate] = useState(birthDate);
   const [uabout, setAbout] = useState(about);
   const [loading, setLoading] = useState(false);
+  const [favouriteSong, setFavouriteSong] = useState(myFavourite);
   const dispatch = useAppDispatch();
 
   const handleInterest = () => {
@@ -200,6 +203,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
                 musicRoles: musicRoles,
                 gallery: gallery,
                 location: location,
+                favouriteSong: favouriteSong,
               }),
             );
             setPic(value);
@@ -218,6 +222,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             musicRoles: musicRoles,
             gallery: gallery,
             location: location,
+            favouriteSong: favouriteSong,
           }),
         );
       }
@@ -315,6 +320,17 @@ export const EditProfile: CommonType.EditProfileScreenProps<
                 icon="music-box-multiple"
               />
             </TouchableOpacity>
+          </View>
+
+          <View style={styles.inputContainer}>
+            <TextInputCustom
+              labelStyle={styles.labelTextCustom}
+              label="Your favourite song"
+              value={favouriteSong}
+              icon={'youtube'}
+              onChangeText={text => setFavouriteSong(text)}
+              iconClick={() => Linking.openURL('https://www.youtube.com/')}
+            />
           </View>
 
           <View style={styles.inputContainer}>

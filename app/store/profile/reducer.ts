@@ -14,6 +14,7 @@ export interface ProfileState {
   gallery: string[];
   about: string;
   location: string;
+  favouriteSong: string;
 }
 
 const initialState: ProfileState = {
@@ -27,6 +28,7 @@ const initialState: ProfileState = {
   gallery: [],
   about: '',
   location: '',
+  favouriteSong: '',
 };
 
 export const profileSlice = createSlice({
@@ -73,6 +75,7 @@ export const profileSlice = createSlice({
         sex,
         about,
         location,
+        favouriteSong,
       } = action.payload;
 
       state.avatarUrl = avatarUrl;
@@ -85,6 +88,7 @@ export const profileSlice = createSlice({
       state.about = about;
       state.sex = sex;
       state.location = location;
+      state.favouriteSong = favouriteSong;
     },
     updateDataFirebase: state => {
       console.log('called');
@@ -104,6 +108,7 @@ export const profileSlice = createSlice({
             about: state.about,
             gallery: state.gallery,
             location: state.location,
+            favouriteSong: state.favouriteSong,
           })
           .then(() => console.log('Added'));
       } catch (error) {

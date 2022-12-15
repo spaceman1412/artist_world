@@ -92,6 +92,7 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
           sex: user.sex ? user.sex : 'not',
           about: user.about ? user.about : '',
           location: user.location ? user.location : '',
+          favouriteSong: user.favouriteSong ? user.favouriteSong : '',
         }),
       );
     };

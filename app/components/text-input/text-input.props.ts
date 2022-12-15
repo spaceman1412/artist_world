@@ -8,4 +8,5 @@ export interface TextInputCustomProps extends TextInputProps{
     icon : string,  /// material Icon
     iconColor?: string,
     iconSize?: number;
+    iconClick?: () => void;
 }
