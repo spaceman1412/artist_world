@@ -91,6 +91,7 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
           gallery: user.gallery ? user.gallery : [],
           sex: user.sex ? user.sex : 'not',
           about: user.about ? user.about : '',
+          location: user.location ? user.location : '',
         }),
       );
     };
