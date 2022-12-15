@@ -124,11 +124,11 @@ export const ProfileDetail: CommonType.AppScreenProps<
                     </Text>
                   )}
                 </View>
-                <ThienButton
+                {/* <ThienButton
                   onPress={() => navigation.navigate('messages')}
                   style={styles.messageButton}
                   children={<PaperPlane />}
-                />
+                /> */}
               </View>
               <View marginT-30 row spread centerV>
                 <View>
