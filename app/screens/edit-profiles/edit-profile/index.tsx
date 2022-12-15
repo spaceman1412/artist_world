@@ -328,7 +328,11 @@ export const EditProfile: CommonType.EditProfileScreenProps<
               label="Your favourite song"
               value={favouriteSong}
               icon={'youtube'}
-              onChangeText={text => setFavouriteSong(text)}
+              onChangeText={text => {
+                if (text.includes('https://')) {
+                  setFavouriteSong(text);
+                }
+              }}
               iconClick={() => Linking.openURL('https://www.youtube.com/')}
             />
           </View>
