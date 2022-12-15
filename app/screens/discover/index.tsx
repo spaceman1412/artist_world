@@ -37,7 +37,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   const [location, setLocation] = React.useState('');
   const [distance, setDistance] = React.useState([0]);
   const [userList, setUserList] = React.useState([]);
-  const {matchList} = useAppSelector(state => state.match);
+  const {matchList, fetch} = useAppSelector(state => state.match);
   const locations = [
     {id: '1', label: 'Hanoi'},
     {id: '2', label: 'SaiGon'},
@@ -110,6 +110,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
         if (valueData.exists) {
           const value = valueData.data();
           dispatch(MatchAction.updateMatchList(value.matches));
+          dispatch(MatchAction.updateMatchListFlag(true))
           return value;
         } else {
           dispatch(MatchAction.createNewMatchUser());
@@ -121,55 +122,22 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   
   React.useEffect(() => {
     const fetchData = async () => {
-      const match = await fetchUserMatch();
-      let fetchU = await fetchUser(match);
-      setUserList(fetchU)
+      if(!fetch)
+      {
+        const match = await fetchUserMatch();
+        let fetchU = await fetchUser(match);
+        setUserList(fetchU)
+      }
+      else
+      {
+        let fetchU = await fetchUser(matchList);
+        setUserList(fetchU)
+      }
     
     };
     fetchData().catch(console.error);
   }, []);
 
-  // React.useEffect(() => {
-  //   if (userList.length === 2) {
-  //     firestore()
-  //       .collection('Users')
-  //       .orderBy(firestore.FieldPath.documentId())
-  //       .startAt(userList[1].id.trim())
-  //       .limit(5)
-  //       .get()
-  //       .then(documentSnapshot => {
-  //         documentSnapshot.forEach(userData => {
-  //           let user = userData.data();
-  //           if (
-  //             !matchList.some(
-  //               value =>
-  //                 value === userData.id ||
-  //                 userData.id === auth().currentUser.uid.trim(),
-  //             )
-  //           ) {
-  //             setUserList(prev => [
-  //               ...prev,
-  //               {
-  //                 id: userData.id,
-  //                 name: user.firstName + ' ' + user.lastName,
-  //                 //uncomment this line when have the galary
-  //                 images: user?.gallery ?  
-  //                 [...user?.gallery ,user?.avatarUrl]
-  //                 .map(image => ({uri: image})) 
-  //                 : [{uri: user.avatarUrl}] ,
-  //                 // images: [{uri: user.avatarUrl}],
-  //                 // uncomment when have full user data
-  //                 musicInterests: user.musicInterests,
-  //                 musicRoles: user.musicRoles,
-  //                 age: getAge(user!.birthDate)
-  //                 //
-  //               },
-  //             ]);
-  //           }
-  //         });
-  //       });
-  //   }
-  // }, [userList]);
   
   const checkMatch = async (userId, matchedUserId) => {
     return firestore()

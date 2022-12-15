@@ -4,4 +4,6 @@ export interface userCartProps extends TouchableOpacityProps{
     onHeartPress: () => void,
     onStokePress: () => void,
     userID: string;
+    image : string,
+    name : string,
 }

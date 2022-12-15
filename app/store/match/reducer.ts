@@ -5,10 +5,12 @@ import auth from '@react-native-firebase/auth';
 
 export interface MatchState {
     matchList: string[],
+    fetch: boolean,
 }
 
 const initialState : MatchState = {
-    matchList: []
+    matchList: [],
+    fetch: false,
 }
 
 export const matchSlice = createSlice({
@@ -20,6 +22,9 @@ export const matchSlice = createSlice({
         },
         addMatchList:(state, action: PayloadAction<string>) =>{
             state.matchList = [action.payload,...state.matchList]
+        },
+        updateMatchListFlag :(state, action: PayloadAction<boolean>) =>{
+            state.fetch = action.payload
         },
         updateDataFirebase: state =>{
             const uid = auth().currentUser.uid.trim()
