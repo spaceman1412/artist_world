@@ -65,6 +65,7 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
             lastName: lastName,
             birthDate: birthDate,
             avatarUrl: url,
+            location: location,
           };
           dispatcher(ProfileActions.updateBasicInfo(data));
           navigation.navigate('sexSelect');
