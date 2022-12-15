@@ -79,6 +79,7 @@ export const AppStack = () => {
         component={ProfileStack}
         options={{
           headerShown: false,
+          headerTitle: 'Profile Details',
         }}
       />
       <Stack.Screen
@@ -126,6 +127,12 @@ export const AppStack = () => {
         name="editProfiles"
         component={EditProfileStack}
         options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="selectCity"
+        component={SCREENS.SelectCity}
+        options={{headerTitle: 'Select City'}}
       />
     </Stack.Navigator>
   );

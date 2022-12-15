@@ -15,8 +15,9 @@ import SizedBox from '@components/sized-box';
 import storage from '@react-native-firebase/storage';
 import {styles} from '../style';
 import auth from '@react-native-firebase/auth';
-import {useAppDispatch} from '@store/hook';
+import {useAppDispatch, useAppSelector} from '@store/hook';
 import {ProfileActions} from '@store/profile/reducer';
+import {color} from '@theme';
 
 interface Props {}
 
@@ -29,6 +30,8 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
   const [birthDate, setBirthDate] = React.useState('Choose your birth date');
   const uid = auth().currentUser.uid;
   const dispatcher = useAppDispatch();
+
+  const location = useAppSelector(state => state.profile.location);
 
   const [dateTimePicker, setDateTimePicker] = React.useState(false);
 
@@ -119,6 +122,14 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
             />
           </View>
         </View>
+
+        <Button
+          style={styles.birthdayButton}
+          textStyle={{color: color.palette.Blue30, fontSize: 16}}
+          text={location || 'Choose Your City'}
+          onPress={() => navigation.navigate('selectCity')}
+        />
+
         <TouchableOpacity
           style={styles.birthdayButton}
           onPress={() => setDateTimePicker(true)}>
@@ -130,6 +141,7 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
           style={styles.buttonConfirmStyle}
           onPress={onConfirm}
         />
+
         <DateTimePicker
           visible={dateTimePicker}
           onSave={value => {

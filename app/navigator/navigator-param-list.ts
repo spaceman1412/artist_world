@@ -19,6 +19,7 @@ export type AppNavigatorParamList = {
   findOutMatch: undefined;
   matchList: undefined;
   editProfiles: undefined;
+  selectCity: undefined;
 };
 
 export type ProfileDetailsNavigatorParamList = {

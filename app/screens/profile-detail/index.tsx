@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {CommonType} from '@utils/types';
 import {color} from '@theme';
 import GlobalStyles from '@theme/styles/global-style';
-import {ScrollView, StyleSheet, FlatList} from 'react-native';
+import {ScrollView, StyleSheet, FlatList, Linking} from 'react-native';
 import BackIcon from '@assets/images/back-arrow.svg';
 import PaperPlane from '@assets/images/paper-plane.svg';
 import Location from '@assets/images/location.svg';
@@ -33,6 +33,8 @@ export const ProfileDetail: CommonType.AppScreenProps<
   const [data, setData] = useState(undefined);
   const [age, setAge] = useState('');
 
+  const location = data.location || 'Việt Nam';
+
   useEffect(() => {
     const getUserData = async () => {
       const res = await firestore().collection('Users').doc(uid).get();
@@ -53,6 +55,13 @@ export const ProfileDetail: CommonType.AppScreenProps<
       }
     }
   }, [data]);
+
+  const handleGoogleMaps = () => {
+    const queryLocationName = location.replace(' ', '+');
+
+    const url = `https://www.google.com/maps/search/?api=1&query=${queryLocationName}`;
+    Linking.openURL(url);
+  };
 
   //FIXME: The ScrollView cannot be resized on content changing
   return (
@@ -127,7 +136,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
                     Location
                   </Text>
                   <Text text80 style={styles.secondaryText}>
-                    Chicago, IL United States
+                    {location}
                   </Text>
                 </View>
                 <Button
@@ -138,7 +147,8 @@ export const ProfileDetail: CommonType.AppScreenProps<
                     <View marginR-4 children={<Location />} />
                   )}
                   borderRadius={7}
-                  label="1 km"
+                  onPress={handleGoogleMaps}
+                  label="Google Maps"
                   style={styles.locationButton}
                   labelStyle={styles.mainText}
                 />

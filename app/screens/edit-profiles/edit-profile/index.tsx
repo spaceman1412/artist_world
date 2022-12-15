@@ -16,9 +16,7 @@ import {
   Alert,
   Image,
 } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import auth from '@react-native-firebase/auth';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import {useAppDispatch, useAppSelector} from '@store/hook';
 import {ProfileActions} from '@store/profile/reducer';
@@ -119,7 +117,6 @@ export const EditProfile: CommonType.EditProfileScreenProps<
   'editProfile',
   Props
 > = ({navigation}) => {
-
   const genderList = [
     {
       id: '1',
@@ -131,7 +128,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
     },
     {
       id: '3',
-      label: "not",
+      label: 'not',
     },
   ];
   const {
@@ -140,13 +137,13 @@ export const EditProfile: CommonType.EditProfileScreenProps<
     lastName,
     sex,
     about,
-    birthDate, 
+    birthDate,
     musicInterests,
     musicRoles,
-    gallery
-  } = useAppSelector(state => state.profile)
-    console.log(musicInterests);
-    
+    gallery,
+  } = useAppSelector(state => state.profile);
+  console.log(musicInterests);
+
   const [pic, setPic] = useState(avatarUrl);
   const [ufirstName, setFirstName] = useState(firstName);
   const [ulastName, setLastName] = useState(lastName);
@@ -156,6 +153,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
   const [uabout, setAbout] = useState(about);
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
+
   const handleInterest = () => {
     navigation.push('editInterest', {interests: musicInterests});
   };
@@ -163,7 +161,6 @@ export const EditProfile: CommonType.EditProfileScreenProps<
     navigation.navigate('editRole', {roles: musicRoles});
   };
   const handleChangeAvatar = value => {
-   
     setPic(value);
   };
   const handleGallery = () => {
@@ -175,56 +172,58 @@ export const EditProfile: CommonType.EditProfileScreenProps<
     var picRef = parts[parts.length - 1];
     const ref = storage().ref(picRef);
     await ref.putFile(picture);
-    return storage().ref(picRef).getDownloadURL().then(
-      value => value
-      
-    );
+    return storage()
+      .ref(picRef)
+      .getDownloadURL()
+      .then(value => value);
   };
-  console.log(gender);
-  
+  console.log(pic);
+
   const handleSaveChange = () => {
-    setLoading(true)
+    setLoading(true);
     const sendData = async () => {
       if (!pic.includes('https')) {
         await postPic(pic)
           .then(value => {
             console.log(value);
-            
-            dispatch(ProfileActions.updateUserFullInfo({
-              avatarUrl: value,
-              firstName: ufirstName,
-              lastName: ulastName,
-              birthDate: ubirthDate,
-              about: uabout,
-              sex: gender,
-              musicInterests: musicInterests,
-              musicRoles: musicRoles,
-              gallery: gallery,
-            }))
+
+            dispatch(
+              ProfileActions.updateUserFullInfo({
+                avatarUrl: value,
+                firstName: ufirstName,
+                lastName: ulastName,
+                birthDate: ubirthDate,
+                about: uabout,
+                sex: gender,
+                musicInterests: musicInterests,
+                musicRoles: musicRoles,
+                gallery: gallery,
+              }),
+            );
             setPic(value);
           })
           .catch(console.error);
       } else {
         dispatch(
           ProfileActions.updateUserFullInfo({
-              avatarUrl: pic,
-              firstName: ufirstName,
-              lastName: ulastName,
-              birthDate: ubirthDate,
-              about: uabout,
-              sex: gender,
-              musicInterests: musicInterests,
-              musicRoles: musicRoles,
-              gallery: gallery,
+            avatarUrl: pic,
+            firstName: ufirstName,
+            lastName: ulastName,
+            birthDate: ubirthDate,
+            about: uabout,
+            sex: gender,
+            musicInterests: musicInterests,
+            musicRoles: musicRoles,
+            gallery: gallery,
           }),
         );
       }
     };
     if (ufirstName.trim() !== '' && ulastName.trim() !== '') {
       sendData()
-        .then(() => 
-        {
-          dispatch(ProfileActions.updateDataFirebase())})
+        .then(() => {
+          dispatch(ProfileActions.updateDataFirebase());
+        })
         .finally(() => {
           setLoading(false);
           navigation.goBack();
@@ -239,8 +238,6 @@ export const EditProfile: CommonType.EditProfileScreenProps<
       ]);
     }
   };
-
-  
 
   return (
     <>

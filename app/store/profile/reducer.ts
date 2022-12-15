@@ -13,6 +13,7 @@ export interface ProfileState {
   musicRoles: string[];
   gallery: string[];
   about: string;
+  location: string;
 }
 
 const initialState: ProfileState = {
@@ -23,8 +24,9 @@ const initialState: ProfileState = {
   sex: 'man',
   musicInterests: [],
   musicRoles: [],
-  gallery : [],
+  gallery: [],
   about: '',
+  location: '',
 };
 
 export const profileSlice = createSlice({
@@ -32,11 +34,13 @@ export const profileSlice = createSlice({
   initialState,
   reducers: {
     updateBasicInfo: (state, action: PayloadAction<Profile.BasicInfo>) => {
-      const {lastName, firstName, avatarUrl, birthDate} = action.payload;
+      const {lastName, firstName, avatarUrl, birthDate, location} =
+        action.payload;
       state.avatarUrl = avatarUrl;
       state.firstName = firstName;
       state.lastName = lastName;
       state.birthDate = birthDate;
+      state.location = location;
     },
     updateSex: (state, action: PayloadAction<'man' | 'woman' | 'not'>) => {
       state.sex = action.payload;
@@ -47,35 +51,39 @@ export const profileSlice = createSlice({
     updateMusicRoles: (state, action: PayloadAction<string[]>) => {
       state.musicRoles = action.payload;
     },
-    updateGallery:(state, action: PayloadAction<string[]>) =>{
+    updateGallery: (state, action: PayloadAction<string[]>) => {
       state.gallery = action.payload;
     },
-    updateAbout:(state, action: PayloadAction<string>) =>{
+    updateAbout: (state, action: PayloadAction<string>) => {
       state.about = action.payload;
     },
-    updateUserFullInfo :(state, action: PayloadAction<Profile.UserInfo>) =>{
+
+    updateLocation: (state, action: PayloadAction<string>) => {
+      state.location = action.payload;
+    },
+    updateUserFullInfo: (state, action: PayloadAction<Profile.UserInfo>) => {
       const {
-      lastName,
-      firstName,
-      avatarUrl,
-      birthDate,
-      musicInterests,
-      musicRoles,
-      gallery,
-      sex,
-      about} = action.payload;
+        lastName,
+        firstName,
+        avatarUrl,
+        birthDate,
+        musicInterests,
+        musicRoles,
+        gallery,
+        sex,
+        about,
+      } = action.payload;
 
       state.avatarUrl = avatarUrl;
       state.firstName = firstName;
       state.lastName = lastName;
       state.birthDate = birthDate;
-      state.musicInterests= musicInterests;
+      state.musicInterests = musicInterests;
       state.musicRoles = musicRoles;
       state.gallery = gallery;
       state.about = about;
       state.sex = sex;
-    }
-    ,
+    },
     updateDataFirebase: state => {
       console.log('called');
       const uid = auth().currentUser.uid;
@@ -93,54 +101,47 @@ export const profileSlice = createSlice({
             musicRoles: state.musicRoles,
             about: state.about,
             gallery: state.gallery,
+            location: state.location,
           })
           .then(() => console.log('Added'));
       } catch (error) {
         console.log(error);
       }
     },
-    updateInterestFirebase : state =>{
+    updateInterestFirebase: state => {
       const uid = auth().currentUser.uid;
-      try{
-        firestore()
-        .collection('Users')
-        .doc(uid)
-        .update({
-          musicInterests: state.musicInterests
-        })
-      }
-      catch{console.error();
+      try {
+        firestore().collection('Users').doc(uid).update({
+          musicInterests: state.musicInterests,
+        });
+      } catch {
+        console.error();
       }
     },
-    updateRolesFirebase : state =>{
+    updateRolesFirebase: state => {
       const uid = auth().currentUser.uid;
-      try{
-        firestore()
-        .collection('Users')
-        .doc(uid)
-        .update({
-          musicRoles: state.musicRoles
-        })
-      }
-      catch{console.error();
+      try {
+        firestore().collection('Users').doc(uid).update({
+          musicRoles: state.musicRoles,
+        });
+      } catch {
+        console.error();
       }
     },
-    updateGalleryFirebase : state =>{
+    updateGalleryFirebase: state => {
       const uid = auth().currentUser.uid;
-      try{
+      try {
         firestore()
-        .collection('Users')
-        .doc(uid)
-        .update({
-          gallery: state.gallery
-        })
-        .then(() => console.log('done')
-        )
-      }
-      catch{console.error();
+          .collection('Users')
+          .doc(uid)
+          .update({
+            gallery: state.gallery,
+          })
+          .then(() => console.log('done'));
+      } catch {
+        console.error();
       }
     },
-
   },
 });
 
