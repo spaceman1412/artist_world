@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {CommonType} from '@utils/types';
 import SizedBox from '@components/sized-box';
@@ -39,6 +40,10 @@ export const CreateAccount: CommonType.AppScreenProps<
   };
 
   const create = () => {
+    if (email.trim() === '' || password.trim() === '') {
+      Alert.alert('Please enter your email address/ password');
+      return;
+    }
     auth()
       .createUserWithEmailAndPassword(email.trim(), password.trim())
       .then(() => {
