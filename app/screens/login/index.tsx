@@ -88,30 +88,38 @@ interface Props {}
 export const Login: CommonType.AppScreenProps<'login', Props> = ({
   navigation,
 }) => {
-  React.useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '608291050737-0iuis5p9hjqpr9mk4s7kn8qaq3vha74k.apps.googleusercontent.com',
-    });
-  }, []);
   async function onGoogleButtonPress() {
     try {
       // Check if your device supports Google Play
-      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-      // Get the users ID token
-      const {idToken} = await GoogleSignin.signIn();
+      GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true}).then(
+        async value => {
+          if (value) {
+            // Get the users ID token
+            const {idToken} = await GoogleSignin.signIn();
 
-      // Create a Google credential with the token
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            // Create a Google credential with the token
+            const googleCredential = await auth.GoogleAuthProvider.credential(
+              idToken,
+            );
 
-      // Sign-in the user with the credential
-      await auth()
-        .signInWithCredential(googleCredential)
-        .then(() => navigation.navigate('profileDetails'));
+            // Sign-in the user with the credential
+            const userCedential = await auth().signInWithCredential(
+              googleCredential,
+            );
+
+            if (userCedential.user) {
+              navigation.navigate('tab', {
+                screen: 'discover',
+              });
+            }
+          }
+        },
+      );
     } catch (e) {
       console.log(e);
     }
   }
+
   return (
     <View style={styles.container}>
       <LoginIcon />
@@ -141,7 +149,7 @@ export const Login: CommonType.AppScreenProps<'login', Props> = ({
       <View style={styles.otherLoginContainer}>
         <Button
           preset="outline"
-          onPress={() => onGoogleButtonPress()}
+          onPress={onGoogleButtonPress}
           style={styles.otherLoginButton}>
           <Google />
         </Button>
