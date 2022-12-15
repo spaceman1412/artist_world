@@ -27,12 +27,12 @@ export const MessageBox = (props: MessageBoxProps) => {
         .collection('chat-messages')
         .doc(roomId.trim())
         .onSnapshot(value => {
-          const message = value.data()
-          setLastMessage(message.lastMessage)
-        })
-    }
-    getLastMessage().catch(console.error)
-  },[])
+          const message = value.data();
+          setLastMessage(message.lastMessage);
+        });
+    };
+    getLastMessage().catch(console.error);
+  }, []);
   return (
     <View style={styles.container}>
       <TouchableOpacity>
@@ -44,7 +44,10 @@ export const MessageBox = (props: MessageBoxProps) => {
               color.palette.purple,
             ]}
             style={styles.imageWrapper}>
-            <FastImage source={image} style={styles.image} />
+            <FastImage
+              source={image || images.placeholder}
+              style={styles.image}
+            />
           </LinearGradient>
         ) : (
           <View style={styles.imageWrapper}>
@@ -56,8 +59,7 @@ export const MessageBox = (props: MessageBoxProps) => {
           </View>
         )}
       </TouchableOpacity>
-      <TouchableOpacity style={styles.info}
-      onPress={onPress}>
+      <TouchableOpacity style={styles.info} onPress={onPress}>
         <View style={styles.content}>
           <Text style={[styles.text, styles.username]} numberOfLines={1}>
             {username}
@@ -70,9 +72,7 @@ export const MessageBox = (props: MessageBoxProps) => {
         </View>
         <View style={styles.content}>
           <Text style={styles.text} numberOfLines={1}>
-            
-            {lastMessage !== null ? 
-            lastMessage.text : null}
+            {lastMessage !== null ? lastMessage.text : null}
           </Text>
           {unreadCount > 0 && (
             <View style={styles.unread}>

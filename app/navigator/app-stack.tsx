@@ -107,14 +107,16 @@ export const AppStack = () => {
       <Stack.Screen
         name="messages"
         component={SCREENS.Messages}
-        options={{headerShown: false}}
+        options={{
+          headerTitle: 'Messages',
+        }}
       />
       <Stack.Screen name="discover" component={SCREENS.Discover} />
       <Stack.Screen name="profile" component={SCREENS.Profile} />
       <Stack.Screen
         name="profileDetail"
         component={SCREENS.ProfileDetail}
-        options={{headerShown: false}}
+        options={{headerShown: false, headerTitle: 'Profile Detail'}}
       />
       <Stack.Screen
         name="editProfiles"

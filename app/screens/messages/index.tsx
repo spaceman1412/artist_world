@@ -1,4 +1,4 @@
-import { MessageBox} from '@components';
+import {MessageBox} from '@components';
 import {CommonType} from '@utils/types';
 import * as React from 'react';
 import {
@@ -91,8 +91,7 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
   const typingTimeOut = React.useRef<any>();
   const [search, setSearch] = React.useState('');
   const [listUserfilter, setListUserFiler] = React.useState([]);
-  const handleChangeSearch = (e: any) => {  
-    
+  const handleChangeSearch = (e: any) => {
     if (typingTimeOut.current) {
       clearTimeout(typingTimeOut.current);
     }
@@ -107,12 +106,12 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
             .includes(search.toLowerCase().trim());
         }
       });
-      
+
       setListUserFiler(filter);
     }, 600);
     setSearch(e);
   };
-  
+
   React.useEffect(() => {
     const getData = async () => {
       const res = await firestore()
@@ -196,7 +195,7 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
           <Text style={styles.title}>Your DMs</Text>
           <View style={styles.messageList}>
             <FlatList
-              data={ search.trim() === '' ? roomchat : listUserfilter}
+              data={search.trim() === '' ? roomchat : listUserfilter}
               extraData={search}
               style={styles.messageList}
               renderItem={({item}) => (

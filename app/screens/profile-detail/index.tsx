@@ -23,6 +23,10 @@ const getAge = (date: string) => {
   const today = new Date();
   const birthDate = new Date(date);
 
+  // if (date) {
+  //   return '';
+  // }
+
   return today.getFullYear() - birthDate.getFullYear();
 };
 
@@ -167,7 +171,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
                 </View>
               )}
 
-              {data.gallery && (
+              {data?.gallery?.length > 0 && (
                 <View marginT-20>
                   <View flex>
                     <View row spread>

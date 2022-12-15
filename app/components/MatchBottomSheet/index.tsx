@@ -32,7 +32,7 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
   const userImage = images.man;
   const matchImage = images.girl;
   const [disbaleOnPress, setDisableOnPress] = useState(false);
-  
+
   const createNewMessageRoom = userId => {
     setDisableOnPress(true);
     const authUser = auth().currentUser.uid.trim();
@@ -57,10 +57,13 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
       await addNewMessageRoom(userId, postReference.id.trim());
       // navigation.navigate('messages')
     });
-    sendMessage.then(() => navigation.navigate('messages'))
-    .finally(hide)
+    sendMessage
+      .then(() => {
+        setTimeout(() => navigation.navigate('messages'), 2000);
+      })
+      .finally(hide);
   };
-  
+
   const addNewMessageRoom = async (userId: string, idRoom: string) => {
     const getUserRoom = await firestore()
       .doc(`user-chat/${userId.trim()}`)
@@ -71,8 +74,7 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
         .doc(userId.trim())
         .set({
           roomId: [idRoom],
-        })
-        ;
+        });
     } else {
       firestore()
         .collection('user-chat')

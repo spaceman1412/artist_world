@@ -41,6 +41,7 @@ export const TabStack = () => {
         component={SCREENS.MatchList}
         options={{headerShown: false}}
       />
+
       <Tab.Screen
         name="messages"
         component={SCREENS.Messages}
