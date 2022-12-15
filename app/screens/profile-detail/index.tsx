@@ -19,17 +19,6 @@ import auth from '@react-native-firebase/auth';
 
 interface Props {}
 
-const getAge = (date: string) => {
-  const today = new Date();
-  const birthDate = new Date(date);
-
-  // if (date) {
-  //   return '';
-  // }
-
-  return today.getFullYear() - birthDate.getFullYear();
-};
-
 const GalleryImage = ({item, index}) => {
   return (
     <FastImage key={item} source={{uri: item}} style={styles.galleryImage} />
@@ -42,6 +31,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
 > = ({navigation, route}) => {
   const uid = route.params?.uid || auth().currentUser.uid;
   const [data, setData] = useState(undefined);
+  const [age, setAge] = useState('');
 
   useEffect(() => {
     const getUserData = async () => {
@@ -51,7 +41,18 @@ export const ProfileDetail: CommonType.AppScreenProps<
     };
 
     getUserData().catch(console.error);
-  });
+  }, []);
+
+  useEffect(() => {
+    if (data && data.birthDate) {
+      const today = new Date();
+      const birthDate = new Date(data.birthDate);
+
+      if (today.getFullYear() - birthDate.getFullYear() > 0) {
+        setAge(`${today.getFullYear() - birthDate.getFullYear()}`);
+      }
+    }
+  }, [data]);
 
   //FIXME: The ScrollView cannot be resized on content changing
   return (
@@ -106,9 +107,7 @@ export const ProfileDetail: CommonType.AppScreenProps<
               <View row spread flex>
                 <View>
                   <Text text50>
-                    {`${data.firstName} ${data.lastName}, ${getAge(
-                      data.birthDate,
-                    )}`}
+                    {`${data.firstName} ${data.lastName} ${age}`}
                   </Text>
                   {data.musicRoles && (
                     <Text text80 style={styles.secondaryText} numberOfLines={1}>
