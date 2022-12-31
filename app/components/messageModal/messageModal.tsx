@@ -15,6 +15,7 @@ import FastImage from 'react-native-fast-image';
 import auth from '@react-native-firebase/auth';
 import { LoaderScreen } from 'react-native-ui-lib';
 import { images } from '@assets/images';
+import { useNavigation } from '@react-navigation/native';
 
 const MessageModal = (props: MessageModalProps) =>{
     const {
@@ -22,8 +23,10 @@ const MessageModal = (props: MessageModalProps) =>{
         onclose,
         ...rest
     } = props
+
     const [messages, setMessages] = React.useState([])
     const [loading, setLoading] = React.useState(true);
+    const navigation = useNavigation();
     React.useLayoutEffect(() => {
         const getData =
             firestore()
@@ -94,7 +97,10 @@ const MessageModal = (props: MessageModalProps) =>{
             </TouchableOpacity>
                 <View style={styles.container}>
                     <View style={styles.wrapper}>
+                    <TouchableOpacity onPress={() => {navigation.navigate('profileDetail', {uid: room.id}); onclose()}}>
+
                     <View style={styles.header}>
+
                     <FastImage
                     onLoadEnd={() => setLoading(false)}
                     source={loading ? images.placeholder : room.avatar}
@@ -106,7 +112,10 @@ const MessageModal = (props: MessageModalProps) =>{
                             <Text style={styles.statusText}>Online</Text>
                         </View>
                     </View>
+
                     </View>
+                    </TouchableOpacity>
+
                     {
                         room !== null ?
                         <GiftedChat

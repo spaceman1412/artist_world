@@ -149,12 +149,14 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
             : uid[0].trim();
         const postRef = firestore().doc(`Users/${id}`);
         const user = await transaction.get(postRef);
+
         setRoomChats(prev => [
           ...prev,
           {
             userName: user.data().firstName + ' ' + user.data().lastName,
             avatar: {uri: user.data().avatarUrl},
             roomId: roomId.trim(),
+            id: id,
           },
         ]);
       });
@@ -169,6 +171,7 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
   const onCloseModal = () => {
     setModal(false);
   };
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -198,16 +201,20 @@ export const Messages: CommonType.AppScreenProps<'messages', Props> = ({
               data={search.trim() === '' ? roomchat : listUserfilter}
               extraData={search}
               style={styles.messageList}
-              renderItem={({item}) => (
-                <MessageBox
-                  roomId={item.roomId}
-                  image={item.avatar}
-                  username={item.userName}
-                  unreadCount={item.unread}
-                  hasStory={item.story}
-                  onPress={() => onOpenModal(item)}
-                />
-              )}
+              renderItem={({item}) => {
+                console.log(item);
+                return (
+                  <MessageBox
+                    roomId={item.roomId}
+                    image={item.avatar}
+                    username={item.userName}
+                    unreadCount={item.unread}
+                    hasStory={item.story}
+                    userId={item.id}
+                    onPress={() => onOpenModal(item)}
+                  />
+                );
+              }}
             />
           </View>
         </View>

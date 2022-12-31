@@ -7,6 +7,7 @@ import * as React from 'react';
 import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
 import {images} from '@assets/images';
+import {useNavigation} from '@react-navigation/native';
 
 export const MessageBox = (props: MessageBoxProps) => {
   const {
@@ -16,9 +17,11 @@ export const MessageBox = (props: MessageBoxProps) => {
     unreadCount = 0,
     roomId,
     onPress,
+    userId,
   } = props;
   const [lastMessage, setLastMessage] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const navigation = useNavigation();
   React.useLayoutEffect(() => {
     const getLastMessage = async () => {
       firestore()
@@ -31,9 +34,15 @@ export const MessageBox = (props: MessageBoxProps) => {
     };
     getLastMessage().catch(console.error);
   }, []);
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('profileDetail', {
+            uid: userId,
+          })
+        }>
         {hasStory ? (
           <LinearGradient
             colors={[
