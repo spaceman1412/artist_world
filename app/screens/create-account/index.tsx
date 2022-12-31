@@ -58,14 +58,14 @@ export const CreateAccount: CommonType.AppScreenProps<
           });
           setEmail('');
           setPassword('');
-          console.log('That email address is already in use!');
+          Alert.alert('That email address is already in use!');
         }
 
         if (error.code === 'auth/invalid-email') {
           setError({isError: true, message: 'That email address is invalid!'});
           setEmail('');
           setPassword('');
-          console.log('That email address is invalid!');
+          Alert.alert('That email address is invalid!');
         }
 
         console.error(error);

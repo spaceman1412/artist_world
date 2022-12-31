@@ -29,8 +29,5 @@ export const Card = (props: CardProps) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    Zindex: 10,
-    position: 'absolute',
-  },
+  container: {},
 });
