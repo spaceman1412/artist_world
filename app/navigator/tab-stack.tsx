@@ -34,12 +34,12 @@ export const TabStack = () => {
       <Tab.Screen
         name="discover"
         component={SCREENS.Discover}
-        options={{headerShown: false, unmountOnBlur: true}}
+        options={{headerShown: false}}
       />
       <Tab.Screen
         name="matchList"
         component={SCREENS.MatchList}
-        options={{headerShown: false, unmountOnBlur: true}}
+        options={{headerShown: false}}
       />
 
       <Tab.Screen

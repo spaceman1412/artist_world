@@ -6,8 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import * as React from 'react';
 import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
-import { images } from '@assets/images';
-
+import {images} from '@assets/images';
 
 export const MessageBox = (props: MessageBoxProps) => {
   const {
@@ -18,12 +17,11 @@ export const MessageBox = (props: MessageBoxProps) => {
     roomId,
     onPress,
   } = props;
-  const [lastMessage, setLastMessage] = React.useState(null)
+  const [lastMessage, setLastMessage] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
-  React.useLayoutEffect(() =>{
-    const getLastMessage = async () =>
-    {
-        firestore()
+  React.useLayoutEffect(() => {
+    const getLastMessage = async () => {
+      firestore()
         .collection('chat-messages')
         .doc(roomId.trim())
         .onSnapshot(value => {
@@ -52,10 +50,10 @@ export const MessageBox = (props: MessageBoxProps) => {
         ) : (
           <View style={styles.imageWrapper}>
             <FastImage
-            onLoadEnd={() => setLoading(false)}
-    
-            source={loading ? images.placeholder : image} 
-            style={styles.image} />
+              onLoadEnd={() => setLoading(false)}
+              source={loading ? images.placeholder : image}
+              style={styles.image}
+            />
           </View>
         )}
       </TouchableOpacity>
@@ -98,7 +96,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: spacing.small,
     borderBottomWidth: size.XXS,
-    borderBottomColor: color.palette.mischka,
+    backgroundColor: color.palette.mischka,
+    padding: 10,
+    borderRadius: 10,
   },
   content: {
     flexDirection: 'row',

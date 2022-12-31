@@ -18,7 +18,6 @@ import FastImage from 'react-native-fast-image';
 import {styles} from './styles';
 import SizedBox from '@components/sized-box';
 import GlobalStyles from '@theme/styles/global-style';
-import {getSize} from '@utils/responsive';
 import {useState} from 'react';
 import {LoaderScreen} from 'react-native-ui-lib';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -47,6 +46,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   ];
   const {width} = Dimensions.get('screen');
   const dispatch = useAppDispatch();
+  const cardRef = React.useRef();
   const getAge = (date: string) => {
     const today = new Date();
     const birthDate = new Date(date);
@@ -91,6 +91,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
         )}
 
         <TinderCard
+          ref={cardRef}
           onSwipe={direction => swiped(direction, user.id)}
           onCardLeftScreen={outOfFrame}
           preventSwipe={['top', 'bottom']}>
@@ -274,7 +275,9 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
 
       <View style={styles.footer}>
         <Button
-          onPress={() => {}}
+          onPress={() => {
+            swiped('left', userList[0].id);
+          }}
           style={[styles.circleButton, styles.passButton]}>
           <Stroke />
         </Button>
@@ -282,7 +285,9 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           <Heart />
         </Button>
         <Button
-          onPress={() => {}}
+          onPress={() => {
+            swiped('right', userList[0].id);
+          }}
           style={[styles.circleButton, styles.starButton]}>
           <Star />
         </Button>
