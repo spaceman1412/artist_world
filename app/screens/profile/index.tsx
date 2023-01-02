@@ -99,8 +99,6 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
       );
     };
     getUsers();
-
-    console.log('render');
   }, []);
 
   const handleLogout = async () => {

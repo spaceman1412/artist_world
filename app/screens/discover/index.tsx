@@ -54,8 +54,6 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
     return today.getFullYear() - birthDate.getFullYear();
   };
 
-  console.log(auth().currentUser.uid);
-
   const swiped = (direction, userId) => {
     if (direction === 'right') {
       handleMatch(userId);

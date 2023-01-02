@@ -15,7 +15,6 @@ const Stack = createStackNavigator<AppNavigatorParamList>();
 export const AppStack = () => {
   const [loginRoute, setLoginRoute] = React.useState();
   const initialRouteName = auth().currentUser ? loginRoute : 'login';
-  console.log(auth().currentUser);
 
   React.useEffect(() => {
     const getUserData = async () => {

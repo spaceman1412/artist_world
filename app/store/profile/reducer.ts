@@ -91,7 +91,6 @@ export const profileSlice = createSlice({
       state.favouriteSong = favouriteSong;
     },
     updateDataFirebase: state => {
-      console.log('called');
       const uid = auth().currentUser.uid;
       try {
         firestore()

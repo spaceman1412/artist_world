@@ -101,7 +101,6 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
       uid: userId,
     });
   };
-  console.log('render');
 
   return (
     <SafeAreaView style={styles.container}>
