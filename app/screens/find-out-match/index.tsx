@@ -58,7 +58,7 @@ export const FindOutMatch: CommonType.AppScreenProps<'findOutMatch', Props> = ({
         </View>
         <Text style={styles.headerText}>It's a match, {user}</Text>
         <Text style={styles.bodyText}>
-          start a conversation with eachother!
+          start a conversation with each other!
         </Text>
         <Button
           text="Say hello"

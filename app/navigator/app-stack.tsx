@@ -12,29 +12,27 @@ import {color} from '@theme/color';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 
+const checkUserDatabase = async () => {
+  // Check if user has in database or not
+  const uid = await auth().currentUser.uid;
+
+  const res = await firestore().collection('Users').doc(uid).get();
+
+  if (res.data()) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export const AppStack = () => {
-  const [loginRoute, setLoginRoute] = React.useState();
-  const initialRouteName = auth().currentUser ? loginRoute : 'login';
+  const initialRouteName = auth().currentUser
+    ? checkUserDatabase()
+      ? 'tab'
+      : 'profileDetails'
+    : 'login';
 
-  React.useEffect(() => {
-    const getUserData = async () => {
-      const uid = await auth().currentUser.uid;
-
-      const res = await firestore().collection('Users').doc(uid).get();
-
-      console.log(res.data());
-
-      if (res.data()) {
-        setLoginRoute('tab');
-      } else {
-        setLoginRoute('profileDetails');
-      }
-    };
-
-    getUserData().catch(console.error);
-  });
-
-  return !loginRoute && auth().currentUser ? (
+  return auth().currentUser ? (
     <LoaderScreen message="Happy waiting..." color={color.primary} />
   ) : (
     <Stack.Navigator initialRouteName={initialRouteName}>
