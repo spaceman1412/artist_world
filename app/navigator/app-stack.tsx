@@ -7,8 +7,6 @@ import auth from '@react-native-firebase/auth';
 import {TabStack} from './tab-stack';
 import {EditProfileStack} from './edit-profile-stack';
 import firestore from '@react-native-firebase/firestore';
-import {LoaderScreen} from 'react-native-ui-lib';
-import {color} from '@theme/color';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 
@@ -32,9 +30,7 @@ export const AppStack = () => {
       : 'profileDetails'
     : 'login';
 
-  return auth().currentUser ? (
-    <LoaderScreen message="Happy waiting..." color={color.primary} />
-  ) : (
+  return (
     <Stack.Navigator initialRouteName={initialRouteName}>
       <Stack.Screen
         name="tab"
