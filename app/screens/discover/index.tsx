@@ -146,10 +146,6 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           results.push({
             id: userData.id,
             name: user.firstName + ' ' + user.lastName,
-            // images: user?.gallery ?
-            // [...user?.gallery ,user?.avatarUrl]
-            // .map(image => ({uri: image}))
-            // : [{uri: user.avatarUrl}] ,
             images: [{uri: user.avatarUrl}],
             musicInterests: user!.musicInterests,
             musicRoles: user!.musicRoles,
@@ -240,11 +236,6 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Discover</Text>
-        {/* <Button
-          onPress={() => setModalVisible(true)}
-          style={styles.buttonHeader}>
-          <FilterIcon />
-        </Button> */}
       </View>
 
       {userList.length > 0 ? (

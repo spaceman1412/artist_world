@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 40,
+    paddingVertical: 20,
   },
   headerButton: {
     justifyContent: 'center',
@@ -59,6 +60,8 @@ export const styles = StyleSheet.create({
     color: color.storybookTextColor,
     marginTop: -8,
     justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   inputLabel: {
     fontSize: 12,

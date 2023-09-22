@@ -1,22 +1,23 @@
 import {StyleSheet, Text, View} from 'react-native';
-import {
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import {ScrollView, TextInput, TouchableOpacity, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import flags from '@components/flag/flags';
 import * as React from 'react';
 import Country from './country/country';
-import { CommonType } from '@utils/types';
-import { color } from '@theme';
-import {images} from '@assets/images'
-import { Button } from '@components';
-interface Props{}
-export const SelectCountry: CommonType.AppScreenProps<'selectCountry', Props> = 
-({navigation}) => {
-  const [countrySelection, setCountrySelection] = React.useState({flagNumber: '', flagCode: ''});
+import {CommonType} from '@utils/types';
+import {color} from '@theme';
+import {images} from '@assets/images';
+import {Button} from '@components';
+interface Props {}
+
+export const SelectCountry: CommonType.AppScreenProps<
+  'selectCountry',
+  Props
+> = ({navigation}) => {
+  const [countrySelection, setCountrySelection] = React.useState({
+    flagNumber: '',
+    flagCode: '',
+  });
   const [listFlag, setListFlag] = React.useState(flags);
   const [search, setSearch] = React.useState('');
   const [inputting, setInputting] = React.useState(false);
@@ -44,12 +45,12 @@ export const SelectCountry: CommonType.AppScreenProps<'selectCountry', Props> =
     }, 600);
     setSearch(e);
   };
-  const handleNextButton = () =>{
-    navigation.navigate('phoneLogin',{
+  const handleNextButton = () => {
+    navigation.navigate('phoneLogin', {
       flagCode: countrySelection.flagCode,
-      flagNumber: countrySelection.flagNumber
-    })
-  }
+      flagNumber: countrySelection.flagNumber,
+    });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.searchBox}>
@@ -64,17 +65,11 @@ export const SelectCountry: CommonType.AppScreenProps<'selectCountry', Props> =
         />
         {!inputting ? (
           <TouchableOpacity>
-            <Image
-              source={images.search}
-              style={{ width: 18, height: 18}}
-            />
+            <Image source={images.search} style={{width: 18, height: 18}} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity onPress={handleClearInput}>
-           <Image
-              source={images.close}
-              style={{ width: 18, height: 18}}
-            />
+            <Image source={images.close} style={{width: 18, height: 18}} />
           </TouchableOpacity>
         )}
       </View>
@@ -98,17 +93,16 @@ export const SelectCountry: CommonType.AppScreenProps<'selectCountry', Props> =
       </ScrollView>
       <View style={styles.buttonContainer}>
         <Button
-        text='Next'
-        textStyle={styles.buttonContent}
-        style={
-        countrySelection.flagCode === '' ?
-        styles.buttonNext : 
-        styles.buttonNextActive}
-        disabled={countrySelection.flagCode === '' 
-        ? true : false}
-        onPress={handleNextButton}
+          text="Next"
+          textStyle={styles.buttonContent}
+          style={
+            countrySelection.flagCode === ''
+              ? styles.buttonNext
+              : styles.buttonNextActive
+          }
+          disabled={countrySelection.flagCode === '' ? true : false}
+          onPress={handleNextButton}
         />
-
       </View>
     </SafeAreaView>
   );
@@ -165,8 +159,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: color.palette.primary,
     margin: 10,
-  }
-  ,
+  },
   buttonContent: {
     color: color.palette.white,
     fontSize: 20,

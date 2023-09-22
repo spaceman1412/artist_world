@@ -113,21 +113,16 @@ export const Profile: CommonType.AppScreenProps<'profile', Props> = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.avatarContainer}>
-        {/* {!onImageLoad ? (
-          <> */}
         <FastImage
           onLoadEnd={() => setImageLoad(false)}
           style={styles.image}
-          source={!onImageLoad ? {uri: avatarUrl} : images.placeholder}
+          // here use avatarUrl in local
+          source={
+            !onImageLoad && avatarUrl ? {uri: avatarUrl} : images.placeholder
+          }
         />
 
         <Text style={styles.name}>{firstName + ' ' + lastName}</Text>
-        {/* </> */}
-        {/* ) : (
-          <View style={styles.loadingImage}>
-            <Image style={styles.placeHoler} source={images.placeholder} />
-          </View>
-        )} */}
       </View>
 
       <SettingItem

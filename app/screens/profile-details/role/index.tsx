@@ -8,7 +8,6 @@ import SizedBox from '@components/sized-box';
 import GlobalStyles from '@theme/styles/global-style';
 import {useAppDispatch} from '@store/hook';
 import {useNavigation} from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
 import {ProfileActions} from '@store/profile/reducer';
 
 interface Props {}
@@ -39,6 +38,8 @@ const styles = StyleSheet.create({
     width: getSize.v(295),
     height: getSize.v(56),
     borderRadius: 15,
+    alignSelf: 'center',
+    justifyContent: 'center',
   },
 });
 

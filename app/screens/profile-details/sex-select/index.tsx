@@ -2,13 +2,11 @@ import React, {useState} from 'react';
 import {CommonType} from '@utils/types';
 import {Text, View, StyleSheet, Alert} from 'react-native';
 import {color} from '@theme';
-import {SelectiveButton} from '@components/selective_button/selective_button';
 import Icon from 'react-native-vector-icons/Entypo';
 import {Button} from '@components';
 import {getSize} from '@utils/responsive';
 import SizedBox from '@components/sized-box';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
+
 import {useAppDispatch} from '@store/hook';
 import {ProfileActions} from '@store/profile/reducer';
 
@@ -44,7 +42,6 @@ export const SexSelect: CommonType.ProfileDetailsScreenProps<
   Props
 > = ({navigation}) => {
   const [selected, setSelected] = useState<'man' | 'woman' | 'not'>('man');
-  const uid = auth().currentUser.uid;
   const dispatcher = useAppDispatch();
 
   const onSubmit = () => {

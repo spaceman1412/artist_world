@@ -252,13 +252,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}>
-        {pic ? (
-          <UploadImage source={pic} onUpload={handleChangeAvatar} />
-        ) : (
-          <View style={styles.loadingImage}>
-            <Image style={styles.placeHoler} source={images.placeholder} />
-          </View>
-        )}
+        <UploadImage source={pic} onUpload={handleChangeAvatar} />
 
         <View style={styles.infoContainer}>
           <View style={styles.inputContainer}>

@@ -1,6 +1,5 @@
 namespace Profile {
   export interface BasicInfo {
-    avatarUrl: string;
     firstName: string;
     lastName: string;
     birthDate: string;
@@ -14,5 +13,6 @@ namespace Profile {
     gallery: string[];
     about: string;
     favouriteSong: string;
+    avatarUrl: string;
   }
 }

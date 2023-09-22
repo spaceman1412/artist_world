@@ -20,6 +20,7 @@ export const ProfileStack = ({navigation}) => {
         name="sexSelect"
         component={SCREENS.SexSelect}
         options={{
+          headerShown: false,
           headerTitle: 'Gender',
         }}
       />
@@ -27,6 +28,7 @@ export const ProfileStack = ({navigation}) => {
         name="interests"
         component={SCREENS.Interests}
         options={{
+          headerShown: false,
           headerTitle: 'Interests',
         }}
       />
@@ -34,6 +36,7 @@ export const ProfileStack = ({navigation}) => {
         name="role"
         component={SCREENS.Role}
         options={{
+          headerShown: false,
           headerTitle: 'Roles',
         }}
       />

@@ -24,7 +24,6 @@ export const CreateAccount: CommonType.AppScreenProps<
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [toggle, setToggle] = useState(true);
-  const [error, setError] = useState({isError: false, message: ''});
 
   const login = () => {
     auth()
@@ -40,36 +39,7 @@ export const CreateAccount: CommonType.AppScreenProps<
   };
 
   const create = () => {
-    if (email.trim() === '' || password.trim() === '') {
-      Alert.alert('Please enter your email address/ password');
-      return;
-    }
-    auth()
-      .createUserWithEmailAndPassword(email.trim(), password.trim())
-      .then(() => {
-        console.log('User account created & signed in!');
-        navigation.navigate('profileDetails');
-      })
-      .catch(error => {
-        if (error.code === 'auth/email-already-in-use') {
-          setError({
-            isError: true,
-            message: 'That email address is already in use!',
-          });
-          setEmail('');
-          setPassword('');
-          Alert.alert('That email address is already in use!');
-        }
-
-        if (error.code === 'auth/invalid-email') {
-          setError({isError: true, message: 'That email address is invalid!'});
-          setEmail('');
-          setPassword('');
-          Alert.alert('That email address is invalid!');
-        }
-
-        console.error(error);
-      });
+    navigation.navigate('profileDetails');
   };
 
   return (
@@ -170,7 +140,6 @@ export const CreateAccount: CommonType.AppScreenProps<
               style={{
                 width: 30,
                 height: 30,
-                // backgroundColor: '#ccc',
                 justifyContent: 'center',
                 alignItems: 'center',
                 marginLeft: -30,

@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 export interface ProfileState {
-  avatarUrl: string;
+  avatarUrl: string | null;
   firstName: string;
   lastName: string;
   birthDate: string;
@@ -18,7 +18,7 @@ export interface ProfileState {
 }
 
 const initialState: ProfileState = {
-  avatarUrl: '',
+  avatarUrl: null,
   firstName: '',
   lastName: '',
   birthDate: '',
@@ -36,9 +36,8 @@ export const profileSlice = createSlice({
   initialState,
   reducers: {
     updateBasicInfo: (state, action: PayloadAction<Profile.BasicInfo>) => {
-      const {lastName, firstName, avatarUrl, birthDate, location} =
-        action.payload;
-      state.avatarUrl = avatarUrl;
+      const {lastName, firstName, birthDate, location} = action.payload;
+
       state.firstName = firstName;
       state.lastName = lastName;
       state.birthDate = birthDate;
@@ -97,6 +96,7 @@ export const profileSlice = createSlice({
           .collection('Users')
           .doc(uid)
           .set({
+            //
             avatarUrl: state.avatarUrl,
             firstName: state.firstName,
             lastName: state.lastName,

@@ -1,6 +1,6 @@
 import {Button, UploadImage} from '@components';
 import {CommonType} from '@utils/types';
-import * as React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -10,14 +10,13 @@ import {
   Alert,
 } from 'react-native';
 import DateTimePicker from '@components/date-time-picker/date-time-picker';
-import GlobalStyles from '@theme/styles/global-style';
 import SizedBox from '@components/sized-box';
-import storage from '@react-native-firebase/storage';
 import {styles} from '../style';
-import auth from '@react-native-firebase/auth';
 import {useAppDispatch, useAppSelector} from '@store/hook';
 import {ProfileActions} from '@store/profile/reducer';
 import {color} from '@theme';
+import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import auth from '@react-native-firebase/auth';
 
 interface Props {}
 
@@ -25,24 +24,66 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
   'basicInfo',
   Props
 > = ({navigation}) => {
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [birthDate, setBirthDate] = React.useState('Choose your birth date');
-  const uid = auth().currentUser.uid;
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [birthDate, setBirthDate] = useState('Choose your birth date');
+  const [toggle, setToggle] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const dispatcher = useAppDispatch();
 
   const location = useAppSelector(state => state.profile.location);
 
-  const [dateTimePicker, setDateTimePicker] = React.useState(false);
+  const [dateTimePicker, setDateTimePicker] = useState(false);
 
-  const [imagePath, setImagePath] = React.useState(null);
+  const create = async () => {
+    if (email.trim() === '' || password.trim() === '') {
+      Alert.alert('Please enter your email address/ password');
+      return;
+    }
+    await auth()
+      .createUserWithEmailAndPassword(email.trim(), password.trim())
+      .then(() => {
+        console.log('User account created & signed in!');
+        if (onValidate()) {
+          const data = {
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: birthDate,
+            location: location,
+          };
+          dispatcher(ProfileActions.updateBasicInfo(data));
+          navigation.navigate('sexSelect');
+        } else {
+          Alert.alert('Wrong data input');
+        }
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          setEmail('');
+          setPassword('');
+          Alert.alert('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          setEmail('');
+          setPassword('');
+          Alert.alert('That email address is invalid!');
+        }
+
+        console.error(error);
+      });
+  };
 
   const onValidate = () => {
+    // dua validate vao ham create
+    console.log(firstName, lastName, location, birthDate);
     if (
       firstName !== '' &&
       lastName !== '' &&
-      birthDate !== 'Choose your birth date' &&
-      imagePath
+      location !== '' &&
+      birthDate !== 'Choose your birth date'
     ) {
       return true;
     } else {
@@ -50,58 +91,23 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
     }
   };
 
-  const onConfirm = async () => {
-    try {
-      const fileName = await uploadFile();
+  // const uploadFile = async () => {
+  //   if (imagePath) {
+  //     const split = imagePath.split('/');
+  //     const fileName = split[split.length - 1];
+  //     const reference = await storage().ref(`${uid}-${fileName}`);
 
-      const ref = storage().ref(fileName);
-
-      const validate = await onValidate();
-
-      if (ref && validate) {
-        ref.getDownloadURL().then(url => {
-          const data = {
-            firstName: firstName,
-            lastName: lastName,
-            birthDate: birthDate,
-            avatarUrl: url,
-            location: location,
-          };
-          dispatcher(ProfileActions.updateBasicInfo(data));
-          navigation.navigate('sexSelect');
-        });
-      } else {
-        Alert.alert('Your data is invalid');
-      }
-    } catch (error) {
-      console.log(imagePath);
-      Alert.alert(
-        'Error',
-        'Your image is too big. Please try again with another image.',
-      );
-    }
-  };
-
-  const uploadFile = async () => {
-    if (imagePath) {
-      const split = imagePath.split('/');
-      const fileName = split[split.length - 1];
-      const reference = await storage().ref(`${uid}-${fileName}`);
-
-      const pathToFile = imagePath;
-      const url = await reference.putFile(pathToFile);
-      return url.metadata.fullPath;
-    }
-  };
+  //     const pathToFile = imagePath;
+  //     const url = await reference.putFile(pathToFile);
+  //     return url.metadata.fullPath;
+  //   }
+  // };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.container}>
         <Text style={styles.title}>Profile details</Text>
         <SizedBox height={20} />
-        <View style={GlobalStyles.itemCenter}>
-          <UploadImage onUpload={value => setImagePath(value)} />
-        </View>
 
         <View style={styles.inputContainer}>
           <Text style={styles.inputLabel}>First name</Text>
@@ -124,6 +130,45 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
           </View>
         </View>
 
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Email</Text>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              value={email}
+              onChangeText={text => setEmail(text)}
+              style={styles.input}
+            />
+          </View>
+        </View>
+
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputLabel}>Password</Text>
+          <View style={styles.inputWrapper}>
+            <TextInput
+              value={password}
+              secureTextEntry={toggle ? true : false}
+              onChangeText={text => setPassword(text)}
+              autoCapitalize="none"
+              style={styles.input}
+            />
+            <TouchableOpacity
+              style={{
+                width: 30,
+                height: 30,
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginEnd: 15,
+              }}
+              onPress={() => setToggle(!toggle)}>
+              {toggle ? (
+                <Icon name="eye-outline" size={20} />
+              ) : (
+                <Icon name="eye-off-outline" size={20} />
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <Button
           style={styles.birthdayButton}
           textStyle={{color: color.palette.Blue30, fontSize: 16}}
@@ -138,9 +183,9 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
         </TouchableOpacity>
         <SizedBox height={20} />
         <Button
-          text={'Confirm'}
+          text={'Create the account'}
           style={styles.buttonConfirmStyle}
-          onPress={onConfirm}
+          onPress={create}
         />
 
         <DateTimePicker
