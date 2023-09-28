@@ -1,7 +1,6 @@
 import {CommonType} from '@utils/types';
 import * as React from 'react';
-import {Animated, View, SafeAreaView, StyleSheet, Text} from 'react-native';
-import {Dimensions} from 'react-native';
+import {View, SafeAreaView, Text} from 'react-native';
 import {color} from '@theme';
 import {Button} from '@components';
 import Stroke from '@assets/images/stroke.svg';

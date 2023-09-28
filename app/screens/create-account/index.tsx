@@ -34,7 +34,7 @@ export const CreateAccount: CommonType.AppScreenProps<
         });
       })
       .catch(error => {
-        console.log(error);
+        Alert.alert('Wrong username or password, please try again');
       });
   };
 
@@ -153,15 +153,6 @@ export const CreateAccount: CommonType.AppScreenProps<
             </TouchableOpacity>
           </View>
         </View>
-
-        <View style={{alignItems: 'flex-start', width: '80%'}}>
-          {error.isError && (
-            <>
-              <Text style={styles.error}>{error.message}</Text>
-            </>
-          )}
-        </View>
-        {/* <SizedBox height={10} /> */}
 
         <View style={{flexDirection: 'row'}}>
           <TouchableOpacity
