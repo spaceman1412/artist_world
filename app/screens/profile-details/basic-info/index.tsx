@@ -1,4 +1,4 @@
-import {Button, UploadImage} from '@components';
+import {Button} from '@components';
 import {CommonType} from '@utils/types';
 import React, {useState} from 'react';
 import {

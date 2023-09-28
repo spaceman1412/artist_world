@@ -27,8 +27,6 @@ interface Props {}
 export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   navigation,
 }) => {
-  const swipe = React.useRef(new Animated.ValueXY()).current;
-  const tiltSign = React.useRef(new Animated.Value(1)).current;
   const [modalVisible, setModalVisible] = useState(false);
   const [age, setAge] = useState([15, 28]);
   const [gender, setGender] = useState('');
@@ -44,7 +42,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
     {id: '4', label: 'Da Nang'},
     {id: '5', label: 'Ca Mau'},
   ];
-  const {width} = Dimensions.get('screen');
+
   const dispatch = useAppDispatch();
   const cardRef = React.useRef();
   const getAge = (date: string) => {

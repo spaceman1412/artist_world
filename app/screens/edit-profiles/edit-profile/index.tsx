@@ -21,7 +21,7 @@ import storage from '@react-native-firebase/storage';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import {useAppDispatch, useAppSelector} from '@store/hook';
 import {ProfileActions} from '@store/profile/reducer';
-import {images} from '@assets/images';
+
 import {getSize} from '@utils/responsive';
 
 const styles = StyleSheet.create({

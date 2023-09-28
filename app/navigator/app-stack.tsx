@@ -7,6 +7,8 @@ import auth from '@react-native-firebase/auth';
 import {TabStack} from './tab-stack';
 import {EditProfileStack} from './edit-profile-stack';
 import firestore from '@react-native-firebase/firestore';
+import {useAppDispatch} from '@store/hook';
+import {ProfileActions} from '@store/profile/reducer';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 
@@ -29,6 +31,34 @@ export const AppStack = () => {
       ? 'tab'
       : 'profileDetails'
     : 'login';
+  const dispatch = useAppDispatch();
+
+  // load user data
+  React.useEffect(() => {
+    const getUsers = async () => {
+      let userinfo = await firestore()
+        .collection('Users')
+        .doc(auth().currentUser.uid)
+        .get();
+      let user = userinfo.data();
+      dispatch(
+        ProfileActions.updateUserFullInfo({
+          avatarUrl: user.avatarUrl ? user.avatarUrl : '',
+          firstName: user.firstName ? user.firstName : '',
+          lastName: user.lastName ? user.lastName : '',
+          birthDate: user.birthDate ? user.birthDate : '',
+          musicInterests: user.musicInterests ? user.musicInterests : [],
+          musicRoles: user.musicRoles ? user.musicRoles : [],
+          gallery: user.gallery ? user.gallery : [],
+          sex: user.sex ? user.sex : 'not',
+          about: user.about ? user.about : '',
+          location: user.location ? user.location : '',
+          favouriteSong: user.favouriteSong ? user.favouriteSong : '',
+        }),
+      );
+    };
+    getUsers();
+  }, []);
 
   return (
     <Stack.Navigator initialRouteName={initialRouteName}>
