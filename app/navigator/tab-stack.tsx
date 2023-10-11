@@ -3,19 +3,16 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import * as SCREENS from '@screens';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import {color} from '@theme';
-import {useAppDispatch, useAppSelector} from '@store/hook';
+import {useAppDispatch} from '@store/hook';
 import {ProfileActions} from '@store/profile/reducer';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {showMatch} from '@utils/constant';
-import {MatchAction} from '@store/match/reducer';
 
 const Tab = createBottomTabNavigator();
 
 export const TabStack = () => {
   const dispatch = useAppDispatch();
-
-  // const {matchedList, count} = useAppSelector(state => state.match);
 
   const matchedList = React.useRef([]);
   const count = React.useRef(0);
@@ -31,8 +28,6 @@ export const TabStack = () => {
             const data = documentSnapshot.data();
 
             if (count.current === 0) {
-              // dispatch(MatchAction.updateMatchedList(data.matched));
-              // dispatch(MatchAction.updateCounters());
               matchedList.current = data.matched;
               count.current = count.current + 1;
             } else if (

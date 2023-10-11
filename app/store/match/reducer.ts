@@ -5,16 +5,12 @@ import auth from '@react-native-firebase/auth';
 
 export interface MatchState {
   matchList: string[];
-  matchedList: string[];
   fetch: boolean;
-  count: number;
 }
 
 const initialState: MatchState = {
   matchList: [],
-  matchedList: [],
   fetch: false,
-  count: 0,
 };
 
 export const matchSlice = createSlice({
@@ -30,14 +26,7 @@ export const matchSlice = createSlice({
     updateMatchListFlag: (state, action: PayloadAction<boolean>) => {
       state.fetch = action.payload;
     },
-    updateMatchedList: (state, action: PayloadAction<string[]>) => {
-      console.log('updateing matched list');
-      state.matchedList = action.payload;
-    },
-    updateCounters: state => {
-      state.count = state.count + 1;
-      console.log('state count', state.count);
-    },
+
     updateWaitingMatchFirebase: state => {
       const uid = auth().currentUser.uid.trim();
       const newid = state.matchList[0];
