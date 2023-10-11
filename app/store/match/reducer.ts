@@ -5,12 +5,16 @@ import auth from '@react-native-firebase/auth';
 
 export interface MatchState {
   matchList: string[];
+  matchedList: string[];
   fetch: boolean;
+  count: number;
 }
 
 const initialState: MatchState = {
   matchList: [],
+  matchedList: [],
   fetch: false,
+  count: 0,
 };
 
 export const matchSlice = createSlice({
@@ -26,7 +30,15 @@ export const matchSlice = createSlice({
     updateMatchListFlag: (state, action: PayloadAction<boolean>) => {
       state.fetch = action.payload;
     },
-    updateDataFirebase: state => {
+    updateMatchedList: (state, action: PayloadAction<string[]>) => {
+      console.log('updateing matched list');
+      state.matchedList = action.payload;
+    },
+    updateCounters: state => {
+      state.count = state.count + 1;
+      console.log('state count', state.count);
+    },
+    updateWaitingMatchFirebase: state => {
       const uid = auth().currentUser.uid.trim();
       const newid = state.matchList[0];
       try {
@@ -35,11 +47,11 @@ export const matchSlice = createSlice({
           const postSnapshot = await transaction.get(postReference);
           if (!postSnapshot.exists) {
             transaction.set(firestore().collection('user-match').doc(uid), {
-              matches: [newid],
+              waiting: [newid],
             });
           } else {
             transaction.update(postReference, {
-              matches: firestore.FieldValue.arrayUnion(newid),
+              waiting: firestore.FieldValue.arrayUnion(newid),
             });
           }
         });
@@ -47,15 +59,49 @@ export const matchSlice = createSlice({
         console.log(error);
       }
     },
-    createNewMatchUser: () => {
+
+    updateMatchedMatchFirebase: state => {
       const uid = auth().currentUser.uid.trim();
-      firestore()
-        .collection('user-match')
-        .doc(uid)
-        .set({
-          matches: [],
-        })
-        .then(() => console.log('created'));
+      const newid = state.matchList[0];
+      try {
+        const postReference1 = firestore().doc(`user-match/${uid}`);
+        // Them data vao currentUser
+        firestore().runTransaction(async transaction => {
+          const postSnapshot = await transaction.get(postReference1);
+          if (!postSnapshot.exists) {
+            transaction.set(firestore().collection('user-match').doc(uid), {
+              matched: [newid],
+            });
+          } else {
+            transaction.update(postReference1, {
+              matched: firestore.FieldValue.arrayUnion(newid),
+            });
+          }
+        });
+
+        const postReference2 = firestore().doc(`user-match/${newid}`);
+
+        // Them data vao newId
+
+        firestore().runTransaction(async transaction => {
+          const postSnapshot = await transaction.get(postReference2);
+          if (!postSnapshot.exists) {
+            transaction.set(firestore().collection('user-match').doc(newid), {
+              matched: [uid],
+            });
+            transaction.update(postReference2, {
+              waiting: firestore.FieldValue.arrayRemove(uid),
+            });
+          } else {
+            transaction.update(postReference2, {
+              matched: firestore.FieldValue.arrayUnion(uid),
+              waiting: firestore.FieldValue.arrayRemove(uid),
+            });
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     removeMatchUser: (state, action: PayloadAction<string>) => {
@@ -66,7 +112,7 @@ export const matchSlice = createSlice({
         .collection('user-match')
         .doc(uid)
         .update({
-          matches: firestore.FieldValue.arrayRemove(removeId.trim()),
+          matched: firestore.FieldValue.arrayRemove(removeId.trim()),
         })
         .then(() => console.log('updated'))
         .catch(console.error);

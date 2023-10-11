@@ -4,12 +4,13 @@ import {CommonType} from '@utils/types';
 import * as React from 'react';
 import {FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import UserCart from './user-card';
-import SortArrow from '@assets/images/sort-two.svg';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {useAppDispatch, useAppSelector} from '@store/hook';
 import {MatchAction} from '@store/match/reducer';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import {createNewMatchUser} from '@utils/constant';
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -56,6 +57,7 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
   const dispatch = useAppDispatch();
   const {fetch} = useAppSelector(state => state.match);
   const [userlist, setUserlist] = React.useState([]);
+
   const fetchUserMatch = async () => {
     const data = await firestore()
       .collection('user-match')
@@ -64,10 +66,12 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
       .then(valueData => {
         if (valueData.exists) {
           const value = valueData.data();
-          dispatch(MatchAction.updateMatchList(value.matches));
+
+          dispatch(MatchAction.updateMatchList([value.matched, value.waiting]));
           dispatch(MatchAction.updateMatchListFlag(true));
+
           let userInfoList = Promise.all(
-            value.matches.map(async item => {
+            value.matched.map(async item => {
               let value = await firestore().collection('Users').doc(item).get();
               return {value: value.data(), item};
             }),
@@ -76,7 +80,7 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
 
           return value;
         } else {
-          dispatch(MatchAction.createNewMatchUser());
+          createNewMatchUser(auth().currentUser.uid);
           dispatch(MatchAction.updateMatchListFlag(true));
           return [];
         }
@@ -118,16 +122,18 @@ export const MatchList: CommonType.AppScreenProps<'matchList', Props> = ({
           data={userlist}
           numColumns={2}
           showsVerticalScrollIndicator={false}
-          renderItem={({item}) => (
-            <UserCart
-              image={item.value.avatarUrl}
-              name={item.value.firstName + ' ' + item.value.lastName}
-              onPress={() => handleGotoDetail(item.item.trim())}
-              userID={item.item}
-              onHeartPress={handleHeartPress}
-              onStokePress={() => handleUnMatchPress(item.item)}
-            />
-          )}
+          renderItem={({item}) =>
+            item.value && (
+              <UserCart
+                image={item.value.avatarUrl}
+                name={item.value.firstName + ' ' + item.value.lastName}
+                onPress={() => handleGotoDetail(item.item.trim())}
+                userID={item.item}
+                onHeartPress={handleHeartPress}
+                onStokePress={() => handleUnMatchPress(item.item)}
+              />
+            )
+          }
         />
       </View>
     </SafeAreaView>

@@ -11,7 +11,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useAppDispatch, useAppSelector} from '@store/hook';
 import {MatchAction} from '@store/match/reducer';
 import auth from '@react-native-firebase/auth';
-import {showMatch} from '@utils/constant';
+import {createNewMatchUser} from '@utils/constant';
 import TinderCard from 'react-tinder-card';
 import FastImage from 'react-native-fast-image';
 import {styles} from './styles';
@@ -52,6 +52,8 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   };
 
   const swiped = (direction, userId) => {
+    // Them dieu kien la khi list khong co
+    // Bug undefined list
     if (direction === 'right') {
       handleMatch(userId);
       setUserList(prevState => prevState.slice(1));
@@ -125,20 +127,20 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       </>
     );
   };
+
   const fetchUser = async userMatches => {
     let results = [];
 
     let filter = await firestore().collection('Users').get();
 
+    // Loc ra nhung nguoi da match roi
+
     filter.forEach(userData => {
       let user = userData.data();
-      if (userMatches.matches?.length > 0) {
+      if (userMatches.length > 0) {
         if (
-          !userMatches.matches.some(
-            value =>
-              value.trim() === userData.id ||
-              userData.id.trim() === auth().currentUser.uid.trim(),
-          )
+          !userMatches.includes(userData.id.trim()) &&
+          userData.id.trim() !== auth().currentUser.uid.trim()
         ) {
           results.push({
             id: userData.id,
@@ -147,25 +149,24 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
             musicInterests: user!.musicInterests,
             musicRoles: user!.musicRoles,
             age: getAge(user!.birthDate),
-            //
           });
         }
-      } else {
-        if (userData.id.trim() !== auth().currentUser.uid.trim()) {
-          results.push({
-            id: userData.id,
-            name: user.firstName + ' ' + user.lastName,
-            images: [{uri: user.avatarUrl}],
-            musicInterests: user!.musicInterests,
-            musicRoles: user!.musicRoles,
-            age: getAge(user!.birthDate),
-          });
-        }
+      } else if (userData.id.trim() !== auth().currentUser.uid.trim()) {
+        results.push({
+          id: userData.id,
+          name: user.firstName + ' ' + user.lastName,
+          images: [{uri: user.avatarUrl}],
+          musicInterests: user!.musicInterests,
+          musicRoles: user!.musicRoles,
+          age: getAge(user!.birthDate),
+          //
+        });
       }
     });
 
     return results;
   };
+
   const fetchUserMatch = async () => {
     const data = await firestore()
       .collection('user-match')
@@ -174,11 +175,12 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       .then(valueData => {
         if (valueData.exists) {
           const value = valueData.data();
-          dispatch(MatchAction.updateMatchList(value.matches));
+          const matches = [...value.waiting, ...value.matched];
+          dispatch(MatchAction.updateMatchList(matches));
           dispatch(MatchAction.updateMatchListFlag(true));
-          return value;
+          return matches;
         } else {
-          dispatch(MatchAction.createNewMatchUser());
+          createNewMatchUser(auth().currentUser.uid);
           return [];
         }
       });
@@ -200,33 +202,38 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   }, []);
 
   const checkMatch = async (userId, matchedUserId) => {
-    return firestore()
+    const data = await firestore()
       .collection('user-match')
       .doc(matchedUserId)
-      .get()
-      .then(documentSnapshot => {
-        if (!documentSnapshot.exists) {
-          console.log('not exist');
-        } else {
-          let documents = documentSnapshot.data().matches;
-          documents.forEach((userData: string) => {
-            if (userData.trim() === userId.trim()) {
-              alert(matchedUserId.trim());
-              return;
-            } else {
-            }
-          });
-        }
-      });
-  };
-  const alert = userId => {
-    showMatch({userId: userId});
+      .get();
+    if (!data.exists) {
+      createNewMatchUser(matchedUserId.trim());
+      return 'not exists';
+    } else {
+      let documents = data.data().waiting;
+
+      if (documents.includes(userId.trim())) {
+        return 'matched';
+      } else {
+        return 'unmatched';
+      }
+    }
   };
 
-  const handleMatch = (userId: string) => {
+  const handleMatch = async (userId: string) => {
     dispatch(MatchAction.addMatchList(userId.trim()));
-    dispatch(MatchAction.updateDataFirebase());
-    checkMatch(auth().currentUser.uid.trim(), userId);
+
+    const status = await checkMatch(
+      auth().currentUser.uid.trim(),
+      userId.trim(),
+    );
+    console.log(status);
+    if (status === 'matched') {
+      // match function is not right yet
+      dispatch(MatchAction.updateMatchedMatchFirebase());
+    } else if (status === 'unmatched') {
+      dispatch(MatchAction.updateWaitingMatchFirebase());
+    }
   };
 
   return (

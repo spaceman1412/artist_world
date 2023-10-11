@@ -10,6 +10,7 @@ import {
 import {color} from '@theme';
 import Stroke from '@assets/images/stroke.svg';
 import {getSize} from '@utils/responsive';
+import {images} from '@assets/images';
 
 const styles = StyleSheet.create({
   container: {
@@ -103,7 +104,7 @@ const UserCart = (props: userCartProps) => {
               borderRadius={15}
               style={styles.image}
               resizeMode="stretch"
-              source={{uri: image}}>
+              source={image ? {uri: image} : images.placeholder}>
               <ImageBackground
                 // onLoadEnd={ () => setLoading(false)}
                 style={styles.imageBlur}

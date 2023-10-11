@@ -1,6 +1,8 @@
 import {MatchModalRef} from '@components/MatchBottomSheet';
 import {createRef} from 'react';
 import {Dimensions} from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+
 const {height, width, fontScale, scale} = Dimensions.get('window');
 
 export class AppDims {
@@ -115,3 +117,14 @@ export const cityList = [
   'Vĩnh Phúc',
   'Yên Bái',
 ];
+
+export const createNewMatchUser = (id: string) => {
+  firestore()
+    .collection('user-match')
+    .doc(id)
+    .set({
+      waiting: [],
+      matched: [],
+    })
+    .then(() => console.log('created'));
+};
