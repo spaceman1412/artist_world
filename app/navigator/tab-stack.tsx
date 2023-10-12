@@ -23,7 +23,6 @@ export const TabStack = () => {
         .collection('user-match')
         .doc(auth().currentUser.uid.trim())
         .onSnapshot(async documentSnapshot => {
-          //snapshot variable not update
           if (documentSnapshot.exists) {
             const data = documentSnapshot.data();
 
@@ -32,14 +31,14 @@ export const TabStack = () => {
               count.current = count.current + 1;
             } else if (
               data.matched.length > 0 &&
-              data.matched !== matchedList.current &&
+              data.matched.length > matchedList.current.length &&
               count.current > 0
             ) {
               console.log(data.matched, matchedList);
               matchedList.current = data.matched;
               count.current = count.current + 1;
 
-              showMatch({userId: data.matched[data.matched.length]});
+              showMatch({userId: data.matched[data.matched.length - 1]});
             }
           }
         });

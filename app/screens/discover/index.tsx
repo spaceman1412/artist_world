@@ -54,11 +54,13 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   const swiped = (direction, userId) => {
     // Them dieu kien la khi list khong co
     // Bug undefined list
-    if (direction === 'right') {
-      handleMatch(userId);
-      setUserList(prevState => prevState.slice(1));
-    } else if (direction === 'left') {
-      setUserList(prevState => prevState.slice(1));
+    if (userList.length > 0) {
+      if (direction === 'right') {
+        handleMatch(userId);
+        setUserList(prevState => prevState.slice(1));
+      } else if (direction === 'left') {
+        setUserList(prevState => prevState.slice(1));
+      }
     }
   };
 
