@@ -33,7 +33,7 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
   const matchImage = images.girl;
   const [disbaleOnPress, setDisableOnPress] = useState(false);
 
-  const createNewMessageRoom = userId => {
+  const createNewMessageRoom = (userId, type: 'hello' | 'null') => {
     setDisableOnPress(true);
     const authUser = auth().currentUser.uid.trim();
     const postReference = firestore().collection('chat-messages').doc();
@@ -44,21 +44,35 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
       text: 'Hello',
     };
     const sendMessage = firestore().runTransaction(async transaction => {
-      await transaction
-        .set(postReference, {
-          lastMessage: lastMessage,
-          members: [authUser, userId],
-        })
-        .set(postReference.collection('messages').doc('1'), {
-          ...lastMessage,
-        })
-        .get(postReference);
+      if (type === 'hello') {
+        await transaction
+          .set(postReference, {
+            lastMessage: lastMessage,
+            members: [authUser, userId],
+          })
+          .set(postReference.collection('messages').doc('1'), {
+            ...lastMessage,
+          })
+          .get(postReference);
+      } else if (type === 'null') {
+        await transaction
+          .set(postReference, {
+            lastMessage: null,
+            members: [authUser, userId],
+          })
+
+          .get(postReference);
+      }
+
       await addNewMessageRoom(authUser, postReference.id.trim());
       await addNewMessageRoom(userId, postReference.id.trim());
     });
     sendMessage
       .then(() => {
-        setTimeout(() => navigation.navigate('messages'), 2000);
+        setTimeout(() => {
+          navigation.navigate('messages');
+          setDisableOnPress(false);
+        }, 2000);
       })
       .finally(() => {
         setTimeout(() => hide(), 2000);
@@ -135,21 +149,24 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
         </View>
         <Text style={styles.headerText}>It's a match</Text>
         <Text style={styles.bodyText}>
-          start a conversation with eachother!
+          start a conversation with each other!
         </Text>
         <Button
           text={disbaleOnPress ? '...Loading' : 'Say Hello'}
           disabled={disbaleOnPress}
           textStyle={styles.buttonText1}
           style={styles.button1}
-          onPress={() => createNewMessageRoom(state.userId)}
+          onPress={() => createNewMessageRoom(state.userId, 'hello')}
         />
         <Button
           text="Keep swiping"
           preset="outline"
           textStyle={styles.buttonText2}
           style={styles.button2}
-          onPress={hide}
+          onPress={() => {
+            createNewMessageRoom(state.userId, 'null');
+            hide();
+          }}
         />
       </View>
     </Modal>
