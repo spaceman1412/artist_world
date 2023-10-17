@@ -15,6 +15,7 @@ import {images} from '@assets/images';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
+import {getUniqueId} from '@utils/constant';
 
 const INITIAL_MATCH_STATE: ModalTypes.Match = {
   isVisible: false,
@@ -33,39 +34,69 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
   const matchImage = images.girl;
   const [disbaleOnPress, setDisableOnPress] = useState(false);
 
-  const createNewMessageRoom = (userId, type: 'hello' | 'null') => {
+  const createNewMessageRoom = async (userId, type: 'hello' | 'null') => {
     setDisableOnPress(true);
     const authUser = auth().currentUser.uid.trim();
-    const postReference = firestore().collection('chat-messages').doc();
+
+    const roomId = getUniqueId(authUser, userId.trim());
+    // let flags = false;
+
+    // await firestore()
+    //   .collection('chat-messages')
+    //   .get()
+    //   .then(querySnapshot => {
+    //     console.log('Total users: ', querySnapshot.size);
+
+    //     querySnapshot.forEach(documentSnapshot => {
+    //       if (documentSnapshot.id === roomId) {
+    //         flags = true;
+    //       }
+    //     });
+    //   });
+
+    const postReference = firestore().collection('chat-messages').doc(roomId);
+
     const lastMessage = {
       _id: '1',
       createAt: new Date(),
       sendBy: authUser.toString(),
       text: 'Hello',
     };
+
     const sendMessage = firestore().runTransaction(async transaction => {
-      if (type === 'hello') {
-        await transaction
-          .set(postReference, {
-            lastMessage: lastMessage,
-            members: [authUser, userId],
-          })
-          .set(postReference.collection('messages').doc('1'), {
-            ...lastMessage,
-          })
-          .get(postReference);
-      } else if (type === 'null') {
-        await transaction
-          .set(postReference, {
-            lastMessage: null,
-            members: [authUser, userId],
-          })
-
-          .get(postReference);
+      if ((await postReference.get()).exists) {
+        if (type === 'hello') {
+          await transaction
+            .update(postReference, {
+              lastMessage: lastMessage,
+            })
+            .set(postReference.collection('messages').doc(), {
+              ...lastMessage,
+            })
+            .get(postReference);
+        }
+      } else {
+        if (type === 'hello') {
+          await transaction
+            .set(postReference, {
+              lastMessage: lastMessage,
+              members: [authUser, userId],
+            })
+            .set(postReference.collection('messages').doc('1'), {
+              ...lastMessage,
+            })
+            .get(postReference);
+        } else if (type === 'null') {
+          await transaction
+            .set(postReference, {
+              lastMessage: null,
+              members: [authUser, userId],
+            })
+            .get(postReference);
+        }
+        await addNewMessageRoom(authUser, roomId);
+        await addNewMessageRoom(userId, roomId);
       }
-
-      await addNewMessageRoom(authUser, postReference.id.trim());
-      await addNewMessageRoom(userId, postReference.id.trim());
     });
     sendMessage
       .then(() => {

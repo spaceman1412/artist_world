@@ -128,3 +128,13 @@ export const createNewMatchUser = (id: string) => {
     })
     .then(() => console.log('created'));
 };
+
+export const getUniqueId = (firstId: string, secondId: string) => {
+  const compareValue = firstId.localeCompare(secondId);
+
+  if (compareValue >= 0) {
+    return `${firstId}-${secondId}`;
+  } else {
+    return `${secondId}-${firstId}`;
+  }
+};
