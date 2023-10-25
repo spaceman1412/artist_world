@@ -259,7 +259,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
             <TextInputCustom
               value={ufirstName}
               labelStyle={styles.labelTextCustom}
-              label={'FirstName'}
+              label={'First Name'}
               icon={'account'}
               onChangeText={text => setFirstName(text)}
             />
@@ -268,7 +268,7 @@ export const EditProfile: CommonType.EditProfileScreenProps<
           <View style={styles.inputContainer}>
             <TextInputCustom
               labelStyle={styles.labelTextCustom}
-              label="LastName"
+              label="Last Name"
               value={ulastName}
               icon={'account'}
               onChangeText={text => setLastName(text)}

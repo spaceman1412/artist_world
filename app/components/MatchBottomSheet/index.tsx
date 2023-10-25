@@ -39,20 +39,6 @@ export const MatchModal = forwardRef<MatchModalRef>((_, ref) => {
     const authUser = auth().currentUser.uid.trim();
 
     const roomId = getUniqueId(authUser, userId.trim());
-    // let flags = false;
-
-    // await firestore()
-    //   .collection('chat-messages')
-    //   .get()
-    //   .then(querySnapshot => {
-    //     console.log('Total users: ', querySnapshot.size);
-
-    //     querySnapshot.forEach(documentSnapshot => {
-    //       if (documentSnapshot.id === roomId) {
-    //         flags = true;
-    //       }
-    //     });
-    //   });
 
     const postReference = firestore().collection('chat-messages').doc(roomId);
 

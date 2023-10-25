@@ -129,14 +129,16 @@ export const EditGallery: CommonType.EditProfileScreenProps<
       {loading ? (
         <LoaderScreen message={'Loading'} />
       ) : (
-        <TouchableOpacity
-          disabled={loading}
-          onPress={handleAddGallery}
-          style={styles.addButtonBox}>
-          <View style={styles.addButton}>
-            <Icon name="plus" size={30} color={color.whiteBackground} />
-          </View>
-        </TouchableOpacity>
+        listImage.length < 5 && (
+          <TouchableOpacity
+            disabled={loading}
+            onPress={handleAddGallery}
+            style={styles.addButtonBox}>
+            <View style={styles.addButton}>
+              <Icon name="plus" size={30} color={color.whiteBackground} />
+            </View>
+          </TouchableOpacity>
+        )
       )}
     </ScrollView>
   );

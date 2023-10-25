@@ -8,6 +8,7 @@ import firestore from '@react-native-firebase/firestore';
 import FastImage from 'react-native-fast-image';
 import {images} from '@assets/images';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
 export const MessageBox = (props: MessageBoxProps) => {
   const {
@@ -19,9 +20,11 @@ export const MessageBox = (props: MessageBoxProps) => {
     onPress,
     userId,
   } = props;
+
   const [lastMessage, setLastMessage] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const navigation = useNavigation();
+
   React.useLayoutEffect(() => {
     const getLastMessage = async () => {
       firestore()
@@ -60,7 +63,9 @@ export const MessageBox = (props: MessageBoxProps) => {
           <View style={styles.imageWrapper}>
             <FastImage
               onLoadEnd={() => setLoading(false)}
-              source={loading ? images.placeholder : image}
+              source={
+                loading || image.uri === null ? images.placeholder : image
+              }
               style={styles.image}
             />
           </View>
@@ -71,14 +76,16 @@ export const MessageBox = (props: MessageBoxProps) => {
           <Text style={[styles.text, styles.username]} numberOfLines={1}>
             {username}
           </Text>
-          <Text style={styles.time}>
-            {/* {lastMessage !== null ?
-            lastMessage.createAt.getDate():
-            'none'} */}
-          </Text>
+          <Text style={styles.time} />
         </View>
         <View style={styles.content}>
           <Text style={styles.text} numberOfLines={1}>
+            {lastMessage && lastMessage.sendBy === auth().currentUser.uid && (
+              <Text style={[styles.text, {color: color.palette.Gray}]}>
+                You:{' '}
+              </Text>
+            )}
+
             {lastMessage !== null ? lastMessage.text : null}
           </Text>
           {unreadCount > 0 && (
