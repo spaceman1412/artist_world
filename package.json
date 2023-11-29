@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "all": "watchman watch-del-all && rm -rf package-lock.json && rm -rf node_modules/ && rm -fr $TMPDIR/metro* && yarn install && cd ios && rm -rf Pods && rm -rf Podfile.lock && pod install && cd .."
+    "all": "watchman watch-del-all && rm -rf package-lock.json && rm -rf node_modules/ && rm -fr $TMPDIR/metro* && yarn install && cd ios && rm -rf Pods && rm -rf Podfile.lock && pod install && cd ..",
+    "all-window": "del C:\\Users\\Space\\AppData\\Local\\Temp\\react-native-* & cd android & gradlew clean & cd .. & del node_modules/ & npm cache clean --force & npm install & npm start -- --reset-cache"
   },
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
@@ -30,6 +31,7 @@
     "react-native": "0.70.1",
     "react-native-calendars": "^1.1291.1",
     "react-native-country-flag": "^1.1.9",
+    "react-native-deck-swiper": "^2.0.16",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.8.0",
     "react-native-gifted-chat": "^1.0.4",

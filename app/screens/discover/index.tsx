@@ -6,13 +6,11 @@ import {Button} from '@components';
 import Stroke from '@assets/images/stroke.svg';
 import Heart from '@assets/images/heart.svg';
 import Star from '@assets/images/star.svg';
-import FilterSearch from '@components/filterSearch/filterSearch';
 import firestore from '@react-native-firebase/firestore';
 import {useAppDispatch, useAppSelector} from '@store/hook';
 import {MatchAction} from '@store/match/reducer';
 import auth from '@react-native-firebase/auth';
 import {createNewMatchUser} from '@utils/constant';
-import TinderCard from 'react-tinder-card';
 import FastImage from 'react-native-fast-image';
 import {styles} from './styles';
 import SizedBox from '@components/sized-box';
@@ -20,30 +18,21 @@ import GlobalStyles from '@theme/styles/global-style';
 import {useState} from 'react';
 import {LoaderScreen} from 'react-native-ui-lib';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import Swiper from 'react-native-deck-swiper';
+import {getSize} from '@utils/responsive';
 
 interface Props {}
+
+let swiperRef;
 
 export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   navigation,
 }) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [age, setAge] = useState([15, 28]);
-  const [gender, setGender] = useState('');
-  const [location, setLocation] = useState('');
-  const [distance, setDistance] = useState([0]);
+  const index = React.useRef(0);
   const [userList, setUserList] = useState([]);
   const {matchList, fetch} = useAppSelector(state => state.match);
 
-  const locations = [
-    {id: '1', label: 'Hanoi'},
-    {id: '2', label: 'SaiGon'},
-    {id: '3', label: 'Da Lat'},
-    {id: '4', label: 'Da Nang'},
-    {id: '5', label: 'Ca Mau'},
-  ];
-
   const dispatch = useAppDispatch();
-  const cardRef = React.useRef();
   const getAge = (date: string) => {
     const today = new Date();
     const birthDate = new Date(date);
@@ -51,20 +40,20 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
     return today.getFullYear() - birthDate.getFullYear();
   };
 
+  //TODO: Add empty card to swiper
+
   const swiped = (direction, userId) => {
     // Them dieu kien la khi list khong co
     // Bug undefined list
+    console.log(userId);
     if (userList.length > 0) {
+      index.current = index.current + 1;
       if (direction === 'right') {
         handleMatch(userId);
-        setUserList(prevState => prevState.slice(1));
       } else if (direction === 'left') {
-        setUserList(prevState => prevState.slice(1));
       }
     }
   };
-
-  const outOfFrame = () => {};
 
   const Card = ({user}) => {
     const [imageState, setImageState] = useState<'loading' | 'end'>('end');
@@ -89,11 +78,13 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           />
         )}
 
-        <TinderCard
-          ref={cardRef}
-          onSwipe={direction => swiped(direction, user.id)}
-          onCardLeftScreen={outOfFrame}
-          preventSwipe={['top', 'bottom']}>
+        <View
+          style={{
+            alignItems: 'center',
+            paddingTop: getSize.v(40),
+            paddingLeft: getSize.v(10),
+            flex: 1,
+          }}>
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('profileDetail', {
@@ -102,7 +93,10 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
             }>
             <FastImage
               source={{
-                uri: user.images[0].uri,
+                uri:
+                  user.images[0].uri === null
+                    ? 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+                    : user.images[0].uri,
                 priority: FastImage.priority.high,
               }}
               onLoadStart={() => {
@@ -125,7 +119,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
               </View>
             </FastImage>
           </TouchableOpacity>
-        </TinderCard>
+        </View>
       </>
     );
   };
@@ -161,7 +155,6 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           musicInterests: user!.musicInterests,
           musicRoles: user!.musicRoles,
           age: getAge(user!.birthDate),
-          //
         });
       }
     });
@@ -187,6 +180,109 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
         }
       });
     return data;
+  };
+
+  const EmptyCard = () => {
+    return (
+      <View
+        style={[
+          GlobalStyles.flex,
+          GlobalStyles.itemCenter,
+          {marginBottom: getSize.v(50)},
+        ]}>
+        <View
+          style={[
+            styles.imageContainer,
+            {backgroundColor: color.palette.primary},
+            GlobalStyles.itemCenter,
+          ]}>
+          <Text
+            style={{
+              color: color.whiteBackground,
+              fontSize: 24,
+              fontWeight: '600',
+            }}>
+            There are no user to match
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
+  const SwiperUserCardList = () => {
+    return React.useMemo(
+      () =>
+        index.current < userList.length ? (
+          <Swiper
+            ref={swiper => {
+              swiperRef = swiper;
+            }}
+            cards={userList}
+            renderCard={card => {
+              return <Card user={card} />;
+            }}
+            keyExtractor={cardData => {
+              return cardData && cardData.id;
+            }}
+            cardIndex={index.current}
+            backgroundColor="transparent"
+            showSecondCard
+            stackSize={4}
+            disableBottomSwipe
+            disableTopSwipe
+            stackScale={10}
+            onSwipedRight={index => swiped('right', userList[index].id)}
+            onSwipedLeft={index => swiped('left', userList[index].id)}
+            stackSeparation={getSize.v(40)}
+            cardVerticalMargin={getSize.v(50)}
+            animateOverlayLabelsOpacity
+            animateCardOpacity
+            overlayLabels={{
+              left: {
+                title: 'NOPE',
+                style: {
+                  label: {
+                    backgroundColor: color.palette.Red,
+                    borderColor: color.palette.Red,
+                    color: color.palette.white,
+                    borderWidth: 1,
+                    fontSize: 24,
+                    marginTop: getSize.v(50),
+                    marginRight: getSize.v(50),
+                  },
+                  wrapper: {
+                    flexDirection: 'column',
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-start',
+                  },
+                },
+              },
+              right: {
+                title: 'LIKE',
+                style: {
+                  label: {
+                    backgroundColor: color.palette.Blue40,
+                    borderColor: color.palette.Blue40,
+                    color: color.palette.white,
+                    borderWidth: 1,
+                    fontSize: 24,
+                    marginTop: getSize.v(50),
+                    marginLeft: getSize.v(50),
+                  },
+                  wrapper: {
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    justifyContent: 'flex-start',
+                  },
+                },
+              },
+            }}
+          />
+        ) : (
+          <EmptyCard />
+        ),
+      [],
+    );
   };
 
   React.useEffect(() => {
@@ -238,41 +334,33 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
     }
   };
 
+  console.log(index);
+  console.log(userList.length);
+  console.log(index.current < userList.length);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Discover</Text>
       </View>
 
-      {userList.length > 0 ? (
-        <View style={[GlobalStyles.flex, GlobalStyles.itemCenter]}>
-          <Card user={userList[0]} />
-        </View>
-      ) : (
-        <View style={[GlobalStyles.flex, GlobalStyles.itemCenter]}>
-          <View
-            style={[
-              styles.imageContainer,
-              {backgroundColor: color.palette.primary},
-              GlobalStyles.itemCenter,
-            ]}>
-            <Text
-              style={{
-                color: color.whiteBackground,
-                fontSize: 24,
-                fontWeight: '600',
-              }}>
-              There are no user to match
-            </Text>
-          </View>
-        </View>
+      {React.useMemo(
+        () =>
+          userList.length > 0 && index.current < userList.length ? (
+            <SwiperUserCardList />
+          ) : (
+            <EmptyCard />
+          ),
+        [userList, index],
       )}
 
       <View style={styles.footer}>
         <Button
-          onPress={() => {
-            swiped('left', userList[0].id);
-          }}
+          onPress={() =>
+            userList.length > 0 &&
+            index.current < userList.length &&
+            swiperRef.swipeLeft()
+          }
           style={[styles.circleButton, styles.passButton]}>
           <Stroke />
         </Button>
@@ -280,29 +368,16 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           <Heart />
         </Button>
         <Button
-          onPress={() => {
-            swiped('right', userList[0].id);
-          }}
+          onPress={() =>
+            userList.length > 0 &&
+            index.current < userList.length &&
+            swiperRef.swipeRight()
+          }
           style={[styles.circleButton, styles.starButton]}>
           <Star />
         </Button>
       </View>
       <SizedBox height={30} />
-      <FilterSearch
-        visible={modalVisible}
-        onCloseModal={setModalVisible}
-        genderValue={gender}
-        setGender={setGender}
-        locationValue={location}
-        setLocation={setLocation}
-        LocationData={locations}
-        distance={distance}
-        setDistance={setDistance}
-        age={age}
-        setAge={setAge}
-        animationType={'slide'}
-        onRequestClose={() => setModalVisible(false)}
-      />
     </SafeAreaView>
   );
 };

@@ -31,6 +31,9 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    bottom: getSize.v(15),
+    left: getSize.v(85),
   },
   circleButton: {
     borderRadius: 50,
