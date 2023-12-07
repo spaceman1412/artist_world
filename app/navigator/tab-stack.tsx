@@ -8,6 +8,7 @@ import {ProfileActions} from '@store/profile/reducer';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {showMatch} from '@utils/constant';
+import Geolocation from '@react-native-community/geolocation';
 
 const Tab = createBottomTabNavigator();
 
@@ -70,10 +71,57 @@ export const TabStack = () => {
     );
   };
 
+  const getLocation = () => {
+    Geolocation.getCurrentPosition(position => {
+      console.log('called');
+      const API_URL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.coords.latitude},${position.coords.longitude}&result_type=administrative_area_level_1&key=AIzaSyCxvSvmXcbtnLSvs2T4a7knLnrNzoJ-1h0`;
+
+      const updateCurrentLocationData = async () => {
+        let userinfo = await firestore()
+          .collection('Users')
+          .doc(auth().currentUser.uid)
+          .get();
+        let user = userinfo.data();
+        const location = user.location ? user.location : '';
+        const coordinates = user.coordinates ? user.coordinates : null;
+
+        dispatch(
+          ProfileActions.updateLocation({
+            location: location,
+            coordinates: coordinates,
+          }),
+        );
+      };
+
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(responseJson => {
+          console.log(responseJson.results[0]);
+          if (responseJson.results[0]) {
+            const location = responseJson.results[0].formatted_address; // Filter address include country and city
+            const coordinates = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+            };
+            console.log(location, coordinates);
+            dispatch(
+              ProfileActions.updateLocation({
+                location: location,
+                coordinates: coordinates,
+              }),
+            );
+          } else {
+            updateCurrentLocationData();
+          }
+        });
+    });
+  };
+
   // load user data
   React.useEffect(() => {
     getUsers();
     checkMatch();
+    getLocation();
   }, []);
 
   return (

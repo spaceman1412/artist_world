@@ -138,3 +138,15 @@ export const getUniqueId = (firstId: string, secondId: string) => {
     return `${secondId}-${firstId}`;
   }
 };
+
+export const handleMeters = (meter: number) => {
+  if (meter >= 1000) {
+    return `${Math.round(meter / 1000)} km`;
+  } else if (meter < 1000 && meter > 0) {
+    return `${Math.round(meter)} m`;
+  } else if (meter === 0) {
+    return 'Near by';
+  } else {
+    throw new Error('Invalid function');
+  }
+};

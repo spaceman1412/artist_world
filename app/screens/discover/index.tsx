@@ -10,16 +10,17 @@ import firestore from '@react-native-firebase/firestore';
 import {useAppDispatch, useAppSelector} from '@store/hook';
 import {MatchAction} from '@store/match/reducer';
 import auth from '@react-native-firebase/auth';
-import {createNewMatchUser} from '@utils/constant';
+import {createNewMatchUser, handleMeters} from '@utils/constant';
 import FastImage from 'react-native-fast-image';
 import {styles} from './styles';
 import SizedBox from '@components/sized-box';
 import GlobalStyles from '@theme/styles/global-style';
 import {useState} from 'react';
 import {LoaderScreen} from 'react-native-ui-lib';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/EvilIcons';
 import Swiper from 'react-native-deck-swiper';
 import {getSize} from '@utils/responsive';
+import {getDistance} from 'geolib';
 
 interface Props {}
 
@@ -31,6 +32,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
   const index = React.useRef(0);
   const [userList, setUserList] = useState([]);
   const {matchList, fetch} = useAppSelector(state => state.match);
+  const {coordinates} = useAppSelector(state => state.profile);
 
   const dispatch = useAppDispatch();
   const getAge = (date: string) => {
@@ -55,8 +57,51 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
     }
   };
 
+  const sortUserList = userList => {
+    if (coordinates !== null) {
+      userList.sort((user1, user2) => {
+        var coordinates1 = user1.coordinates,
+          coordinates2 = user2.coordinates;
+
+        if (!coordinates1) {
+          return 1;
+        }
+        if (!coordinates2) {
+          return -1;
+        }
+
+        var distance1 = getDistance(coordinates, coordinates1),
+          distance2 = getDistance(coordinates, coordinates2);
+
+        if (distance1 < distance2) {
+          return -1;
+        }
+        if (distance1 > distance2) {
+          return 1;
+        }
+        return 0;
+      });
+      return userList;
+    } else {
+      return userList;
+    }
+  };
+
+  console.log(sortUserList(userList));
+
   const Card = ({user}) => {
     const [imageState, setImageState] = useState<'loading' | 'end'>('end');
+    let distance;
+
+    // console.log(user.name);
+    // console.log(coordinates);
+    if (
+      user.coordinates !== undefined &&
+      user.coordinates !== null &&
+      coordinates !== null
+    ) {
+      distance = handleMeters(getDistance(coordinates, user.coordinates));
+    }
     const secondText =
       user.musicRoles.length > 0
         ? user.musicRoles.map((text, index) => {
@@ -85,40 +130,54 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
             paddingLeft: getSize.v(10),
             flex: 1,
           }}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('profileDetail', {
-                uid: user.id,
-              })
-            }>
-            <FastImage
-              source={{
-                uri:
-                  user.images[0].uri === null
-                    ? 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
-                    : user.images[0].uri,
-                priority: FastImage.priority.high,
-              }}
-              onLoadStart={() => {
-                setImageState('loading');
-              }}
-              onLoadEnd={() => {
-                setImageState('end');
-              }}
-              style={[
-                styles.imageContainer,
-                {height: imageState === 'loading' ? 0 : 500},
-              ]}>
-              <View style={GlobalStyles.flex} />
-              <View style={styles.bottomContainer}>
-                <Text style={styles.firstText}>
-                  {user.name}, {user.age}
+          <FastImage
+            source={{
+              uri:
+                user.images[0].uri === null
+                  ? 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+                  : user.images[0].uri,
+              priority: FastImage.priority.high,
+            }}
+            onLoadStart={() => {
+              setImageState('loading');
+            }}
+            onLoadEnd={() => {
+              setImageState('end');
+            }}
+            style={[
+              styles.imageContainer,
+              {height: imageState === 'loading' ? 0 : 500},
+            ]}>
+            {distance && (
+              <View
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: 'rgba(93, 93, 94, 0.7)',
+                  width: 80,
+                  height: 34,
+                  marginLeft: 20,
+                  marginTop: 20,
+                  flexDirection: 'row',
+                  borderRadius: 7,
+                }}>
+                <Icon name={'location'} size={20} color={'white'} />
+                <Text
+                  style={{textAlign: 'center', fontSize: 12, color: 'white'}}>
+                  {String(distance)}
                 </Text>
-                <SizedBox height={5} />
-                <Text style={styles.secondText}>{secondText}</Text>
               </View>
-            </FastImage>
-          </TouchableOpacity>
+            )}
+
+            <View style={GlobalStyles.flex} />
+            <View style={styles.bottomContainer}>
+              <Text style={styles.firstText}>
+                {user.name}, {user.age}
+              </Text>
+              <SizedBox height={5} />
+              <Text style={styles.secondText}>{secondText}</Text>
+            </View>
+          </FastImage>
         </View>
       </>
     );
@@ -145,6 +204,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
             musicInterests: user!.musicInterests,
             musicRoles: user!.musicRoles,
             age: getAge(user!.birthDate),
+            coordinates: user.coordinates,
           });
         }
       } else if (userData.id.trim() !== auth().currentUser.uid.trim()) {
@@ -155,6 +215,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           musicInterests: user!.musicInterests,
           musicRoles: user!.musicRoles,
           age: getAge(user!.birthDate),
+          coordinates: user.coordinates,
         });
       }
     });
@@ -233,6 +294,9 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
             stackScale={10}
             onSwipedRight={index => swiped('right', userList[index].id)}
             onSwipedLeft={index => swiped('left', userList[index].id)}
+            onTapCard={index => {
+              navigation.navigate('profileDetail', {uid: userList[index].id});
+            }}
             stackSeparation={getSize.v(40)}
             cardVerticalMargin={getSize.v(50)}
             animateOverlayLabelsOpacity
@@ -281,7 +345,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
         ) : (
           <EmptyCard />
         ),
-      [],
+      [coordinates],
     );
   };
 
@@ -290,10 +354,13 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       if (!fetch) {
         const match = await fetchUserMatch();
         let fetchU = await fetchUser(match);
-        setUserList(fetchU);
+        const sortedUserList = await sortUserList(fetchU);
+        setUserList(sortedUserList);
       } else {
         let fetchU = await fetchUser(matchList);
-        setUserList(fetchU);
+        const sortedUserList = await sortUserList(fetchU);
+
+        setUserList(sortedUserList);
       }
     };
     fetchData().catch(console.error);
@@ -334,9 +401,9 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
     }
   };
 
-  console.log(index);
-  console.log(userList.length);
-  console.log(index.current < userList.length);
+  // console.log(index);
+  // console.log(userList.length);
+  // console.log(index.current < userList.length);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -351,7 +418,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           ) : (
             <EmptyCard />
           ),
-        [userList, index],
+        [userList, index, coordinates],
       )}
 
       <View style={styles.footer}>

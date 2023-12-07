@@ -344,12 +344,12 @@ export const EditProfile: CommonType.EditProfileScreenProps<
           </View>
         </View>
 
-        <Button
+        {/* <Button
           style={styles.birthdayButton}
           textStyle={{color: color.palette.Blue30, fontSize: 16}}
           text={location || 'Choose Your City'}
           onPress={() => navigation.navigate('selectCity')}
-        />
+        /> */}
 
         <Button
           text="Your Gallery"

@@ -13,8 +13,9 @@ export interface ProfileState {
   musicRoles: string[];
   gallery: string[];
   about: string;
-  location: string;
+  location: string; //city
   favouriteSong: string;
+  coordinates: {latitude; longitude};
 }
 
 const initialState: ProfileState = {
@@ -29,6 +30,7 @@ const initialState: ProfileState = {
   about: '',
   location: '',
   favouriteSong: '',
+  coordinates: null,
 };
 
 export const profileSlice = createSlice({
@@ -59,8 +61,23 @@ export const profileSlice = createSlice({
       state.about = action.payload;
     },
 
-    updateLocation: (state, action: PayloadAction<string>) => {
-      state.location = action.payload;
+    updateLocation: (state, action: PayloadAction<any>) => {
+      state.location = action.payload.location;
+      state.coordinates = action.payload.coordinates;
+      const uid = auth().currentUser.uid;
+
+      try {
+        firestore()
+          .collection('Users')
+          .doc(uid)
+          .update({
+            location: state.location,
+            coordinates: state.coordinates,
+          })
+          .then(() => console.log('updated location'));
+      } catch {
+        console.error();
+      }
     },
     updateUserFullInfo: (state, action: PayloadAction<Profile.UserInfo>) => {
       const {
@@ -73,7 +90,6 @@ export const profileSlice = createSlice({
         gallery,
         sex,
         about,
-        location,
         favouriteSong,
       } = action.payload;
 
@@ -86,7 +102,6 @@ export const profileSlice = createSlice({
       state.gallery = gallery;
       state.about = about;
       state.sex = sex;
-      state.location = location;
       state.favouriteSong = favouriteSong;
     },
     updateDataFirebase: state => {
@@ -106,7 +121,6 @@ export const profileSlice = createSlice({
             musicRoles: state.musicRoles,
             about: state.about,
             gallery: state.gallery,
-            location: state.location,
             favouriteSong: state.favouriteSong,
           })
           .then(() => console.log('Added'));

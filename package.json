@@ -14,6 +14,7 @@
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-clipboard/clipboard": "^1.11.1",
+    "@react-native-community/geolocation": "^3.1.0",
     "@react-native-firebase/app": "^16.4.5",
     "@react-native-firebase/app-check": "^16.4.5",
     "@react-native-firebase/auth": "^16.4.5",
@@ -27,6 +28,7 @@
     "@reduxjs/toolkit": "^1.8.6",
     "@types/react-native": "^0.70.4",
     "@types/react-redux": "^7.1.24",
+    "geolib": "^3.3.4",
     "react": "18.1.0",
     "react-native": "0.70.1",
     "react-native-calendars": "^1.1291.1",
