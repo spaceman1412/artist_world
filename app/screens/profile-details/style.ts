@@ -78,5 +78,9 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     flex: 1,
   },
-  mainContainer: {flex: 1, backgroundColor: color.whiteBackground},
+  mainContainer: {
+    flex: 1,
+    backgroundColor: color.whiteBackground,
+    alignItems: 'center',
+  },
 });

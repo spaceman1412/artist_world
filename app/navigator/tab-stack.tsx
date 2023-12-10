@@ -9,10 +9,11 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {showMatch} from '@utils/constant';
 import Geolocation from '@react-native-community/geolocation';
+import {CommonActions} from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 
-export const TabStack = () => {
+export const TabStack = ({navigation}) => {
   const dispatch = useAppDispatch();
 
   const matchedList = React.useRef([]);
@@ -117,11 +118,45 @@ export const TabStack = () => {
     });
   };
 
+  const checkInformation = () => {
+    firestore()
+      .collection('Users')
+      .get()
+      .then(querySnapshot => {
+        let flags = false;
+
+        querySnapshot.forEach(documentSnapshot => {
+          if (documentSnapshot.id === auth().currentUser.uid) {
+            flags = true;
+          }
+        });
+
+        if (!flags) {
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [
+                {
+                  name: 'profileDetails',
+                  state: {
+                    routes: [{name: 'sexSelect'}],
+                  },
+                },
+              ],
+            }),
+          );
+        } else {
+          console.log('Exist');
+        }
+      });
+  };
+
   // load user data
   React.useEffect(() => {
+    checkInformation();
     getUsers();
     checkMatch();
-    getLocation();
+    // getLocation();
   }, []);
 
   return (

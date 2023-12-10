@@ -38,12 +38,11 @@ export const profileSlice = createSlice({
   initialState,
   reducers: {
     updateBasicInfo: (state, action: PayloadAction<Profile.BasicInfo>) => {
-      const {lastName, firstName, birthDate, location} = action.payload;
+      const {lastName, firstName, birthDate} = action.payload;
 
       state.firstName = firstName;
       state.lastName = lastName;
       state.birthDate = birthDate;
-      state.location = location;
     },
     updateSex: (state, action: PayloadAction<'man' | 'woman' | 'not'>) => {
       state.sex = action.payload;

@@ -7,7 +7,7 @@ import {getSize} from '@utils/responsive';
 import SizedBox from '@components/sized-box';
 import GlobalStyles from '@theme/styles/global-style';
 import {useAppDispatch} from '@store/hook';
-import {useNavigation} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import {ProfileActions} from '@store/profile/reducer';
 
 interface Props {}
@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
   header: {
     fontWeight: '700',
     fontSize: 32,
+    color: 'black',
   },
   container: {
     flex: 1,
@@ -35,8 +36,8 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     backgroundColor: color.primary,
-    width: getSize.v(295),
-    height: getSize.v(56),
+    width: getSize.v(320),
+    height: getSize.v(80),
     borderRadius: 15,
     alignSelf: 'center',
     justifyContent: 'center',
@@ -53,7 +54,16 @@ export const Role: CommonType.ProfileDetailsScreenProps<'role', Props> = () => {
   const onConfirm = () => {
     dispatcher(ProfileActions.updateMusicRoles(selected));
     dispatcher(ProfileActions.updateDataFirebase());
-    navigation.navigate('tab');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [
+          {
+            name: 'tab',
+          },
+        ],
+      }),
+    );
   };
 
   const renderItem = ({item}) => {
@@ -110,6 +120,7 @@ export const Role: CommonType.ProfileDetailsScreenProps<'role', Props> = () => {
         text="Continue"
         style={styles.primaryButton}
         onPress={onConfirm}
+        textStyle={{fontSize: getSize.font(18)}}
       />
     </View>
   );

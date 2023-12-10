@@ -12,8 +12,8 @@ export const ProfileStack = ({navigation}) => {
         name="basicInfo"
         component={SCREENS.BasicInfo}
         options={{
-          headerShown: false,
-          headerTitle: 'Basic Info',
+          headerShown: true,
+          headerTitle: '',
         }}
       />
       <Stack.Screen

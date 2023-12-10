@@ -80,19 +80,6 @@ const styles = StyleSheet.create({
 const UserCart = (props: userCartProps) => {
   const {userID, onHeartPress, onStokePress, image, name, ...rest} = props;
 
-  // React.useEffect(() => {
-  //   firestore()
-  //     .collection('Users')
-  //     .doc(userID)
-  //     .get()
-  //     .then(value => {
-  //       const data = value.data();
-  //       setUser({
-  //         image: {uri: data.avatarUrl},
-  //         name: data.firstName + ' ' + data.lastName,
-  //       });
-  //     });
-  // }, []);
   return (
     <TouchableOpacity style={styles.surround} {...rest}>
       <View style={styles.container}>

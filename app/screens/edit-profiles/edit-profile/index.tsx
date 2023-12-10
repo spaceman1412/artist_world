@@ -5,7 +5,7 @@ import DateTimePicker from '@components/date-time-picker/date-time-picker';
 import {TextInputCustom} from '@components/text-input/text-input';
 import {color} from '@theme';
 import {CommonType} from '@utils/types';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import {
   StyleSheet,
   View,

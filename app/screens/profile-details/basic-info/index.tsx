@@ -1,21 +1,14 @@
 import {Button} from '@components';
 import {CommonType} from '@utils/types';
 import React, {useState} from 'react';
-import {
-  SafeAreaView,
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-  Alert,
-} from 'react-native';
+import {Text, TouchableOpacity, View, TextInput, Alert} from 'react-native';
 import DateTimePicker from '@components/date-time-picker/date-time-picker';
 import SizedBox from '@components/sized-box';
 import {styles} from '../style';
 import {useAppDispatch, useAppSelector} from '@store/hook';
-import {ProfileActions} from '@store/profile/reducer';
-import {color} from '@theme';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import {CommonActions} from '@react-navigation/native';
+import {ProfileActions} from '@store/profile/reducer';
 import auth from '@react-native-firebase/auth';
 
 interface Props {}
@@ -42,6 +35,10 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
       Alert.alert('Please enter your email address/ password');
       return;
     }
+    if (!onValidate()) {
+      Alert.alert('Wrong data input');
+      return;
+    }
     await auth()
       .createUserWithEmailAndPassword(email.trim(), password.trim())
       .then(() => {
@@ -51,10 +48,22 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
             firstName: firstName,
             lastName: lastName,
             birthDate: birthDate,
-            location: location,
           };
           dispatcher(ProfileActions.updateBasicInfo(data));
-          navigation.navigate('sexSelect');
+
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [
+                {
+                  name: 'profileDetails',
+                  state: {
+                    routes: [{name: 'sexSelect'}],
+                  },
+                },
+              ],
+            }),
+          );
         } else {
           Alert.alert('Wrong data input');
         }
@@ -82,7 +91,6 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
     if (
       firstName !== '' &&
       lastName !== '' &&
-      location !== '' &&
       birthDate !== 'Choose your birth date'
     ) {
       return true;
@@ -91,20 +99,8 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
     }
   };
 
-  // const uploadFile = async () => {
-  //   if (imagePath) {
-  //     const split = imagePath.split('/');
-  //     const fileName = split[split.length - 1];
-  //     const reference = await storage().ref(`${uid}-${fileName}`);
-
-  //     const pathToFile = imagePath;
-  //     const url = await reference.putFile(pathToFile);
-  //     return url.metadata.fullPath;
-  //   }
-  // };
-
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       <View style={styles.container}>
         <Text style={styles.title}>Profile details</Text>
         <SizedBox height={20} />
@@ -169,13 +165,6 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
           </View>
         </View>
 
-        <Button
-          style={styles.birthdayButton}
-          textStyle={{color: color.palette.Blue30, fontSize: 16}}
-          text={location || 'Choose Your City'}
-          onPress={() => navigation.navigate('selectCity')}
-        />
-
         <TouchableOpacity
           style={styles.birthdayButton}
           onPress={() => setDateTimePicker(true)}>
@@ -197,6 +186,6 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
           onBackPress={() => setDateTimePicker(false)}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };

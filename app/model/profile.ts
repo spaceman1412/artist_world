@@ -3,7 +3,6 @@ namespace Profile {
     firstName: string;
     lastName: string;
     birthDate: string;
-    location: string;
   }
 
   export interface UserInfo extends BasicInfo {

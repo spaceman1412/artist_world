@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
   header: {
     fontWeight: '700',
     fontSize: 32,
+    color: 'black',
   },
   container: {
     flex: 1,
@@ -34,9 +35,10 @@ const styles = StyleSheet.create({
   },
   primaryButton: {
     backgroundColor: color.primary,
-    width: getSize.v(295),
-    height: getSize.v(56),
+    width: getSize.v(320),
+    height: getSize.v(80),
     borderRadius: 15,
+    alignSelf: 'center',
   },
 });
 
@@ -120,6 +122,7 @@ export const Interests: CommonType.ProfileDetailsScreenProps<
       <Button
         text="Continue"
         style={styles.primaryButton}
+        textStyle={{fontSize: getSize.font(18)}}
         onPress={onConfirm}
       />
     </View>

@@ -114,7 +114,11 @@ export const ProfileDetail: CommonType.AppScreenProps<
           <View flex>
             <FastImage
               source={
-                data.avatarUrl ? {uri: data.avatarUrl} : images.placeholder
+                data.avatarUrl && data.avatarUrl !== null
+                  ? {uri: data.avatarUrl}
+                  : {
+                      uri: 'https://vmsco.vn/wp-content/uploads/2021/05/placeholder.png',
+                    }
               }
               resizeMode={'cover'}
               style={styles.mainImage}

@@ -103,6 +103,7 @@ export const Login: CommonType.AppScreenProps<'login', Props> = ({
             );
 
             // Sign-in the user with the credential
+            // TODO: Thêm một hàm nữa khi user đã có email thì signin bằng email luôn
             const userCedential = await auth().signInWithCredential(
               googleCredential,
             );
@@ -132,13 +133,13 @@ export const Login: CommonType.AppScreenProps<'login', Props> = ({
             textStyle={styles.textEmailButton}
             onPress={() => navigation.navigate('createAccount')}
           />
-          <Button
+          {/* <Button
             text={'Use phone number'}
             style={styles.buttonPhone}
             textStyle={styles.textPhoneButton}
             preset="outline"
             onPress={() => navigation.navigate('phoneLogin')}
-          />
+          /> */}
         </View>
       </View>
       <View style={styles.dividerContainer}>

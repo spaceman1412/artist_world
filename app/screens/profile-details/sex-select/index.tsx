@@ -18,21 +18,23 @@ const styles = StyleSheet.create({
     backgroundColor: color.whiteBackground,
     paddingHorizontal: 40,
     paddingVertical: 48,
+    alignItems: 'center',
   },
   header: {
     fontWeight: '700',
-    fontSize: 32,
+    fontSize: getSize.font(35),
+    color: 'black',
   },
   button: {
     paddingHorizontal: 20,
     borderRadius: 20,
-    width: getSize.v(295),
-    height: getSize.v(58),
+    width: getSize.v(320),
+    height: getSize.v(80),
     borderWidth: 1,
   },
   textButton: {
     fontWeight: '700',
-    fontSize: 16,
+    fontSize: getSize.font(16),
     flex: 1,
   },
 });
@@ -135,6 +137,9 @@ export const SexSelect: CommonType.ProfileDetailsScreenProps<
       <Button
         text="Continue"
         style={[styles.button, {backgroundColor: '#E94057'}]}
+        textStyle={{
+          fontSize: getSize.font(18),
+        }}
         onPress={onSubmit}
       />
     </View>

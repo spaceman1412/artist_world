@@ -94,6 +94,7 @@ export const matchSlice = createSlice({
     },
 
     removeMatchUser: (state, action: PayloadAction<string>) => {
+      //TODO: Remove 2 user
       const removeId = action.payload;
       state.matchList = state.matchList.filter(value => value !== removeId);
       const uid = auth().currentUser.uid.trim();
