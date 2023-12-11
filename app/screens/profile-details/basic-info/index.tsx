@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import {CommonActions} from '@react-navigation/native';
 import {ProfileActions} from '@store/profile/reducer';
 import auth from '@react-native-firebase/auth';
+import {getSize} from '@utils/responsive';
 
 interface Props {}
 
@@ -26,7 +27,8 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
 
   const dispatcher = useAppDispatch();
 
-  const location = useAppSelector(state => state.profile.location);
+  const {location} = useAppSelector(state => state.profile);
+  const isLogined = auth().currentUser ? true : false;
 
   const [dateTimePicker, setDateTimePicker] = useState(false);
 
@@ -85,6 +87,20 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
       });
   };
 
+  const confirm = () => {
+    if (!onValidate()) {
+      Alert.alert('Wrong data input');
+    } else {
+      const data = {
+        firstName: firstName,
+        lastName: lastName,
+        birthDate: birthDate,
+      };
+      dispatcher(ProfileActions.updateBasicInfo(data));
+      navigation.navigate('interests');
+    }
+  };
+
   const onValidate = () => {
     // dua validate vao ham create
     console.log(firstName, lastName, location, birthDate);
@@ -126,44 +142,50 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
           </View>
         </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Email</Text>
-          <View style={styles.inputWrapper}>
-            <TextInput
-              value={email}
-              onChangeText={text => setEmail(text)}
-              style={styles.input}
-            />
-          </View>
-        </View>
+        {!isLogined ? (
+          <>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Email</Text>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  value={email}
+                  onChangeText={text => setEmail(text)}
+                  style={styles.input}
+                />
+              </View>
+            </View>
 
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputLabel}>Password</Text>
-          <View style={styles.inputWrapper}>
-            <TextInput
-              value={password}
-              secureTextEntry={toggle ? true : false}
-              onChangeText={text => setPassword(text)}
-              autoCapitalize="none"
-              style={styles.input}
-            />
-            <TouchableOpacity
-              style={{
-                width: 30,
-                height: 30,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginEnd: 15,
-              }}
-              onPress={() => setToggle(!toggle)}>
-              {toggle ? (
-                <Icon name="eye-outline" size={20} />
-              ) : (
-                <Icon name="eye-off-outline" size={20} />
-              )}
-            </TouchableOpacity>
-          </View>
-        </View>
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Password</Text>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  value={password}
+                  secureTextEntry={toggle ? true : false}
+                  onChangeText={text => setPassword(text)}
+                  autoCapitalize="none"
+                  style={styles.input}
+                />
+                <TouchableOpacity
+                  style={{
+                    width: 30,
+                    height: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginEnd: 15,
+                  }}
+                  onPress={() => setToggle(!toggle)}>
+                  {toggle ? (
+                    <Icon name="eye-outline" size={20} />
+                  ) : (
+                    <Icon name="eye-off-outline" size={20} />
+                  )}
+                </TouchableOpacity>
+              </View>
+            </View>
+          </>
+        ) : (
+          <SizedBox height={getSize.v(250)} />
+        )}
 
         <TouchableOpacity
           style={styles.birthdayButton}
@@ -171,11 +193,20 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
           <Text style={styles.textButtonBirthday}>{birthDate}</Text>
         </TouchableOpacity>
         <SizedBox height={20} />
-        <Button
-          text={'Create the account'}
-          style={styles.buttonConfirmStyle}
-          onPress={create}
-        />
+
+        {isLogined ? (
+          <Button
+            text={'Confirm'}
+            style={styles.buttonConfirmStyle}
+            onPress={confirm}
+          />
+        ) : (
+          <Button
+            text={'Create the account'}
+            style={styles.buttonConfirmStyle}
+            onPress={create}
+          />
+        )}
 
         <DateTimePicker
           visible={dateTimePicker}

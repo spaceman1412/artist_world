@@ -87,8 +87,6 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
     }
   };
 
-  console.log(sortUserList(userList));
-
   const Card = ({user}) => {
     const [imageState, setImageState] = useState<'loading' | 'end'>('end');
     let distance;

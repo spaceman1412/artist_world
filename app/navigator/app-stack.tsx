@@ -10,25 +10,21 @@ import firestore from '@react-native-firebase/firestore';
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
 
-const checkUserDatabase = async () => {
-  // Check if user has in database or not
-  const uid = await auth().currentUser.uid;
+// const checkUserDatabase = async () => {
+//   // Check if user has in database or not
+//   const uid = await auth().currentUser.uid;
 
-  const res = await firestore().collection('Users').doc(uid).get();
+//   const res = await firestore().collection('Users').doc(uid).get();
 
-  if (res.data()) {
-    return true;
-  } else {
-    return false;
-  }
-};
+//   if (res.data()) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// };
 
 export const AppStack = () => {
-  const initialRouteName = auth().currentUser
-    ? checkUserDatabase()
-      ? 'tab'
-      : 'profileDetails'
-    : 'login';
+  const initialRouteName = auth().currentUser ? 'tab' : 'login';
 
   return (
     <Stack.Navigator initialRouteName={initialRouteName}>

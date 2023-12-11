@@ -66,7 +66,6 @@ export const TabStack = ({navigation}) => {
         gallery: user.gallery ? user.gallery : [],
         sex: user.sex ? user.sex : 'not',
         about: user.about ? user.about : '',
-        location: user.location ? user.location : '',
         favouriteSong: user.favouriteSong ? user.favouriteSong : '',
       }),
     );
@@ -138,9 +137,6 @@ export const TabStack = ({navigation}) => {
               routes: [
                 {
                   name: 'profileDetails',
-                  state: {
-                    routes: [{name: 'sexSelect'}],
-                  },
                 },
               ],
             }),
