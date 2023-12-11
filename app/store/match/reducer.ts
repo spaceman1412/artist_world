@@ -106,6 +106,15 @@ export const matchSlice = createSlice({
         })
         .then(() => console.log('updated'))
         .catch(console.error);
+
+      firestore()
+        .collection('user-match')
+        .doc(removeId.trim())
+        .update({
+          matched: firestore.FieldValue.arrayRemove(uid),
+        })
+        .then(() => console.log('updated'))
+        .catch(console.error);
     },
   },
 });
