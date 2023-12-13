@@ -59,6 +59,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
 
   const sortUserList = userList => {
     if (coordinates !== null) {
+      console.log('sorting user list');
       userList.sort((user1, user2) => {
         var coordinates1 = user1.coordinates,
           coordinates2 = user2.coordinates;
@@ -91,8 +92,6 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
     const [imageState, setImageState] = useState<'loading' | 'end'>('end');
     let distance;
 
-    // console.log(user.name);
-    // console.log(coordinates);
     if (
       user.coordinates !== undefined &&
       user.coordinates !== null &&
@@ -131,7 +130,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           <FastImage
             source={{
               uri:
-                user.images[0].uri === null
+                user.images[0].uri === null || user.images[0].uri === ''
                   ? 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
                   : user.images[0].uri,
               priority: FastImage.priority.high,
@@ -362,7 +361,7 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
       }
     };
     fetchData().catch(console.error);
-  }, []);
+  }, [coordinates]);
 
   const checkMatch = async (userId, matchedUserId) => {
     const data = await firestore()

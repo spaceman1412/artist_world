@@ -103,6 +103,12 @@ export const profileSlice = createSlice({
       state.sex = sex;
       state.favouriteSong = favouriteSong;
     },
+    updateLocationCoordinates: (state, action: PayloadAction<any>) => {
+      const {location, coordinates} = action.payload;
+
+      state.location = location;
+      state.coordinates = coordinates;
+    },
     updateDataFirebase: state => {
       const uid = auth().currentUser.uid;
       try {

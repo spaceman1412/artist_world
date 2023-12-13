@@ -69,6 +69,15 @@ export const TabStack = ({navigation}) => {
         favouriteSong: user.favouriteSong ? user.favouriteSong : '',
       }),
     );
+
+    if (user.location && user.coordinates) {
+      dispatch(
+        ProfileActions.updateLocationCoordinates({
+          location: user.location,
+          coordinates: user.coordinates,
+        }),
+      );
+    }
   };
 
   const getLocation = () => {
@@ -152,7 +161,7 @@ export const TabStack = ({navigation}) => {
     checkInformation();
     getUsers();
     checkMatch();
-    // getLocation();
+    getLocation();
   }, []);
 
   return (
