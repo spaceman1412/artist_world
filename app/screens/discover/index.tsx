@@ -429,17 +429,15 @@ export const Discover: CommonType.AppScreenProps<'discover', Props> = ({
           style={[styles.circleButton, styles.passButton]}>
           <Stroke />
         </Button>
-        <Button style={[styles.circleButton, styles.heartButton]}>
-          <Heart />
-        </Button>
+        <SizedBox width={getSize.v(100)} />
         <Button
           onPress={() =>
             userList.length > 0 &&
             index.current < userList.length &&
             swiperRef.swipeRight()
           }
-          style={[styles.circleButton, styles.starButton]}>
-          <Star />
+          style={[styles.circleButton, styles.heartButton]}>
+          <Heart />
         </Button>
       </View>
       <SizedBox height={30} />

@@ -32,8 +32,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',
-    bottom: getSize.v(15),
-    left: getSize.v(85),
+    left: 0,
+    right: 0,
+    bottom: getSize.v(16),
   },
   circleButton: {
     borderRadius: 50,
@@ -43,7 +44,7 @@ export const styles = StyleSheet.create({
   passButton: {
     width: 78,
     height: 78,
-    backgroundColor: color.palette.outOfGreyWithOpacity(0.07),
+    backgroundColor: color.palette.blackWithOpacity(0.7),
     borderWidth: 0.1,
     borderColor: color.palette.blackWithOpacity(0.3),
   },
@@ -54,8 +55,8 @@ export const styles = StyleSheet.create({
     height: 500,
   },
   heartButton: {
-    width: 99,
-    height: 99,
+    width: 78,
+    height: 78,
     backgroundColor: color.primary,
   },
   starButton: {
