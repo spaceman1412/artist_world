@@ -15,6 +15,7 @@ import {color} from '@theme';
 import {Button} from '@components';
 import BackIcon from '@assets/images/back-arrow.svg';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import {CommonActions} from '@react-navigation/native';
 
 interface Props {}
 export const CreateAccount: CommonType.AppScreenProps<
@@ -24,28 +25,53 @@ export const CreateAccount: CommonType.AppScreenProps<
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [toggle, setToggle] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const validate = () => {
+    if (email !== '' && password !== '') {
+      return true;
+    }
+    return false;
+  };
 
   const login = () => {
-    auth()
-      .signInWithEmailAndPassword(email.trim(), password.trim())
-      .then(() => {
-        navigation.navigate('tab', {
-          screen: 'discover',
+    if (validate()) {
+      setLoading(true);
+      auth()
+        .signInWithEmailAndPassword(email.trim(), password.trim())
+        .then(() => {
+          navigation.navigate('tab', {
+            screen: 'discover',
+          });
+        })
+        .catch(error => {
+          Alert.alert('Wrong username or password, please try again');
         });
-      })
-      .catch(error => {
-        Alert.alert('Wrong username or password, please try again');
-      });
+    } else {
+      Alert.alert('Please enter a username and password');
+    }
   };
 
   const create = () => {
-    navigation.navigate('profileDetails');
+    !loading &&
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            {
+              name: 'profileDetails',
+            },
+          ],
+        }),
+      );
   };
 
   return (
     <>
       <View style={styles.header}>
-        <Button style={styles.buttonHeader} onPress={() => navigation.goBack()}>
+        <Button
+          style={styles.buttonHeader}
+          onPress={() => !loading && navigation.goBack()}>
           <BackIcon />
         </Button>
       </View>
@@ -94,8 +120,6 @@ export const CreateAccount: CommonType.AppScreenProps<
             }}
           />
         </View>
-
-        {/* <SizedBox height={50} /> */}
 
         <View
           style={{
@@ -164,8 +188,11 @@ export const CreateAccount: CommonType.AppScreenProps<
               alignItems: 'center',
               borderRadius: 15,
             }}
+            disabled={loading}
             onPress={login}>
-            <Text style={{color: 'white', fontWeight: 'bold'}}>Login</Text>
+            <Text style={{color: 'white', fontWeight: 'bold'}}>
+              {loading ? 'Logining....' : 'Login'}
+            </Text>
           </TouchableOpacity>
 
           <SizedBox width={20} />

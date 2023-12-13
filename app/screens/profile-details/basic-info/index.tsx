@@ -24,6 +24,7 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
   const [toggle, setToggle] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const dispatcher = useAppDispatch();
 
@@ -41,6 +42,8 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
       Alert.alert('Wrong data input');
       return;
     }
+
+    setLoading(true);
     await auth()
       .createUserWithEmailAndPassword(email.trim(), password.trim())
       .then(() => {
@@ -196,15 +199,17 @@ export const BasicInfo: CommonType.ProfileDetailsScreenProps<
 
         {isLogined ? (
           <Button
-            text={'Confirm'}
+            text={loading ? 'Loading...' : 'Confirm'}
             style={styles.buttonConfirmStyle}
+            disabled={loading}
             onPress={confirm}
           />
         ) : (
           <Button
-            text={'Create the account'}
+            text={loading ? 'Loading...' : 'Create the account'}
             style={styles.buttonConfirmStyle}
             onPress={create}
+            disabled={loading}
           />
         )}
 
